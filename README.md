@@ -1,10 +1,10 @@
 <h1 align="center">Hello Tool</h1>
 
 <p align="center">
-    <a href="https://github.com/dkbnull/hello-bill" target="_blank">
+    <a href="https://github.com/dkbnull/hello-tool" target="_blank">
        <img src="https://img.shields.io/badge/GitHub-访问地址-blue?logo=github">
     </a>
-    <a href="https://gitee.com/dkbnull/hello-bill" target="_blank">
+    <a href="https://gitee.com/dkbnull/hello-tool" target="_blank">
        <img src="https://img.shields.io/badge/Gitee-访问地址-red?logo=gitee">
     </a>
 </p>
