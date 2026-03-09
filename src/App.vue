@@ -1,29 +1,33 @@
 <script setup>
-import {RouterView} from 'vue-router'
 </script>
 
 <template>
-  <div id="app">
-    <nav class="navbar">
-      <div class="nav-brand">
-        <h2>HELLO TOOL</h2>
-      </div>
-      <div class="nav-links">
-        <router-link to="/">首页</router-link>
-        <router-link to="/timestamp">时间戳转换</router-link>
-        <router-link to="/jwt">JWT解密</router-link>
-        <router-link to="/rsa">RSA生成</router-link>
-      </div>
-    </nav>
-    <main>
-      <RouterView/>
+  <div class="app">
+    <header class="header">
+      <h1>Hello Tool</h1>
+      <nav>
+        <router-link to="/" class="nav-link">首页</router-link>
+      </nav>
+    </header>
+    <main class="main">
+      <router-view></router-view>
     </main>
+    <footer class="footer">
+      <p>© 2026 Hello Tool</p>
+      <p>备案号：鲁ICP备2026010010号-1</p>
+    </footer>
   </div>
 </template>
 
 <style scoped>
-.navbar {
-  background: #2c3e50;
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: #35495e;
   color: white;
   padding: 1rem 2rem;
   display: flex;
@@ -31,29 +35,34 @@ import {RouterView} from 'vue-router'
   align-items: center;
 }
 
-.nav-brand h2 {
+.header h1 {
   margin: 0;
+  color: white;
+  font-size: 1.5rem;
 }
 
-.nav-links {
-  display: flex;
-  gap: 2rem;
-}
-
-.nav-links a {
+.nav-link {
   color: white;
   text-decoration: none;
   padding: 0.5rem 1rem;
   border-radius: 4px;
-  transition: background 0.3s;
+  transition: background 0.3s ease;
 }
 
-.nav-links a:hover,
-.nav-links a.router-link-active {
-  background: #34495e;
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
-main {
-  min-height: calc(100vh - 80px);
+.main {
+  flex: 1;
+  padding: 2rem;
+}
+
+.footer {
+  background: #35495e;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin-top: auto;
 }
 </style>
