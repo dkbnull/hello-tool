@@ -51,24 +51,28 @@ const jsonToXml = () => {
 }
 
 // 递归转换JSON为XML
-const jsonToXmlRecursive = (obj, root) => {
-  let xml = `<${root}>`
+const jsonToXmlRecursive = (obj, root, indent = 0) => {
+  const indentStr = '  '.repeat(indent)
+  let xml = `${indentStr}<${root}>`
 
   if (typeof obj === 'object' && obj !== null) {
+    xml += '\n'
     for (const key in obj) {
       if (Array.isArray(obj[key])) {
         obj[key].forEach(item => {
-          xml += jsonToXmlRecursive(item, key)
+          xml += jsonToXmlRecursive(item, key, indent + 1)
         })
       } else {
-        xml += jsonToXmlRecursive(obj[key], key)
+        xml += jsonToXmlRecursive(obj[key], key, indent + 1)
       }
     }
+    xml += indentStr
   } else {
     xml += obj
   }
 
   xml += `</${root}>`
+  xml += '\n'
   return xml
 }
 

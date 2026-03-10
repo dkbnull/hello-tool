@@ -4,11 +4,13 @@ import {createRouter, createWebHistory} from 'vue-router'
 import Home from '../views/Home.vue'
 import TimestampConverter from '../views/tools/TimestampConverter.vue'
 import JwtDecoder from '../views/tools/JwtDecoder.vue'
+import JsonAllConverter from "../views/tools/JsonAllConverter.vue";
 import JsonXmlConverter from '../views/tools/JsonXmlConverter.vue'
 import JsonQuoteConverter from '../views/tools/JsonQuoteConverter.vue'
 import JsonCaseConverter from '../views/tools/JsonCaseConverter.vue'
 import NamingConverter from '../views/tools/NamingConverter.vue'
 import RsaKeyGenerator from '../views/tools/RsaKeyGenerator.vue'
+import BmiCalculator from "../views/tools/BmiCalculator.vue";
 
 // 创建路由
 const router = createRouter({
@@ -28,6 +30,11 @@ const router = createRouter({
             path: '/jwt',
             name: 'JwtDecoder',
             component: JwtDecoder
+        },
+        {
+            path: '/json-all',
+            name: 'JsonAllConverter',
+            component: JsonAllConverter
         },
         {
             path: '/json-xml',
@@ -53,6 +60,11 @@ const router = createRouter({
             path: '/rsa',
             name: 'RsaKeyGenerator',
             component: RsaKeyGenerator
+        },
+        {
+            path: '/bmi',
+            name: 'BmiCalculator',
+            component: BmiCalculator
         }
     ]
 })
