@@ -13,8 +13,8 @@
       <router-view></router-view>
     </main>
     <footer class="footer">
-      <p>© 2026 Hello Tool</p>
-      <p>备案号：鲁ICP备2026010010号-1</p>
+      <p>© 2026 null. 保留所有权利.</p>
+      <a href="https://beian.miit.gov.cn/" target="_blank" class="record-link">鲁ICP备2026010010号-1</a>
     </footer>
   </div>
 </template>
@@ -64,5 +64,11 @@
   text-align: center;
   padding: 1rem;
   margin-top: auto;
+}
+
+.record-link {
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 </style>
