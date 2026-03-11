@@ -38,7 +38,6 @@ h1, h2, h3, h4, h5, h6 {
 
 /* 工具页面通用样式 */
 .tool-container {
-    max-width: 1000px;
     margin: 0 auto;
     padding: 2rem;
     background: #f9f9f9;

@@ -69,9 +69,11 @@ const minifyJson = () => {
 const validateJson = () => {
   try {
     JSON.parse(jsonInput.value)
-    error.value = 'JSON格式有效'
+    showToastMessage('JSON格式有效')
+    error.value = ''
   } catch (err) {
-    error.value = '无效的JSON格式: ' + err.message
+    showToastMessage('无效的JSON格式: ' + err.message)
+    error.value = ''
   }
 }
 
@@ -112,42 +114,6 @@ const jsonToXmlRecursive = (obj, root, indent = 0) => {
   return xml
 }
 
-// JSON转CSV
-const jsonToCsv = () => {
-  try {
-    const data = JSON.parse(jsonInput.value)
-    const array = Array.isArray(data) ? data : [data]
-
-    if (array.length === 0) {
-      output.value = ''
-      return
-    }
-
-    const headers = Object.keys(array[0])
-    const csv = [
-      headers.join(','),
-      ...array.map(row => {
-        return headers.map(header => {
-          const value = row[header]
-          if (Array.isArray(value)) {
-            return `"${value.join(', ')}"`
-          } else if (typeof value === 'object' && value !== null) {
-            return `"${JSON.stringify(value)}"`
-          } else {
-            const isString = typeof value === 'string'
-            const needsQuotes = isString && (value.includes(',') || value.includes('"') || value.includes('\n'))
-            return needsQuotes ? `"${value.replace(/"/g, '""')}"` : value
-          }
-        }).join(',')
-      })
-    ].join('\n')
-
-    output.value = csv
-    error.value = ''
-  } catch (err) {
-    error.value = '无效的JSON格式'
-  }
-}
 
 // JSON转YAML
 const jsonToYaml = () => {
@@ -192,7 +158,6 @@ const jsonToYamlRecursive = (obj, indent) => {
 <template>
   <div class="tool-container">
     <h2>JSON全能转换器</h2>
-    <p class="tool-description">支持格式化、压缩、转XML/CSV/YAML</p>
 
     <div class="converter-container">
       <!-- 左侧输入区域 -->
@@ -229,9 +194,6 @@ const jsonToYamlRecursive = (obj, indent) => {
           <button id="toXmlBtn" @click="jsonToXml" class="option-btn indigo">
             <i class="fas fa-code mr-1"></i>转XML
           </button>
-          <button id="toCsvBtn" @click="jsonToCsv" class="option-btn teal">
-            <i class="fas fa-file-csv mr-1"></i>转CSV
-          </button>
           <button id="toYamlBtn" @click="jsonToYaml" class="option-btn amber">
             <i class="fas fa-file-alt mr-1"></i>转YAML
           </button>
@@ -262,7 +224,6 @@ const jsonToYamlRecursive = (obj, indent) => {
 
 <style scoped>
 .tool-container {
-  max-width: 1000px;
   margin: 0 auto;
   padding: 2rem;
 }
@@ -282,6 +243,7 @@ h2 {
 }
 
 .converter-container {
+  padding: 2rem;
   display: flex;
   gap: 1.5rem;
   margin-bottom: 1.5rem;
@@ -298,7 +260,7 @@ h2 {
   }
 
   .options-section {
-    flex: 0 0 200px;
+    flex: 0 0 150px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -311,11 +273,15 @@ h2 {
 }
 
 .input-section,
-.options-section,
 .output-section {
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+.options-section {
+  border-radius: 8px;
   padding: 1.5rem;
 }
 
@@ -348,7 +314,7 @@ textarea {
   font-size: 1rem;
   font-family: monospace;
   resize: vertical;
-  min-height: 200px;
+  min-height: 300px;
 }
 
 .input-buttons {
@@ -484,7 +450,7 @@ textarea {
   font-family: monospace;
   background: #f7fafc;
   overflow: auto;
-  height: 200px;
+  height: 300px;
   white-space: pre-wrap;
   word-wrap: break-word;
 }

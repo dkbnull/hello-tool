@@ -189,7 +189,7 @@ h3 {
 }
 
 .copy-btn {
-  padding: 0.25rem 0.75rem;
+  padding: 0.5rem 1rem;
   background: #42b883;
   color: white;
   border: none;

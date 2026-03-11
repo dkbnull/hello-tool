@@ -35,7 +35,7 @@
         <div class="tool-grid">
           <router-link to="/json-all" class="tool-card">
             <h3>JSON全能转换</h3>
-            <p>JSON转XML/CSV/YAML</p>
+            <p>JSON格式化/转XML/YAML</p>
           </router-link>
           <router-link to="/json-xml" class="tool-card">
             <h3>JSON XML互转</h3>
@@ -88,7 +88,6 @@
 <style scoped>
 .home-container {
   display: flex;
-  max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
   gap: 2rem;

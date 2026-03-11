@@ -97,7 +97,6 @@ watch(singleQuoteJson, convertQuotes)
 
 <style scoped>
 .tool-container {
-  max-width: 1000px;
   margin: 0 auto;
   padding: 2rem;
 }
@@ -139,7 +138,7 @@ label {
 }
 
 .copy-btn {
-  padding: 0.25rem 0.75rem;
+  padding: 0.5rem 1rem;
   background: #42b883;
   color: white;
   border: none;
@@ -189,6 +188,7 @@ textarea {
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
+  min-height: 400px;
   resize: vertical;
 }
 
