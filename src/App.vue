@@ -4,7 +4,9 @@
 <template>
   <div class="app">
     <header class="header">
-      <h1>Hello Tool</h1>
+      <h1 class="logo">
+        <router-link to="/">Hello Tool</router-link>
+      </h1>
       <nav>
         <router-link to="/" class="nav-link">首页</router-link>
       </nav>
@@ -39,6 +41,16 @@
   margin: 0;
   color: white;
   font-size: 1.5rem;
+}
+
+.logo {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.logo a {
+  color: white;
+  text-decoration: none;
 }
 
 .nav-link {
