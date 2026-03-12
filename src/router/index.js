@@ -11,6 +11,9 @@ import JsonCaseConverter from '../views/tools/JsonCaseConverter.vue'
 import NamingConverter from '../views/tools/NamingConverter.vue'
 import RsaKeyGenerator from '../views/tools/RsaKeyGenerator.vue'
 import BmiCalculator from "../views/tools/BmiCalculator.vue";
+import CryptoTool from '../views/tools/CryptoTool.vue';
+import QrCodeGenerator from '../views/tools/QrCodeGenerator.vue';
+import ImageTool from '../views/tools/ImageTool.vue';
 
 // 创建路由
 const router = createRouter({
@@ -65,6 +68,21 @@ const router = createRouter({
             path: '/bmi',
             name: 'BmiCalculator',
             component: BmiCalculator
+        },
+        {
+            path: '/crypto',
+            name: 'CryptoTool',
+            component: CryptoTool
+        },
+        {
+            path: '/qrcode',
+            name: 'QrCodeGenerator',
+            component: QrCodeGenerator
+        },
+        {
+            path: '/image',
+            name: 'ImageTool',
+            component: ImageTool
         }
     ]
 })
