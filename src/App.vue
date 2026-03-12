@@ -9,6 +9,7 @@
       </h1>
       <nav>
         <router-link to="/" class="nav-link">首页</router-link>
+        <router-link to="/about" class="nav-link">关于</router-link>
       </nav>
     </header>
     <main class="main">
@@ -56,6 +57,7 @@
 .nav-link {
   color: white;
   text-decoration: none;
+  margin-left: 2rem;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   transition: background 0.3s ease;

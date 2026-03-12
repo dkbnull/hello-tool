@@ -2,6 +2,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 
 // 导入工具页面
 import Home from '../views/Home.vue'
+import About from '../views/About.vue'
 import TimestampConverter from '../views/tools/TimestampConverter.vue'
 import JwtDecoder from '../views/tools/JwtDecoder.vue'
 import JsonAllConverter from "../views/tools/JsonAllConverter.vue";
@@ -23,6 +24,11 @@ const router = createRouter({
             path: '/',
             name: 'Home',
             component: Home
+        },
+        {
+            path: '/about',
+            name: 'About',
+            component: About
         },
         {
             path: '/timestamp',
