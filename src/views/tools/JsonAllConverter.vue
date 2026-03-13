@@ -1,6 +1,6 @@
 <template>
   <div class="tool-container">
-    <h2>JSON全能转换器</h2>
+    <h2>JSON全能转换</h2>
 
     <div class="converter-container">
       <!-- 左侧输入区域 -->

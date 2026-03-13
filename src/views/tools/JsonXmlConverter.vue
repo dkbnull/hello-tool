@@ -1,6 +1,6 @@
 <template>
   <div class="tool-container">
-    <h2>JSON XML互转</h2>
+    <h2>JSON与XML互转</h2>
     <div class="converter">
       <div class="input-group">
         <div class="input-header">

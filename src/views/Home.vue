@@ -129,15 +129,15 @@
             <h3 class="tool-title">JWT解密</h3>
             <p class="tool-desc">解析JWT令牌字段</p>
           </router-link>
-          <router-link to="/rsa" class="tool-card">
-            <div class="tool-icon">🔐</div>
-            <h3 class="tool-title">RSA密钥生成</h3>
-            <p class="tool-desc">生成RSA公钥和私钥</p>
-          </router-link>
           <router-link to="/crypto" class="tool-card">
             <div class="tool-icon">🔓</div>
             <h3 class="tool-title">加解密工具</h3>
             <p class="tool-desc">Base64/AES/DES/3DES加解密</p>
+          </router-link>
+          <router-link to="/rsa" class="tool-card">
+            <div class="tool-icon">🔐</div>
+            <h3 class="tool-title">RSA密钥生成</h3>
+            <p class="tool-desc">生成RSA公钥和私钥</p>
           </router-link>
         </div>
       </div>
@@ -165,7 +165,7 @@
         </h2>
         <div class="tool-grid">
           <router-link to="/qrcode" class="tool-card">
-            <div class="tool-icon">📱</div>
+            <div class="tool-icon">🔲</div>
             <h3 class="tool-title">二维码生成器</h3>
             <p class="tool-desc">将文本转换为二维码</p>
           </router-link>
