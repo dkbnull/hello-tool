@@ -17,7 +17,7 @@
       <div class="result-section">
         <div class="input-header">
           <h3>驼峰命名：</h3>
-          <button @click="copyToClipboard(camelCaseOutput)" class="copy-btn" :disabled="!camelCaseOutput">复制</button>
+          <button @click="handleCopy(camelCaseOutput)" class="copy-btn" :disabled="!camelCaseOutput">复制</button>
         </div>
         <textarea
             v-model="camelCaseOutput"
@@ -29,7 +29,7 @@
       <div class="result-section">
         <div class="input-header">
           <h3>下划线命名：</h3>
-          <button @click="copyToClipboard(snakeCaseOutput)" class="copy-btn" :disabled="!snakeCaseOutput">复制</button>
+          <button @click="handleCopy(snakeCaseOutput)" class="copy-btn" :disabled="!snakeCaseOutput">复制</button>
         </div>
         <textarea
             v-model="snakeCaseOutput"
@@ -39,49 +39,25 @@
       </div>
     </div>
   </div>
-
-  <!-- Toast提示 -->
-  <div v-if="showToast" class="toast">
-    {{ toastMessage }}
-  </div>
 </template>
 
 <script setup>
 import {ref, watch} from 'vue'
+import {copyToClipboard} from '../../utils/clipboard'
+import {showToast} from '../../utils/toast'
 
 const inputText = ref('')
 const camelCaseOutput = ref('')
 const snakeCaseOutput = ref('')
-const toastMessage = ref('')
-const showToast = ref(false)
-let toastTimeout = null
 
 // 复制到剪贴板
-const copyToClipboard = (text) => {
-  navigator.clipboard.writeText(text)
-      .then(() => {
-        showToastMessage('已复制到剪贴板')
-      })
-      .catch((error) => {
-        console.error('复制失败:', error)
-        showToastMessage('复制失败')
-      })
-}
-
-// 显示toast提示
-const showToastMessage = (message) => {
-  toastMessage.value = message
-  showToast.value = true
-
-  // 清除之前的定时器
-  if (toastTimeout) {
-    clearTimeout(toastTimeout)
+const handleCopy = async (text) => {
+  if (text) {
+    const success = await copyToClipboard(text)
+    showToast({
+      message: success ? '已复制到剪贴板' : '复制失败'
+    })
   }
-
-  // 3秒后自动隐藏
-  toastTimeout = setTimeout(() => {
-    showToast.value = false
-  }, 3000)
 }
 
 // 转换命名格式

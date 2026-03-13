@@ -89,15 +89,11 @@
       </div>
     </div>
   </div>
-
-  <!-- Toast提示 -->
-  <div v-if="showToast" class="toast">
-    {{ toastMessage }}
-  </div>
 </template>
 
 <script setup>
 import {ref} from 'vue'
+import {showToast} from '../../utils/toast'
 
 const height = ref('')
 const weight = ref('')
@@ -107,25 +103,6 @@ const bmiColor = ref('')
 const scaleWidth = ref('0%')
 const showResult = ref(false)
 const error = ref('')
-const toastMessage = ref('')
-const showToast = ref(false)
-let toastTimeout = null
-
-// 显示toast提示
-const showToastMessage = (message) => {
-  toastMessage.value = message
-  showToast.value = true
-
-  // 清除之前的定时器
-  if (toastTimeout) {
-    clearTimeout(toastTimeout)
-  }
-
-  // 3秒后自动隐藏
-  toastTimeout = setTimeout(() => {
-    showToast.value = false
-  }, 3000)
-}
 
 // 计算BMI
 const calculateBMI = () => {
@@ -169,7 +146,9 @@ const calculateBMI = () => {
 
   // 显示结果区域
   showResult.value = true
-  showToastMessage('计算完成')
+  showToast({
+    message: '计算完成'
+  })
 }
 
 // 清空输入

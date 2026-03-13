@@ -7,46 +7,34 @@
       <div class="key-section">
         <h3>公钥：</h3>
         <pre>{{ publicKey }}</pre>
-        <button @click="copyToClipboard(publicKey)" class="copy-btn">复制公钥</button>
+        <button @click="handleCopy(publicKey)" class="copy-btn">复制公钥</button>
       </div>
 
       <div class="key-section">
         <h3>私钥：</h3>
         <pre>{{ privateKey }}</pre>
-        <button @click="copyToClipboard(privateKey)" class="copy-btn">复制私钥</button>
+        <button @click="handleCopy(privateKey)" class="copy-btn">复制私钥</button>
       </div>
     </div>
-  </div>
-
-  <!-- Toast提示 -->
-  <div v-if="showToast" class="toast">
-    {{ toastMessage }}
   </div>
 </template>
 
 <script setup>
 import {ref} from 'vue'
+import {copyToClipboard} from '../../utils/clipboard'
+import {showToast} from '../../utils/toast'
 
 const publicKey = ref('')
 const privateKey = ref('')
-const toastMessage = ref('')
-const showToast = ref(false)
-let toastTimeout = null
 
-// 显示toast提示
-const showToastMessage = (message) => {
-  toastMessage.value = message
-  showToast.value = true
-
-  // 清除之前的定时器
-  if (toastTimeout) {
-    clearTimeout(toastTimeout)
+// 复制到剪贴板
+const handleCopy = async (text) => {
+  if (text) {
+    const success = await copyToClipboard(text)
+    showToast({
+      message: success ? '已复制到剪贴板' : '复制失败'
+    })
   }
-
-  // 3秒后自动隐藏
-  toastTimeout = setTimeout(() => {
-    showToast.value = false
-  }, 3000)
 }
 
 const generateRsaKeys = () => {
@@ -65,7 +53,7 @@ const generateRsaKeys = () => {
       // 导出公钥
       return window.crypto.subtle.exportKey('spki', keyPair.publicKey)
           .then((publicKeyBuffer) => {
-            publicKey.value = arrayBufferToBase64(publicKeyBuffer)
+            publicKey.value = arrayBufferToBase64(publicKeyBuffer, 'PUBLIC')
             return keyPair.privateKey
           })
           .then((privateKey) => {
@@ -73,7 +61,7 @@ const generateRsaKeys = () => {
             return window.crypto.subtle.exportKey('pkcs8', privateKey)
           })
           .then((privateKeyBuffer) => {
-            privateKey.value = arrayBufferToBase64(privateKeyBuffer)
+            privateKey.value = arrayBufferToBase64(privateKeyBuffer, 'PRIVATE')
           })
     }).catch((error) => {
       console.error('生成RSA密钥失败:', error)
@@ -87,7 +75,7 @@ const generateRsaKeys = () => {
 }
 
 // ArrayBuffer转Base64
-const arrayBufferToBase64 = (buffer) => {
+const arrayBufferToBase64 = (buffer, type) => {
   const binary = new Uint8Array(buffer)
   let base64 = ''
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
@@ -104,21 +92,10 @@ const arrayBufferToBase64 = (buffer) => {
   }
 
   // 添加PEM格式头和尾
-  return '-----BEGIN PUBLIC KEY-----\n' +
+  const header = type === 'PUBLIC' ? 'PUBLIC' : 'PRIVATE'
+  return `-----BEGIN ${header} KEY-----\n` +
       base64.match(/.{1,64}/g).join('\n') +
-      '\n-----END PUBLIC KEY-----'
-}
-
-// 复制到剪贴板
-const copyToClipboard = (text) => {
-  navigator.clipboard.writeText(text)
-      .then(() => {
-        showToastMessage('已复制到剪贴板')
-      })
-      .catch((error) => {
-        console.error('复制失败:', error)
-        showToastMessage('复制失败')
-      })
+      `\n-----END ${header} KEY-----`
 }
 </script>
 

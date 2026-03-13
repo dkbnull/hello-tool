@@ -48,7 +48,7 @@
         <div class="output-header">
           <h3>转换结果</h3>
           <div class="output-actions">
-            <button @click="copyToClipboard(output)" class="action-btn copy-btn" :disabled="!output">
+            <button @click="handleCopy(output)" class="action-btn copy-btn" :disabled="!output">
               <i class="fas fa-copy mr-1"></i>复制
             </button>
           </div>
@@ -58,49 +58,25 @@
       </div>
     </div>
   </div>
-
-  <!-- Toast提示 -->
-  <div v-if="showToast" class="toast">
-    {{ toastMessage }}
-  </div>
 </template>
 
 <script setup>
 import {ref} from 'vue'
+import {copyToClipboard} from '../../utils/clipboard'
+import {showToast} from '../../utils/toast'
 
 const jsonInput = ref('')
 const output = ref('')
 const error = ref('')
-const toastMessage = ref('')
-const showToast = ref(false)
-let toastTimeout = null
 
 // 复制到剪贴板
-const copyToClipboard = (text) => {
-  navigator.clipboard.writeText(text)
-      .then(() => {
-        showToastMessage('已复制到剪贴板')
-      })
-      .catch((error) => {
-        console.error('复制失败:', error)
-        showToastMessage('复制失败')
-      })
-}
-
-// 显示toast提示
-const showToastMessage = (message) => {
-  toastMessage.value = message
-  showToast.value = true
-
-  // 清除之前的定时器
-  if (toastTimeout) {
-    clearTimeout(toastTimeout)
+const handleCopy = async (text) => {
+  if (text) {
+    const success = await copyToClipboard(text)
+    showToast({
+      message: success ? '已复制到剪贴板' : '复制失败'
+    })
   }
-
-  // 3秒后自动隐藏
-  toastTimeout = setTimeout(() => {
-    showToast.value = false
-  }, 3000)
 }
 
 // 清空输入
@@ -136,10 +112,14 @@ const minifyJson = () => {
 const validateJson = () => {
   try {
     JSON.parse(jsonInput.value)
-    showToastMessage('JSON格式有效')
+    showToast({
+      message: 'JSON格式有效'
+    })
     error.value = ''
   } catch (err) {
-    showToastMessage('无效的JSON格式: ' + err.message)
+    showToast({
+      message: '无效的JSON格式: ' + err.message
+    })
     error.value = ''
   }
 }

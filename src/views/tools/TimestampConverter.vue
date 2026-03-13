@@ -9,17 +9,17 @@
         <div class="current-time-item">
           <span>日期时间：</span>
           <span class="time-value">{{ currentTime }}</span>
-          <button @click="copyToClipboard(currentTime)" class="copy-btn">复制</button>
+          <button @click="handleCopy(currentTime)" class="copy-btn">复制</button>
         </div>
         <div class="current-time-item">
           <span>时间戳（秒）：</span>
           <span class="time-value">{{ currentTimestamp }}</span>
-          <button @click="copyToClipboard(currentTimestamp)" class="copy-btn">复制</button>
+          <button @click="handleCopy(currentTimestamp)" class="copy-btn">复制</button>
         </div>
         <div class="current-time-item">
           <span>时间戳（毫秒）：</span>
           <span class="time-value">{{ currentTimestampMs }}</span>
-          <button @click="copyToClipboard(currentTimestampMs)" class="copy-btn">复制</button>
+          <button @click="handleCopy(currentTimestampMs)" class="copy-btn">复制</button>
         </div>
       </div>
     </div>
@@ -34,9 +34,9 @@
               v-model="timestamp"
               placeholder="输入时间戳"
           />
-          <button @click="copyToClipboard(timestamp)" class="copy-btn">复制</button>
+          <button @click="handleCopy(timestamp)" class="copy-btn">复制</button>
         </div>
-        <button @click="timestampToDateTime" class="convert-btn">转换为日期</button>
+        <button @click="handleTimestampToDateTime" class="convert-btn">转换为日期</button>
         <div v-if="timestampError" class="error-message">{{ timestampError }}</div>
       </div>
       <div class="arrow">⇄</div>
@@ -50,22 +50,20 @@
               placeholder="yyyy-MM-dd hh:mm:ss"
               step="1"
           />
-          <button @click="copyToClipboard(dateTime)" class="copy-btn">复制</button>
+          <button @click="handleCopy(dateTime)" class="copy-btn">复制</button>
         </div>
-        <button @click="dateTimeToTimestamp" class="convert-btn">转换为时间戳</button>
+        <button @click="handleDateTimeToTimestamp" class="convert-btn">转换为时间戳</button>
         <div v-if="dateTimeError" class="error-message">{{ dateTimeError }}</div>
       </div>
     </div>
-  </div>
-
-  <!-- Toast提示 -->
-  <div v-if="showToast" class="toast">
-    {{ toastMessage }}
   </div>
 </template>
 
 <script setup>
 import {onMounted, ref} from 'vue'
+import {getCurrentTimeInfo, timestampToDateTime, dateTimeToTimestamp} from '../../utils/time'
+import {copyToClipboard} from '../../utils/clipboard'
+import {showToast} from '../../utils/toast'
 
 const timestamp = ref('')
 const dateTime = ref('')
@@ -74,119 +72,46 @@ const dateTimeError = ref('')
 const currentTime = ref('')
 const currentTimestamp = ref('')
 const currentTimestampMs = ref('')
-const toastMessage = ref('')
-const showToast = ref(false)
-let timestampTimeout = null
-let toastTimeout = null
 
 // 获取当前时间
-const getCurrentTime = () => {
-  const now = new Date()
-  currentTime.value = now.toISOString().replace('T', ' ').replace('Z', '')
-  currentTimestamp.value = Math.floor(now.getTime() / 1000).toString()
-  currentTimestampMs.value = now.getTime().toString()
+const updateCurrentTime = () => {
+  const timeInfo = getCurrentTimeInfo()
+  currentTime.value = timeInfo.currentTime
+  currentTimestamp.value = timeInfo.currentTimestamp
+  currentTimestampMs.value = timeInfo.currentTimestampMs
 }
 
 // 时间戳转日期
-const timestampToDateTime = () => {
-  timestampError.value = ''
+const handleTimestampToDateTime = () => {
+  const result = timestampToDateTime(timestamp.value)
+  dateTime.value = result.dateTime
+  timestampError.value = result.error
   dateTimeError.value = ''
-
-  if (timestamp.value) {
-    const ts = timestamp.value.trim()
-    // 检查是否为数字
-    if (!/^\d+$/.test(ts)) {
-      timestampError.value = '无效的时间戳格式'
-      dateTime.value = ''
-      return
-    }
-
-    let timestampNum = parseInt(ts)
-    // 判断是秒还是毫秒
-    if (ts.length === 10) {
-      // 秒
-      timestampNum *= 1000
-    } else if (ts.length === 13) {
-      // 毫秒
-    } else {
-      timestampError.value = '时间戳格式错误（应为10位秒或13位毫秒）'
-      dateTime.value = ''
-      return
-    }
-
-    const date = new Date(timestampNum)
-    if (!isNaN(date.getTime())) {
-      dateTime.value = date.toISOString().replace('T', ' ').replace('Z', '')
-    } else {
-      timestampError.value = '无效的时间戳'
-      dateTime.value = ''
-    }
-  } else {
-    dateTime.value = ''
-  }
 }
 
 // 日期转时间戳
-const dateTimeToTimestamp = () => {
+const handleDateTimeToTimestamp = () => {
+  const result = dateTimeToTimestamp(dateTime.value)
+  timestamp.value = result.timestamp
+  dateTimeError.value = result.error
   timestampError.value = ''
-  dateTimeError.value = ''
-
-  if (dateTime.value) {
-    const date = new Date(dateTime.value)
-    if (!isNaN(date.getTime())) {
-      timestamp.value = Math.floor(date.getTime() / 1000).toString()
-    } else {
-      dateTimeError.value = '无效的日期格式'
-      timestamp.value = ''
-    }
-  } else {
-    timestamp.value = ''
-  }
 }
 
 // 复制到剪贴板
-const copyToClipboard = (text) => {
-  navigator.clipboard.writeText(text)
-      .then(() => {
-        showToastMessage('已复制到剪贴板')
-      })
-      .catch((error) => {
-        console.error('复制失败:', error)
-        showToastMessage('复制失败')
-      })
-}
-
-// 显示toast提示
-const showToastMessage = (message) => {
-  toastMessage.value = message
-  showToast.value = true
-
-  // 清除之前的定时器
-  if (toastTimeout) {
-    clearTimeout(toastTimeout)
-  }
-
-  // 3秒后自动隐藏
-  toastTimeout = setTimeout(() => {
-    showToast.value = false
-  }, 3000)
-}
-
-// 防抖函数
-const debounce = (func, delay) => {
-  return function () {
-    clearTimeout(timestampTimeout)
-    timestampTimeout = setTimeout(() => func.apply(this, arguments), delay)
+const handleCopy = async (text) => {
+  if (text) {
+    const success = await copyToClipboard(text)
+    showToast({
+      message: success ? '已复制到剪贴板' : '复制失败'
+    })
   }
 }
-
-// 移除自动监听，改为手动触发转换
 
 // 组件挂载时获取当前时间
 onMounted(() => {
-  getCurrentTime()
+  updateCurrentTime()
   // 每秒更新当前时间
-  setInterval(getCurrentTime, 1000)
+  setInterval(updateCurrentTime, 1000)
 })
 </script>
 

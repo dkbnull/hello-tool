@@ -89,7 +89,7 @@
       <div class="output-section">
         <div class="output-header">
           <h3>结果</h3>
-          <button @click="copyToClipboard(output)" class="action-btn copy-btn" :disabled="!output">
+          <button @click="handleCopy(output)" class="action-btn copy-btn" :disabled="!output">
             <i class="fas fa-copy mr-1"></i>复制
           </button>
         </div>
@@ -98,57 +98,32 @@
       </div>
     </div>
   </div>
-
-  <!-- Toast提示 -->
-  <div v-if="showToast" class="toast">
-    {{ toastMessage }}
-  </div>
 </template>
 
 <script setup>
 import {ref} from 'vue'
 import CryptoJS from 'crypto-js'
+import {copyToClipboard} from '../../utils/clipboard'
+import {showToast} from '../../utils/toast'
 
 const input = ref('')
 const output = ref('')
 const error = ref('')
-const toastMessage = ref('')
-const showToast = ref(false)
 const cryptoMode = ref('base64') // base64, aes, des, tripleDes, md5
 const aesKey = ref('')
 const desKey = ref('')
 const tripleDesKey = ref('')
 const rsaPublicKey = ref('')
 const rsaPrivateKey = ref('')
-const aesMode = ref('encrypt') // encrypt, decrypt
-let toastTimeout = null
 
 // 复制到剪贴板
-const copyToClipboard = (text) => {
-  navigator.clipboard.writeText(text)
-      .then(() => {
-        showToastMessage('已复制到剪贴板')
-      })
-      .catch((error) => {
-        console.error('复制失败:', error)
-        showToastMessage('复制失败')
-      })
-}
-
-// 显示toast提示
-const showToastMessage = (message) => {
-  toastMessage.value = message
-  showToast.value = true
-
-  // 清除之前的定时器
-  if (toastTimeout) {
-    clearTimeout(toastTimeout)
+const handleCopy = async (text) => {
+  if (text) {
+    const success = await copyToClipboard(text)
+    showToast({
+      message: success ? '已复制到剪贴板' : '复制失败'
+    })
   }
-
-  // 3秒后自动隐藏
-  toastTimeout = setTimeout(() => {
-    showToast.value = false
-  }, 3000)
 }
 
 // 清空输入
@@ -313,33 +288,34 @@ const rsaDecrypt = () => {
 
 // 处理加密操作
 const handleEncrypt = () => {
-  if (cryptoMode.value === 'base64') {
-    base64Encrypt()
-  } else if (cryptoMode.value === 'aes') {
-    aesEncrypt()
-  } else if (cryptoMode.value === 'des') {
-    desEncrypt()
-  } else if (cryptoMode.value === 'tripleDes') {
-    tripleDesEncrypt()
-  } else if (cryptoMode.value === 'md5') {
-    md5Encrypt()
-  } else if (cryptoMode.value === 'rsa') {
-    rsaEncrypt()
+  const encryptors = {
+    base64: base64Encrypt,
+    aes: aesEncrypt,
+    des: desEncrypt,
+    tripleDes: tripleDesEncrypt,
+    md5: md5Encrypt,
+    rsa: rsaEncrypt
+  }
+  
+  const encryptor = encryptors[cryptoMode.value]
+  if (encryptor) {
+    encryptor()
   }
 }
 
 // 处理解密操作
 const handleDecrypt = () => {
-  if (cryptoMode.value === 'base64') {
-    base64Decrypt()
-  } else if (cryptoMode.value === 'aes') {
-    aesDecrypt()
-  } else if (cryptoMode.value === 'des') {
-    desDecrypt()
-  } else if (cryptoMode.value === 'tripleDes') {
-    tripleDesDecrypt()
-  } else if (cryptoMode.value === 'rsa') {
-    rsaDecrypt()
+  const decryptors = {
+    base64: base64Decrypt,
+    aes: aesDecrypt,
+    des: desDecrypt,
+    tripleDes: tripleDesDecrypt,
+    rsa: rsaDecrypt
+  }
+  
+  const decryptor = decryptors[cryptoMode.value]
+  if (decryptor) {
+    decryptor()
   }
 }
 </script>

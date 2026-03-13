@@ -16,7 +16,7 @@
         <div class="result-header">
           <h3>Header：</h3>
           <button v-if="decodedHeader && decodedHeader !== '无效的JWT令牌格式' && decodedHeader !== '解码失败'"
-                  @click="copyToClipboard(decodedHeader)" class="copy-btn">复制
+                  @click="handleCopy(decodedHeader)" class="copy-btn">复制
           </button>
         </div>
         <pre>{{ decodedHeader }}</pre>
@@ -25,7 +25,7 @@
       <div class="result-section payload-section">
         <div class="result-header">
           <h3>Payload：</h3>
-          <button v-if="decodedPayload" @click="copyToClipboard(decodedPayload)" class="copy-btn">复制</button>
+          <button v-if="decodedPayload" @click="handleCopy(decodedPayload)" class="copy-btn">复制</button>
         </div>
         <pre>{{ decodedPayload }}</pre>
 
@@ -41,50 +41,26 @@
       </div>
     </div>
   </div>
-
-  <!-- Toast提示 -->
-  <div v-if="showToast" class="toast">
-    {{ toastMessage }}
-  </div>
 </template>
 
 <script setup>
 import {computed, ref, watch} from 'vue'
+import {copyToClipboard} from '../../utils/clipboard'
+import {showToast} from '../../utils/toast'
 
 const jwtToken = ref('')
 const decodedHeader = ref('')
 const decodedPayload = ref('')
 const payloadObject = ref(null)
-const toastMessage = ref('')
-const showToast = ref(false)
-let toastTimeout = null
 
 // 复制到剪贴板
-const copyToClipboard = (text) => {
-  navigator.clipboard.writeText(text)
-      .then(() => {
-        showToastMessage('已复制到剪贴板')
-      })
-      .catch((error) => {
-        console.error('复制失败:', error)
-        showToastMessage('复制失败')
-      })
-}
-
-// 显示toast提示
-const showToastMessage = (message) => {
-  toastMessage.value = message
-  showToast.value = true
-
-  // 清除之前的定时器
-  if (toastTimeout) {
-    clearTimeout(toastTimeout)
+const handleCopy = async (text) => {
+  if (text) {
+    const success = await copyToClipboard(text)
+    showToast({
+      message: success ? '已复制到剪贴板' : '复制失败'
+    })
   }
-
-  // 3秒后自动隐藏
-  toastTimeout = setTimeout(() => {
-    showToast.value = false
-  }, 3000)
 }
 
 const decodeJwt = () => {
