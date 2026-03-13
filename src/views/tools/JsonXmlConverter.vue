@@ -1,3 +1,41 @@
+<template>
+  <div class="tool-container">
+    <h2>JSON XML互转</h2>
+    <div class="converter">
+      <div class="input-group">
+        <div class="input-header">
+          <label for="json-input">JSON：</label>
+          <button @click="copyToClipboard(jsonInput)" class="copy-btn" :disabled="!jsonInput">复制</button>
+        </div>
+        <textarea
+            id="json-input"
+            v-model="jsonInput"
+            placeholder="输入JSON"
+            rows="8"
+        ></textarea>
+      </div>
+      <div class="arrow">⇄</div>
+      <div class="input-group">
+        <div class="input-header">
+          <label for="xml-input">XML：</label>
+          <button @click="copyToClipboard(xmlInput)" class="copy-btn" :disabled="!xmlInput">复制</button>
+        </div>
+        <textarea
+            id="xml-input"
+            v-model="xmlInput"
+            placeholder="输入XML"
+            rows="8"
+        ></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast提示 -->
+  <div v-if="showToast" class="toast">
+    {{ toastMessage }}
+  </div>
+</template>
+
 <script setup>
 import {ref, watch} from 'vue'
 
@@ -123,44 +161,6 @@ const xmlToJsonRecursive = (node) => {
 watch(jsonInput, jsonToXml)
 watch(xmlInput, xmlToJson)
 </script>
-
-<template>
-  <div class="tool-container">
-    <h2>JSON XML互转</h2>
-    <div class="converter">
-      <div class="input-group">
-        <div class="input-header">
-          <label for="json-input">JSON：</label>
-          <button @click="copyToClipboard(jsonInput)" class="copy-btn" :disabled="!jsonInput">复制</button>
-        </div>
-        <textarea
-            id="json-input"
-            v-model="jsonInput"
-            placeholder="输入JSON"
-            rows="8"
-        ></textarea>
-      </div>
-      <div class="arrow">⇄</div>
-      <div class="input-group">
-        <div class="input-header">
-          <label for="xml-input">XML：</label>
-          <button @click="copyToClipboard(xmlInput)" class="copy-btn" :disabled="!xmlInput">复制</button>
-        </div>
-        <textarea
-            id="xml-input"
-            v-model="xmlInput"
-            placeholder="输入XML"
-            rows="8"
-        ></textarea>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast提示 -->
-  <div v-if="showToast" class="toast">
-    {{ toastMessage }}
-  </div>
-</template>
 
 <style scoped>
 .tool-container {

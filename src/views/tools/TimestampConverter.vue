@@ -1,5 +1,71 @@
+<template>
+  <div class="tool-container">
+    <h2>时间戳与日期转换</h2>
+
+    <!-- 当前时间展示 -->
+    <div class="current-time">
+      <h3>当前时间</h3>
+      <div class="current-time-content">
+        <div class="current-time-item">
+          <span>日期时间：</span>
+          <span class="time-value">{{ currentTime }}</span>
+          <button @click="copyToClipboard(currentTime)" class="copy-btn">复制</button>
+        </div>
+        <div class="current-time-item">
+          <span>时间戳（秒）：</span>
+          <span class="time-value">{{ currentTimestamp }}</span>
+          <button @click="copyToClipboard(currentTimestamp)" class="copy-btn">复制</button>
+        </div>
+        <div class="current-time-item">
+          <span>时间戳（毫秒）：</span>
+          <span class="time-value">{{ currentTimestampMs }}</span>
+          <button @click="copyToClipboard(currentTimestampMs)" class="copy-btn">复制</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="converter">
+      <div class="input-group">
+        <label for="timestamp">UNIX时间戳（支持秒和毫秒）：</label>
+        <div class="input-with-copy">
+          <input
+              type="text"
+              id="timestamp"
+              v-model="timestamp"
+              placeholder="输入时间戳"
+          />
+          <button @click="copyToClipboard(timestamp)" class="copy-btn">复制</button>
+        </div>
+        <button @click="timestampToDateTime" class="convert-btn">转换为日期</button>
+        <div v-if="timestampError" class="error-message">{{ timestampError }}</div>
+      </div>
+      <div class="arrow">⇄</div>
+      <div class="input-group">
+        <label for="datetime">日期时间：</label>
+        <div class="input-with-copy">
+          <input
+              type="datetime-local"
+              id="datetime"
+              v-model="dateTime"
+              placeholder="yyyy-MM-dd hh:mm:ss"
+              step="1"
+          />
+          <button @click="copyToClipboard(dateTime)" class="copy-btn">复制</button>
+        </div>
+        <button @click="dateTimeToTimestamp" class="convert-btn">转换为时间戳</button>
+        <div v-if="dateTimeError" class="error-message">{{ dateTimeError }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast提示 -->
+  <div v-if="showToast" class="toast">
+    {{ toastMessage }}
+  </div>
+</template>
+
 <script setup>
-import {ref, watch, onMounted} from 'vue'
+import {onMounted, ref} from 'vue'
 
 const timestamp = ref('')
 const dateTime = ref('')
@@ -123,72 +189,6 @@ onMounted(() => {
   setInterval(getCurrentTime, 1000)
 })
 </script>
-
-<template>
-  <div class="tool-container">
-    <h2>时间戳与日期转换</h2>
-
-    <!-- 当前时间展示 -->
-    <div class="current-time">
-      <h3>当前时间</h3>
-      <div class="current-time-content">
-        <div class="current-time-item">
-          <span>日期时间：</span>
-          <span class="time-value">{{ currentTime }}</span>
-          <button @click="copyToClipboard(currentTime)" class="copy-btn">复制</button>
-        </div>
-        <div class="current-time-item">
-          <span>时间戳（秒）：</span>
-          <span class="time-value">{{ currentTimestamp }}</span>
-          <button @click="copyToClipboard(currentTimestamp)" class="copy-btn">复制</button>
-        </div>
-        <div class="current-time-item">
-          <span>时间戳（毫秒）：</span>
-          <span class="time-value">{{ currentTimestampMs }}</span>
-          <button @click="copyToClipboard(currentTimestampMs)" class="copy-btn">复制</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="converter">
-      <div class="input-group">
-        <label for="timestamp">UNIX时间戳（支持秒和毫秒）：</label>
-        <div class="input-with-copy">
-          <input
-              type="text"
-              id="timestamp"
-              v-model="timestamp"
-              placeholder="输入时间戳"
-          />
-          <button @click="copyToClipboard(timestamp)" class="copy-btn">复制</button>
-        </div>
-        <button @click="timestampToDateTime" class="convert-btn">转换为日期</button>
-        <div v-if="timestampError" class="error-message">{{ timestampError }}</div>
-      </div>
-      <div class="arrow">⇄</div>
-      <div class="input-group">
-        <label for="datetime">日期时间：</label>
-        <div class="input-with-copy">
-          <input
-              type="datetime-local"
-              id="datetime"
-              v-model="dateTime"
-              placeholder="yyyy-MM-dd hh:mm:ss"
-              step="1"
-          />
-          <button @click="copyToClipboard(dateTime)" class="copy-btn">复制</button>
-        </div>
-        <button @click="dateTimeToTimestamp" class="convert-btn">转换为时间戳</button>
-        <div v-if="dateTimeError" class="error-message">{{ dateTimeError }}</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast提示 -->
-  <div v-if="showToast" class="toast">
-    {{ toastMessage }}
-  </div>
-</template>
 
 <style scoped>
 .tool-container {

@@ -1,92 +1,3 @@
-<script setup>
-import {ref} from 'vue'
-
-const height = ref('')
-const weight = ref('')
-const bmiValue = ref('0.0')
-const bmiCategory = ref('')
-const bmiColor = ref('')
-const scaleWidth = ref('0%')
-const showResult = ref(false)
-const error = ref('')
-const toastMessage = ref('')
-const showToast = ref(false)
-let toastTimeout = null
-
-// 显示toast提示
-const showToastMessage = (message) => {
-  toastMessage.value = message
-  showToast.value = true
-
-  // 清除之前的定时器
-  if (toastTimeout) {
-    clearTimeout(toastTimeout)
-  }
-
-  // 3秒后自动隐藏
-  toastTimeout = setTimeout(() => {
-    showToast.value = false
-  }, 3000)
-}
-
-// 计算BMI
-const calculateBMI = () => {
-  const heightValue = parseFloat(height.value)
-  const weightValue = parseFloat(weight.value)
-
-  if (isNaN(heightValue) || isNaN(weightValue) || heightValue <= 0 || weightValue <= 0) {
-    error.value = '请输入有效的身高和体重数值'
-    return
-  }
-
-  error.value = ''
-  const heightInMeter = heightValue / 100
-  const bmi = (weightValue / (heightInMeter * heightInMeter)).toFixed(1)
-
-  bmiValue.value = bmi
-
-  // 计算BMI进度条位置
-  let width = 0
-  if (bmi < 18.5) width = (bmi / 18.5) * 25
-  else if (bmi < 24) width = 25 + ((bmi - 18.5) / (24 - 18.5)) * 25
-  else if (bmi < 28) width = 50 + ((bmi - 24) / (28 - 24)) * 25
-  else width = 75 + (Math.min(parseFloat(bmi) - 28, 12) / 12) * 25
-
-  scaleWidth.value = `${Math.min(width, 100)}%`
-
-  // 设置BMI分类和颜色
-  if (bmi < 18.5) {
-    bmiCategory.value = '偏瘦'
-    bmiColor.value = 'bg-blue-100 text-blue-800'
-  } else if (bmi < 24) {
-    bmiCategory.value = '正常'
-    bmiColor.value = 'bg-green-100 text-green-800'
-  } else if (bmi < 28) {
-    bmiCategory.value = '偏胖'
-    bmiColor.value = 'bg-yellow-100 text-yellow-800'
-  } else {
-    bmiCategory.value = '肥胖'
-    bmiColor.value = 'bg-red-100 text-red-800'
-  }
-
-  // 显示结果区域
-  showResult.value = true
-  showToastMessage('计算完成')
-}
-
-// 清空输入
-const clearInput = () => {
-  height.value = ''
-  weight.value = ''
-  bmiValue.value = '0.0'
-  bmiCategory.value = ''
-  bmiColor.value = ''
-  scaleWidth.value = '0%'
-  showResult.value = false
-  error.value = ''
-}
-</script>
-
 <template>
   <div class="tool-container">
     <h2>BMI计算器</h2>
@@ -184,6 +95,95 @@ const clearInput = () => {
     {{ toastMessage }}
   </div>
 </template>
+
+<script setup>
+import {ref} from 'vue'
+
+const height = ref('')
+const weight = ref('')
+const bmiValue = ref('0.0')
+const bmiCategory = ref('')
+const bmiColor = ref('')
+const scaleWidth = ref('0%')
+const showResult = ref(false)
+const error = ref('')
+const toastMessage = ref('')
+const showToast = ref(false)
+let toastTimeout = null
+
+// 显示toast提示
+const showToastMessage = (message) => {
+  toastMessage.value = message
+  showToast.value = true
+
+  // 清除之前的定时器
+  if (toastTimeout) {
+    clearTimeout(toastTimeout)
+  }
+
+  // 3秒后自动隐藏
+  toastTimeout = setTimeout(() => {
+    showToast.value = false
+  }, 3000)
+}
+
+// 计算BMI
+const calculateBMI = () => {
+  const heightValue = parseFloat(height.value)
+  const weightValue = parseFloat(weight.value)
+
+  if (isNaN(heightValue) || isNaN(weightValue) || heightValue <= 0 || weightValue <= 0) {
+    error.value = '请输入有效的身高和体重数值'
+    return
+  }
+
+  error.value = ''
+  const heightInMeter = heightValue / 100
+  const bmi = (weightValue / (heightInMeter * heightInMeter)).toFixed(1)
+
+  bmiValue.value = bmi
+
+  // 计算BMI进度条位置
+  let width = 0
+  if (bmi < 18.5) width = (bmi / 18.5) * 25
+  else if (bmi < 24) width = 25 + ((bmi - 18.5) / (24 - 18.5)) * 25
+  else if (bmi < 28) width = 50 + ((bmi - 24) / (28 - 24)) * 25
+  else width = 75 + (Math.min(parseFloat(bmi) - 28, 12) / 12) * 25
+
+  scaleWidth.value = `${Math.min(width, 100)}%`
+
+  // 设置BMI分类和颜色
+  if (bmi < 18.5) {
+    bmiCategory.value = '偏瘦'
+    bmiColor.value = 'bg-blue-100 text-blue-800'
+  } else if (bmi < 24) {
+    bmiCategory.value = '正常'
+    bmiColor.value = 'bg-green-100 text-green-800'
+  } else if (bmi < 28) {
+    bmiCategory.value = '偏胖'
+    bmiColor.value = 'bg-yellow-100 text-yellow-800'
+  } else {
+    bmiCategory.value = '肥胖'
+    bmiColor.value = 'bg-red-100 text-red-800'
+  }
+
+  // 显示结果区域
+  showResult.value = true
+  showToastMessage('计算完成')
+}
+
+// 清空输入
+const clearInput = () => {
+  height.value = ''
+  weight.value = ''
+  bmiValue.value = '0.0'
+  bmiCategory.value = ''
+  bmiColor.value = ''
+  scaleWidth.value = '0%'
+  showResult.value = false
+  error.value = ''
+}
+</script>
 
 <style scoped>
 .tool-container {

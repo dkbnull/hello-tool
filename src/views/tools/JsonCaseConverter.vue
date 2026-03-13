@@ -1,3 +1,51 @@
+<template>
+  <div class="tool-container">
+    <h2>JSON大小写转换</h2>
+    <div class="converter">
+      <div class="input-group">
+        <div class="input-header">
+          <label for="original-json">原始JSON：</label>
+        </div>
+        <textarea
+            id="original-json"
+            v-model="originalJson"
+            placeholder="输入JSON"
+            rows="6"
+        ></textarea>
+      </div>
+
+      <div class="result-section">
+        <div class="input-header">
+          <h3>驼峰命名：</h3>
+          <button @click="copyToClipboard(camelCaseJson)" class="copy-btn" :disabled="!camelCaseJson">复制</button>
+        </div>
+        <textarea
+            v-model="camelCaseJson"
+            rows="6"
+            readonly
+        ></textarea>
+      </div>
+
+      <div class="result-section">
+        <div class="input-header">
+          <h3>下划线命名：</h3>
+          <button @click="copyToClipboard(snakeCaseJson)" class="copy-btn" :disabled="!snakeCaseJson">复制</button>
+        </div>
+        <textarea
+            v-model="snakeCaseJson"
+            rows="6"
+            readonly
+        ></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast提示 -->
+  <div v-if="showToast" class="toast">
+    {{ toastMessage }}
+  </div>
+</template>
+
 <script setup>
 import {ref, watch} from 'vue'
 
@@ -87,54 +135,6 @@ const toSnakeCase = (str) => {
 
 watch(originalJson, convertCase)
 </script>
-
-<template>
-  <div class="tool-container">
-    <h2>JSON大小写转换</h2>
-    <div class="converter">
-      <div class="input-group">
-        <div class="input-header">
-          <label for="original-json">原始JSON：</label>
-        </div>
-        <textarea
-            id="original-json"
-            v-model="originalJson"
-            placeholder="输入JSON"
-            rows="6"
-        ></textarea>
-      </div>
-
-      <div class="result-section">
-        <div class="input-header">
-          <h3>驼峰命名：</h3>
-          <button @click="copyToClipboard(camelCaseJson)" class="copy-btn" :disabled="!camelCaseJson">复制</button>
-        </div>
-        <textarea
-            v-model="camelCaseJson"
-            rows="6"
-            readonly
-        ></textarea>
-      </div>
-
-      <div class="result-section">
-        <div class="input-header">
-          <h3>下划线命名：</h3>
-          <button @click="copyToClipboard(snakeCaseJson)" class="copy-btn" :disabled="!snakeCaseJson">复制</button>
-        </div>
-        <textarea
-            v-model="snakeCaseJson"
-            rows="6"
-            readonly
-        ></textarea>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast提示 -->
-  <div v-if="showToast" class="toast">
-    {{ toastMessage }}
-  </div>
-</template>
 
 <style scoped>
 .tool-container {

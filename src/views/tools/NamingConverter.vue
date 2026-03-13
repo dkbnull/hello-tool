@@ -1,3 +1,51 @@
+<template>
+  <div class="tool-container">
+    <h2>实体类属性命名转换</h2>
+    <div class="converter">
+      <div class="input-group">
+        <div class="input-header">
+          <label for="input-text">输入文本：</label>
+        </div>
+        <textarea
+            id="input-text"
+            v-model="inputText"
+            placeholder="输入属性名，多个属性名请换行"
+            rows="4"
+        ></textarea>
+      </div>
+
+      <div class="result-section">
+        <div class="input-header">
+          <h3>驼峰命名：</h3>
+          <button @click="copyToClipboard(camelCaseOutput)" class="copy-btn" :disabled="!camelCaseOutput">复制</button>
+        </div>
+        <textarea
+            v-model="camelCaseOutput"
+            rows="4"
+            readonly
+        ></textarea>
+      </div>
+
+      <div class="result-section">
+        <div class="input-header">
+          <h3>下划线命名：</h3>
+          <button @click="copyToClipboard(snakeCaseOutput)" class="copy-btn" :disabled="!snakeCaseOutput">复制</button>
+        </div>
+        <textarea
+            v-model="snakeCaseOutput"
+            rows="4"
+            readonly
+        ></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast提示 -->
+  <div v-if="showToast" class="toast">
+    {{ toastMessage }}
+  </div>
+</template>
+
 <script setup>
 import {ref, watch} from 'vue'
 
@@ -69,54 +117,6 @@ const toSnakeCase = (str) => {
 
 watch(inputText, convertNaming)
 </script>
-
-<template>
-  <div class="tool-container">
-    <h2>实体类属性命名转换</h2>
-    <div class="converter">
-      <div class="input-group">
-        <div class="input-header">
-          <label for="input-text">输入文本：</label>
-        </div>
-        <textarea
-            id="input-text"
-            v-model="inputText"
-            placeholder="输入属性名，多个属性名请换行"
-            rows="4"
-        ></textarea>
-      </div>
-
-      <div class="result-section">
-        <div class="input-header">
-          <h3>驼峰命名：</h3>
-          <button @click="copyToClipboard(camelCaseOutput)" class="copy-btn" :disabled="!camelCaseOutput">复制</button>
-        </div>
-        <textarea
-            v-model="camelCaseOutput"
-            rows="4"
-            readonly
-        ></textarea>
-      </div>
-
-      <div class="result-section">
-        <div class="input-header">
-          <h3>下划线命名：</h3>
-          <button @click="copyToClipboard(snakeCaseOutput)" class="copy-btn" :disabled="!snakeCaseOutput">复制</button>
-        </div>
-        <textarea
-            v-model="snakeCaseOutput"
-            rows="4"
-            readonly
-        ></textarea>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast提示 -->
-  <div v-if="showToast" class="toast">
-    {{ toastMessage }}
-  </div>
-</template>
 
 <style scoped>
 .tool-container {

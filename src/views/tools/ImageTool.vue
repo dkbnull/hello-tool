@@ -1,3 +1,80 @@
+<template>
+  <div class="tool-container">
+    <h2>图片处理工具</h2>
+    <p class="tool-description">支持上传图片转Base64，以及Base64转图片</p>
+
+    <div class="converter-container">
+      <!-- 左侧输入区域 -->
+      <div class="input-section">
+        <div class="input-header">
+          <h3>图片预览</h3>
+          <!-- 图片上传 -->
+          <div class="upload-section">
+            <input
+                type="file"
+                id="imageUpload"
+                accept="image/*"
+                @change="handleFileUpload"
+                class="file-input"
+            />
+            <label for="imageUpload" class="file-label action-btn primary">
+              <i class="fas fa-upload mr-1"></i>选择图片
+            </label>
+          </div>
+          <div class="input-actions">
+            <button @click="clearInput" class="action-btn secondary">
+              <i class="fas fa-trash-alt mr-1"></i>清空
+            </button>
+            <button @click="downloadImage" class="action-btn success" :disabled="!imageUrl">
+              <i class="fas fa-download mr-1"></i>下载图片
+            </button>
+          </div>
+        </div>
+
+        <!-- 图片上传和预览区域 -->
+        <div class="upload-preview-container">
+          <!-- 图片显示区域 -->
+          <div class="image-container">
+            <img v-if="imageUrl" :src="imageUrl" alt="预览图片" class="preview-image"/>
+            <div v-else class="image-placeholder">
+              请上传图片或在右侧输入Base64字符串
+            </div>
+          </div>
+        </div>
+
+        <div v-if="error" class="error-area">{{ error }}</div>
+      </div>
+
+      <!-- 右侧输出区域 -->
+      <div class="output-section">
+        <div class="output-header">
+          <h3>Base64字符串</h3>
+          <div class="output-actions">
+            <button @click="copyToClipboard(base64String)" class="action-btn copy-btn" :disabled="!base64String">
+              <i class="fas fa-copy mr-1"></i>复制Base64
+            </button>
+          </div>
+        </div>
+
+        <!-- Base64输入/输出区域 -->
+        <div class="base64-section">
+          <textarea
+              v-model="base64String"
+              rows="10"
+              placeholder="请输入Base64字符串，或上传图片自动生成"
+              class="base64-textarea"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast提示 -->
+  <div v-if="showToast" class="toast">
+    {{ toastMessage }}
+  </div>
+</template>
+
 <script setup>
 import {ref, watch} from 'vue'
 
@@ -104,83 +181,6 @@ const downloadImage = () => {
   link.click()
 }
 </script>
-
-<template>
-  <div class="tool-container">
-    <h2>图片处理工具</h2>
-    <p class="tool-description">支持上传图片转Base64，以及Base64转图片</p>
-
-    <div class="converter-container">
-      <!-- 左侧输入区域 -->
-      <div class="input-section">
-        <div class="input-header">
-          <h3>图片预览</h3>
-          <!-- 图片上传 -->
-          <div class="upload-section">
-            <input
-                type="file"
-                id="imageUpload"
-                accept="image/*"
-                @change="handleFileUpload"
-                class="file-input"
-            />
-            <label for="imageUpload" class="file-label action-btn primary">
-              <i class="fas fa-upload mr-1"></i>选择图片
-            </label>
-          </div>
-          <div class="input-actions">
-            <button @click="clearInput" class="action-btn secondary">
-              <i class="fas fa-trash-alt mr-1"></i>清空
-            </button>
-            <button @click="downloadImage" class="action-btn success" :disabled="!imageUrl">
-              <i class="fas fa-download mr-1"></i>下载图片
-            </button>
-          </div>
-        </div>
-
-        <!-- 图片上传和预览区域 -->
-        <div class="upload-preview-container">
-          <!-- 图片显示区域 -->
-          <div class="image-container">
-            <img v-if="imageUrl" :src="imageUrl" alt="预览图片" class="preview-image"/>
-            <div v-else class="image-placeholder">
-              请上传图片或在右侧输入Base64字符串
-            </div>
-          </div>
-        </div>
-
-        <div v-if="error" class="error-area">{{ error }}</div>
-      </div>
-
-      <!-- 右侧输出区域 -->
-      <div class="output-section">
-        <div class="output-header">
-          <h3>Base64字符串</h3>
-          <div class="output-actions">
-            <button @click="copyToClipboard(base64String)" class="action-btn copy-btn" :disabled="!base64String">
-              <i class="fas fa-copy mr-1"></i>复制Base64
-            </button>
-          </div>
-        </div>
-
-        <!-- Base64输入/输出区域 -->
-        <div class="base64-section">
-          <textarea
-              v-model="base64String"
-              rows="10"
-              placeholder="请输入Base64字符串，或上传图片自动生成"
-              class="base64-textarea"
-          ></textarea>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast提示 -->
-  <div v-if="showToast" class="toast">
-    {{ toastMessage }}
-  </div>
-</template>
 
 <style scoped>
 .tool-container {

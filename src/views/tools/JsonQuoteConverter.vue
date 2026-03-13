@@ -1,3 +1,39 @@
+<template>
+  <div class="tool-container">
+    <h2>JSON单引号转双引号</h2>
+    <div class="converter">
+      <div class="input-group">
+        <label for="single-quote-json">单引号JSON：</label>
+        <textarea
+            id="single-quote-json"
+            v-model="singleQuoteJson"
+            placeholder="输入单引号JSON"
+            rows="8"
+        ></textarea>
+      </div>
+      <div class="arrow">→</div>
+      <div class="input-group">
+        <div class="input-header">
+          <label for="double-quote-json">双引号JSON：</label>
+          <button @click="copyToClipboard(doubleQuoteJson)" class="copy-btn" :disabled="!doubleQuoteJson">复制</button>
+        </div>
+        <textarea
+            id="double-quote-json"
+            v-model="doubleQuoteJson"
+            placeholder="转换后的标准JSON"
+            rows="8"
+            readonly
+        ></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast提示 -->
+  <div v-if="showToast" class="toast">
+    {{ toastMessage }}
+  </div>
+</template>
+
 <script setup>
 import {ref, watch} from 'vue'
 
@@ -58,42 +94,6 @@ const convertQuotes = () => {
 
 watch(singleQuoteJson, convertQuotes)
 </script>
-
-<template>
-  <div class="tool-container">
-    <h2>JSON单引号转双引号</h2>
-    <div class="converter">
-      <div class="input-group">
-        <label for="single-quote-json">单引号JSON：</label>
-        <textarea
-            id="single-quote-json"
-            v-model="singleQuoteJson"
-            placeholder="输入单引号JSON"
-            rows="8"
-        ></textarea>
-      </div>
-      <div class="arrow">→</div>
-      <div class="input-group">
-        <div class="input-header">
-          <label for="double-quote-json">双引号JSON：</label>
-          <button @click="copyToClipboard(doubleQuoteJson)" class="copy-btn" :disabled="!doubleQuoteJson">复制</button>
-        </div>
-        <textarea
-            id="double-quote-json"
-            v-model="doubleQuoteJson"
-            placeholder="转换后的标准JSON"
-            rows="8"
-            readonly
-        ></textarea>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast提示 -->
-  <div v-if="showToast" class="toast">
-    {{ toastMessage }}
-  </div>
-</template>
 
 <style scoped>
 .tool-container {

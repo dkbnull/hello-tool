@@ -1,33 +1,3 @@
-<script setup>
-import {onMounted, ref} from 'vue';
-
-// 当前激活的分类
-const activeCategory = ref('');
-
-// 监听滚动，更新激活的分类
-onMounted(() => {
-  const handleScroll = () => {
-    const sections = document.querySelectorAll('.tool-section');
-    let current = '';
-
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop;
-      if (scrollY >= sectionTop - 100) {
-        current = section.getAttribute('id');
-      }
-    });
-
-    activeCategory.value = current;
-  };
-
-  window.addEventListener('scroll', handleScroll);
-  // 初始执行一次
-  handleScroll();
-
-  return () => window.removeEventListener('scroll', handleScroll);
-});
-</script>
-
 <template>
   <div class="home-container">
     <!-- 左侧导航栏 -->
@@ -224,6 +194,36 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
+<script setup>
+import {onMounted, ref} from 'vue';
+
+// 当前激活的分类
+const activeCategory = ref('');
+
+// 监听滚动，更新激活的分类
+onMounted(() => {
+  const handleScroll = () => {
+    const sections = document.querySelectorAll('.tool-section');
+    let current = '';
+
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      if (scrollY >= sectionTop - 100) {
+        current = section.getAttribute('id');
+      }
+    });
+
+    activeCategory.value = current;
+  };
+
+  window.addEventListener('scroll', handleScroll);
+  // 初始执行一次
+  handleScroll();
+
+  return () => window.removeEventListener('scroll', handleScroll);
+});
+</script>
 
 <style scoped>
 .home-container {

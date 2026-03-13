@@ -1,6 +1,3 @@
-<script setup>
-</script>
-
 <template>
   <div class="app">
     <header class="header">
@@ -21,6 +18,9 @@
     </footer>
   </div>
 </template>
+
+<script setup>
+</script>
 
 <style scoped>
 .app {

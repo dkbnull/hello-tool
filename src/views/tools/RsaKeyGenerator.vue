@@ -1,3 +1,29 @@
+<template>
+  <div class="tool-container">
+    <h2>生成RSA密钥</h2>
+    <div class="rsa-generator">
+      <button @click="generateRsaKeys" class="generate-btn">生成密钥对</button>
+
+      <div class="key-section">
+        <h3>公钥：</h3>
+        <pre>{{ publicKey }}</pre>
+        <button @click="copyToClipboard(publicKey)" class="copy-btn">复制公钥</button>
+      </div>
+
+      <div class="key-section">
+        <h3>私钥：</h3>
+        <pre>{{ privateKey }}</pre>
+        <button @click="copyToClipboard(privateKey)" class="copy-btn">复制私钥</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast提示 -->
+  <div v-if="showToast" class="toast">
+    {{ toastMessage }}
+  </div>
+</template>
+
 <script setup>
 import {ref} from 'vue'
 
@@ -95,32 +121,6 @@ const copyToClipboard = (text) => {
       })
 }
 </script>
-
-<template>
-  <div class="tool-container">
-    <h2>生成RSA密钥</h2>
-    <div class="rsa-generator">
-      <button @click="generateRsaKeys" class="generate-btn">生成密钥对</button>
-
-      <div class="key-section">
-        <h3>公钥：</h3>
-        <pre>{{ publicKey }}</pre>
-        <button @click="copyToClipboard(publicKey)" class="copy-btn">复制公钥</button>
-      </div>
-
-      <div class="key-section">
-        <h3>私钥：</h3>
-        <pre>{{ privateKey }}</pre>
-        <button @click="copyToClipboard(privateKey)" class="copy-btn">复制私钥</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast提示 -->
-  <div v-if="showToast" class="toast">
-    {{ toastMessage }}
-  </div>
-</template>
 
 <style scoped>
 .tool-container {

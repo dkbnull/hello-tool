@@ -1,65 +1,3 @@
-<script setup>
-import {ref} from 'vue'
-import QRCode from 'qrcode'
-
-const input = ref('')
-const error = ref('')
-const toastMessage = ref('')
-const showToast = ref(false)
-const qrCodeUrl = ref('')
-const qrCodeSize = ref(200)
-
-// 清空输入
-const clearInput = () => {
-  input.value = ''
-  qrCodeUrl.value = ''
-  error.value = ''
-}
-
-// 生成二维码
-const generateQRCode = () => {
-  if (!input.value) {
-    error.value = '请输入内容'
-    return
-  }
-
-  try {
-    QRCode.toDataURL(input.value, {
-      width: qrCodeSize.value,
-      margin: 1,
-      color: {
-        dark: '#000000',
-        light: '#FFFFFF'
-      }
-    })
-        .then(url => {
-          qrCodeUrl.value = url
-          error.value = ''
-        })
-        .catch(err => {
-          error.value = '生成失败: ' + err.message
-        })
-  } catch (err) {
-    error.value = '生成失败: ' + err.message
-  }
-}
-
-// 下载二维码
-const downloadQRCode = () => {
-  if (!qrCodeUrl.value) {
-    error.value = '请先生成二维码'
-    return
-  }
-
-  const link = document.createElement('a')
-  link.href = qrCodeUrl.value
-  link.download = 'qrcode.png'
-  link.click()
-}
-
-
-</script>
-
 <template>
   <div class="tool-container">
     <h2>二维码生成器</h2>
@@ -128,6 +66,66 @@ const downloadQRCode = () => {
     {{ toastMessage }}
   </div>
 </template>
+
+<script setup>
+import {ref} from 'vue'
+import QRCode from 'qrcode'
+
+const input = ref('')
+const error = ref('')
+const toastMessage = ref('')
+const showToast = ref(false)
+const qrCodeUrl = ref('')
+const qrCodeSize = ref(200)
+
+// 清空输入
+const clearInput = () => {
+  input.value = ''
+  qrCodeUrl.value = ''
+  error.value = ''
+}
+
+// 生成二维码
+const generateQRCode = () => {
+  if (!input.value) {
+    error.value = '请输入内容'
+    return
+  }
+
+  try {
+    QRCode.toDataURL(input.value, {
+      width: qrCodeSize.value,
+      margin: 1,
+      color: {
+        dark: '#000000',
+        light: '#FFFFFF'
+      }
+    })
+        .then(url => {
+          qrCodeUrl.value = url
+          error.value = ''
+        })
+        .catch(err => {
+          error.value = '生成失败: ' + err.message
+        })
+  } catch (err) {
+    error.value = '生成失败: ' + err.message
+  }
+}
+
+// 下载二维码
+const downloadQRCode = () => {
+  if (!qrCodeUrl.value) {
+    error.value = '请先生成二维码'
+    return
+  }
+
+  const link = document.createElement('a')
+  link.href = qrCodeUrl.value
+  link.download = 'qrcode.png'
+  link.click()
+}
+</script>
 
 <style scoped>
 .tool-container {

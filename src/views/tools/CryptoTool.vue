@@ -1,3 +1,110 @@
+<template>
+  <div class="tool-container">
+    <h2>加解密工具</h2>
+    <p class="tool-description">支持Base64、AES、DES、3DES和MD5加解密</p>
+
+    <div class="converter-container">
+
+      <!-- 控制区域 -->
+      <div class="control-section">
+        <div class="control-row">
+          <!-- 加密模式选择 -->
+          <div class="mode-selector">
+            <label>加密模式：</label>
+            <select v-model="cryptoMode" class="mode-select">
+              <option value="base64">Base64</option>
+              <option value="aes">AES</option>
+              <option value="des">DES</option>
+              <option value="tripleDes">3DES</option>
+              <option value="md5">MD5</option>
+            </select>
+          </div>
+
+          <!-- 密钥输入 -->
+          <div class="key-input-container">
+            <!-- AES密钥输入 -->
+            <div v-if="cryptoMode === 'aes'" class="key-input">
+              <label for="aesKey">AES密钥：</label>
+              <input
+                  type="text"
+                  id="aesKey"
+                  v-model="aesKey"
+                  placeholder="请输入AES密钥"
+                  class="key-input-field"
+              />
+            </div>
+
+            <!-- DES密钥输入 -->
+            <div v-if="cryptoMode === 'des'" class="key-input">
+              <label for="desKey">DES密钥：</label>
+              <input
+                  type="text"
+                  id="desKey"
+                  v-model="desKey"
+                  placeholder="请输入DES密钥"
+                  class="key-input-field"
+              />
+            </div>
+
+            <!-- 3DES密钥输入 -->
+            <div v-if="cryptoMode === 'tripleDes'" class="key-input">
+              <label for="tripleDesKey">3DES密钥：</label>
+              <input
+                  type="text"
+                  id="tripleDesKey"
+                  v-model="tripleDesKey"
+                  placeholder="请输入3DES密钥"
+                  class="key-input-field"
+              />
+            </div>
+          </div>
+
+          <!-- 加密解密按钮 -->
+          <div class="input-buttons">
+            <button @click="handleEncrypt" class="action-btn success">
+              <i class="fas fa-lock mr-1"></i>加密
+            </button>
+            <button @click="handleDecrypt" class="action-btn warning">
+              <i class="fas fa-unlock mr-1"></i>解密
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 输入区域 -->
+      <div class="input-section">
+        <div class="input-header">
+          <h3>输入</h3>
+          <button @click="clearInput" class="action-btn secondary">
+            <i class="fas fa-trash-alt mr-1"></i>清空
+          </button>
+        </div>
+        <textarea
+            v-model="input"
+            rows="8"
+        ></textarea>
+      </div>
+
+      <!-- 输出区域 -->
+      <div class="output-section">
+        <div class="output-header">
+          <h3>结果</h3>
+          <button @click="copyToClipboard(output)" class="action-btn copy-btn" :disabled="!output">
+            <i class="fas fa-copy mr-1"></i>复制
+          </button>
+        </div>
+        <pre class="output-area">{{ output }}</pre>
+        <div v-if="error" class="error-area">{{ error }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast提示 -->
+  <div v-if="showToast" class="toast">
+    {{ toastMessage }}
+  </div>
+</template>
+
 <script setup>
 import {ref} from 'vue'
 import CryptoJS from 'crypto-js'
@@ -236,113 +343,6 @@ const handleDecrypt = () => {
   }
 }
 </script>
-
-<template>
-  <div class="tool-container">
-    <h2>加解密工具</h2>
-    <p class="tool-description">支持Base64、AES、DES、3DES和MD5加解密</p>
-
-    <div class="converter-container">
-
-      <!-- 控制区域 -->
-      <div class="control-section">
-        <div class="control-row">
-          <!-- 加密模式选择 -->
-          <div class="mode-selector">
-            <label>加密模式：</label>
-            <select v-model="cryptoMode" class="mode-select">
-              <option value="base64">Base64</option>
-              <option value="aes">AES</option>
-              <option value="des">DES</option>
-              <option value="tripleDes">3DES</option>
-              <option value="md5">MD5</option>
-            </select>
-          </div>
-
-          <!-- 密钥输入 -->
-          <div class="key-input-container">
-            <!-- AES密钥输入 -->
-            <div v-if="cryptoMode === 'aes'" class="key-input">
-              <label for="aesKey">AES密钥：</label>
-              <input
-                  type="text"
-                  id="aesKey"
-                  v-model="aesKey"
-                  placeholder="请输入AES密钥"
-                  class="key-input-field"
-              />
-            </div>
-
-            <!-- DES密钥输入 -->
-            <div v-if="cryptoMode === 'des'" class="key-input">
-              <label for="desKey">DES密钥：</label>
-              <input
-                  type="text"
-                  id="desKey"
-                  v-model="desKey"
-                  placeholder="请输入DES密钥"
-                  class="key-input-field"
-              />
-            </div>
-
-            <!-- 3DES密钥输入 -->
-            <div v-if="cryptoMode === 'tripleDes'" class="key-input">
-              <label for="tripleDesKey">3DES密钥：</label>
-              <input
-                  type="text"
-                  id="tripleDesKey"
-                  v-model="tripleDesKey"
-                  placeholder="请输入3DES密钥"
-                  class="key-input-field"
-              />
-            </div>
-          </div>
-
-          <!-- 加密解密按钮 -->
-          <div class="input-buttons">
-            <button @click="handleEncrypt" class="action-btn success">
-              <i class="fas fa-lock mr-1"></i>加密
-            </button>
-            <button @click="handleDecrypt" class="action-btn warning">
-              <i class="fas fa-unlock mr-1"></i>解密
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 输入区域 -->
-      <div class="input-section">
-        <div class="input-header">
-          <h3>输入</h3>
-          <button @click="clearInput" class="action-btn secondary">
-            <i class="fas fa-trash-alt mr-1"></i>清空
-          </button>
-        </div>
-        <textarea
-            v-model="input"
-            rows="8"
-        ></textarea>
-      </div>
-
-      <!-- 输出区域 -->
-      <div class="output-section">
-        <div class="output-header">
-          <h3>结果</h3>
-          <button @click="copyToClipboard(output)" class="action-btn copy-btn" :disabled="!output">
-            <i class="fas fa-copy mr-1"></i>复制
-          </button>
-        </div>
-        <pre class="output-area">{{ output }}</pre>
-        <div v-if="error" class="error-area">{{ error }}</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast提示 -->
-  <div v-if="showToast" class="toast">
-    {{ toastMessage }}
-  </div>
-</template>
 
 <style scoped>
 .tool-container {

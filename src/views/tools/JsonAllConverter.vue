@@ -1,3 +1,70 @@
+<template>
+  <div class="tool-container">
+    <h2>JSON全能转换器</h2>
+
+    <div class="converter-container">
+      <!-- 左侧输入区域 -->
+      <div class="input-section">
+        <div class="input-header">
+          <h3>JSON</h3>
+          <div class="input-actions">
+            <button @click="clearInput" class="action-btn secondary">
+              <i class="fas fa-trash-alt mr-1"></i>清空
+            </button>
+          </div>
+        </div>
+        <textarea
+            v-model="jsonInput"
+            rows="8"
+        ></textarea>
+
+        <div class="input-buttons">
+          <button @click="formatJson" class="action-btn success">
+            <i class="fas fa-align-left mr-1"></i>格式化
+          </button>
+          <button @click="minifyJson" class="action-btn purple">
+            <i class="fas fa-compress-alt mr-1"></i>压缩
+          </button>
+          <button @click="validateJson" class="action-btn warning">
+            <i class="fas fa-check-circle mr-1"></i>验证
+          </button>
+        </div>
+      </div>
+
+      <!-- 中间转换选项区域 -->
+      <div class="options-section">
+        <div class="options-buttons">
+          <button id="toXmlBtn" @click="jsonToXml" class="option-btn indigo">
+            <i class="fas fa-code mr-1"></i>转XML
+          </button>
+          <button id="toYamlBtn" @click="jsonToYaml" class="option-btn amber">
+            <i class="fas fa-file-alt mr-1"></i>转YAML
+          </button>
+        </div>
+      </div>
+
+      <!-- 右侧输出区域 -->
+      <div class="output-section">
+        <div class="output-header">
+          <h3>转换结果</h3>
+          <div class="output-actions">
+            <button @click="copyToClipboard(output)" class="action-btn copy-btn" :disabled="!output">
+              <i class="fas fa-copy mr-1"></i>复制
+            </button>
+          </div>
+        </div>
+        <pre class="output-area">{{ output }}</pre>
+        <div v-if="error" class="error-area">{{ error }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast提示 -->
+  <div v-if="showToast" class="toast">
+    {{ toastMessage }}
+  </div>
+</template>
+
 <script setup>
 import {ref} from 'vue'
 
@@ -154,73 +221,6 @@ const jsonToYamlRecursive = (obj, indent) => {
   return yaml
 }
 </script>
-
-<template>
-  <div class="tool-container">
-    <h2>JSON全能转换器</h2>
-
-    <div class="converter-container">
-      <!-- 左侧输入区域 -->
-      <div class="input-section">
-        <div class="input-header">
-          <h3>JSON</h3>
-          <div class="input-actions">
-            <button @click="clearInput" class="action-btn secondary">
-              <i class="fas fa-trash-alt mr-1"></i>清空
-            </button>
-          </div>
-        </div>
-        <textarea
-            v-model="jsonInput"
-            rows="8"
-        ></textarea>
-
-        <div class="input-buttons">
-          <button @click="formatJson" class="action-btn success">
-            <i class="fas fa-align-left mr-1"></i>格式化
-          </button>
-          <button @click="minifyJson" class="action-btn purple">
-            <i class="fas fa-compress-alt mr-1"></i>压缩
-          </button>
-          <button @click="validateJson" class="action-btn warning">
-            <i class="fas fa-check-circle mr-1"></i>验证
-          </button>
-        </div>
-      </div>
-
-      <!-- 中间转换选项区域 -->
-      <div class="options-section">
-        <div class="options-buttons">
-          <button id="toXmlBtn" @click="jsonToXml" class="option-btn indigo">
-            <i class="fas fa-code mr-1"></i>转XML
-          </button>
-          <button id="toYamlBtn" @click="jsonToYaml" class="option-btn amber">
-            <i class="fas fa-file-alt mr-1"></i>转YAML
-          </button>
-        </div>
-      </div>
-
-      <!-- 右侧输出区域 -->
-      <div class="output-section">
-        <div class="output-header">
-          <h3>转换结果</h3>
-          <div class="output-actions">
-            <button @click="copyToClipboard(output)" class="action-btn copy-btn" :disabled="!output">
-              <i class="fas fa-copy mr-1"></i>复制
-            </button>
-          </div>
-        </div>
-        <pre class="output-area">{{ output }}</pre>
-        <div v-if="error" class="error-area">{{ error }}</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast提示 -->
-  <div v-if="showToast" class="toast">
-    {{ toastMessage }}
-  </div>
-</template>
 
 <style scoped>
 .tool-container {

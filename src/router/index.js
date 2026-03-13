@@ -4,17 +4,17 @@ import {createRouter, createWebHistory} from 'vue-router'
 import Home from '../views/Home.vue'
 import About from '../views/About.vue'
 import TimestampConverter from '../views/tools/TimestampConverter.vue'
-import JwtDecoder from '../views/tools/JwtDecoder.vue'
 import JsonAllConverter from "../views/tools/JsonAllConverter.vue";
 import JsonXmlConverter from '../views/tools/JsonXmlConverter.vue'
 import JsonQuoteConverter from '../views/tools/JsonQuoteConverter.vue'
 import JsonCaseConverter from '../views/tools/JsonCaseConverter.vue'
-import NamingConverter from '../views/tools/NamingConverter.vue'
-import RsaKeyGenerator from '../views/tools/RsaKeyGenerator.vue'
-import BmiCalculator from "../views/tools/BmiCalculator.vue";
+import JwtDecoder from '../views/tools/JwtDecoder.vue'
 import CryptoTool from '../views/tools/CryptoTool.vue';
+import RsaKeyGenerator from '../views/tools/RsaKeyGenerator.vue'
+import NamingConverter from '../views/tools/NamingConverter.vue'
 import QrCodeGenerator from '../views/tools/QrCodeGenerator.vue';
 import ImageTool from '../views/tools/ImageTool.vue';
+import BmiCalculator from "../views/tools/BmiCalculator.vue";
 
 // 创建路由
 const router = createRouter({
@@ -34,11 +34,6 @@ const router = createRouter({
             path: '/timestamp',
             name: 'TimestampConverter',
             component: TimestampConverter
-        },
-        {
-            path: '/jwt',
-            name: 'JwtDecoder',
-            component: JwtDecoder
         },
         {
             path: '/json-all',
@@ -61,9 +56,14 @@ const router = createRouter({
             component: JsonCaseConverter
         },
         {
-            path: '/naming',
-            name: 'NamingConverter',
-            component: NamingConverter
+            path: '/jwt',
+            name: 'JwtDecoder',
+            component: JwtDecoder
+        },
+        {
+            path: '/crypto',
+            name: 'CryptoTool',
+            component: CryptoTool
         },
         {
             path: '/rsa',
@@ -71,14 +71,9 @@ const router = createRouter({
             component: RsaKeyGenerator
         },
         {
-            path: '/bmi',
-            name: 'BmiCalculator',
-            component: BmiCalculator
-        },
-        {
-            path: '/crypto',
-            name: 'CryptoTool',
-            component: CryptoTool
+            path: '/naming',
+            name: 'NamingConverter',
+            component: NamingConverter
         },
         {
             path: '/qrcode',
@@ -89,6 +84,11 @@ const router = createRouter({
             path: '/image',
             name: 'ImageTool',
             component: ImageTool
+        },
+        {
+            path: '/bmi',
+            name: 'BmiCalculator',
+            component: BmiCalculator
         }
     ]
 })

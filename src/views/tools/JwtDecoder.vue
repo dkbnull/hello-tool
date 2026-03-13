@@ -1,3 +1,53 @@
+<template>
+  <div class="tool-container">
+    <h2>JWT解密</h2>
+    <div class="jwt-decoder">
+      <div class="input-group">
+        <label for="jwt-token">JWT令牌：</label>
+        <textarea
+            id="jwt-token"
+            v-model="jwtToken"
+            placeholder="输入JWT令牌"
+            rows="4"
+        ></textarea>
+      </div>
+
+      <div class="result-section header-section">
+        <div class="result-header">
+          <h3>Header：</h3>
+          <button v-if="decodedHeader && decodedHeader !== '无效的JWT令牌格式' && decodedHeader !== '解码失败'"
+                  @click="copyToClipboard(decodedHeader)" class="copy-btn">复制
+          </button>
+        </div>
+        <pre>{{ decodedHeader }}</pre>
+      </div>
+
+      <div class="result-section payload-section">
+        <div class="result-header">
+          <h3>Payload：</h3>
+          <button v-if="decodedPayload" @click="copyToClipboard(decodedPayload)" class="copy-btn">复制</button>
+        </div>
+        <pre>{{ decodedPayload }}</pre>
+
+        <div v-if="expirationInfo" class="expiration-info">
+          <div class="expiration-item">
+            <span>过期时间：</span>
+            <span>{{ expirationInfo.date }}</span>
+            <span :class="expirationInfo.isExpired ? 'expired' : 'not-expired'">
+              {{ expirationInfo.isExpired ? '已过期' : '未过期' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast提示 -->
+  <div v-if="showToast" class="toast">
+    {{ toastMessage }}
+  </div>
+</template>
+
 <script setup>
 import {computed, ref, watch} from 'vue'
 
@@ -88,56 +138,6 @@ const expirationInfo = computed(() => {
 
 watch(jwtToken, decodeJwt)
 </script>
-
-<template>
-  <div class="tool-container">
-    <h2>JWT解密</h2>
-    <div class="jwt-decoder">
-      <div class="input-group">
-        <label for="jwt-token">JWT令牌：</label>
-        <textarea
-            id="jwt-token"
-            v-model="jwtToken"
-            placeholder="输入JWT令牌"
-            rows="4"
-        ></textarea>
-      </div>
-
-      <div class="result-section header-section">
-        <div class="result-header">
-          <h3>Header：</h3>
-          <button v-if="decodedHeader && decodedHeader !== '无效的JWT令牌格式' && decodedHeader !== '解码失败'"
-                  @click="copyToClipboard(decodedHeader)" class="copy-btn">复制
-          </button>
-        </div>
-        <pre>{{ decodedHeader }}</pre>
-      </div>
-
-      <div class="result-section payload-section">
-        <div class="result-header">
-          <h3>Payload：</h3>
-          <button v-if="decodedPayload" @click="copyToClipboard(decodedPayload)" class="copy-btn">复制</button>
-        </div>
-        <pre>{{ decodedPayload }}</pre>
-
-        <div v-if="expirationInfo" class="expiration-info">
-          <div class="expiration-item">
-            <span>过期时间：</span>
-            <span>{{ expirationInfo.date }}</span>
-            <span :class="expirationInfo.isExpired ? 'expired' : 'not-expired'">
-              {{ expirationInfo.isExpired ? '已过期' : '未过期' }}
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast提示 -->
-  <div v-if="showToast" class="toast">
-    {{ toastMessage }}
-  </div>
-</template>
 
 <style scoped>
 .tool-container {
