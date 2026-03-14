@@ -67,19 +67,4 @@
 .nav-link:hover {
   background: rgba(0, 0, 0, 0.05);
 }
-
-.theme-toggle {
-  background: none;
-  border: none;
-  color: #333333;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 50%;
-  transition: background 0.3s ease, color 0.3s;
-}
-
-.theme-toggle:hover {
-  background: rgba(0, 0, 0, 0.05);
-}
 </style>

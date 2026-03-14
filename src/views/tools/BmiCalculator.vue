@@ -121,7 +121,7 @@ const calculateBMI = () => {
   bmiValue.value = bmi
 
   // 计算BMI进度条位置
-  let width = 0
+  let width
   if (bmi < 18.5) width = (bmi / 18.5) * 25
   else if (bmi < 24) width = 25 + ((bmi - 18.5) / (24 - 18.5)) * 25
   else if (bmi < 28) width = 50 + ((bmi - 24) / (28 - 24)) * 25
@@ -197,7 +197,6 @@ h2 {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
-  background-color: #f8fafc;
 }
 
 .input-header,
@@ -210,7 +209,6 @@ h2 {
 
 h3 {
   font-size: 1.25rem;
-  font-weight: semibold;
   color: #333;
   margin: 0;
 }
@@ -234,7 +232,6 @@ h3 {
 
 .field-label {
   font-size: 0.875rem;
-  font-weight: medium;
   color: #666;
 }
 
@@ -248,7 +245,6 @@ h3 {
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
-  padding-right: 3rem;
 }
 
 .input-suffix {
@@ -360,7 +356,6 @@ h3 {
   padding: 1rem;
   border-radius: 4px;
   text-align: center;
-  font-weight: medium;
   transition: all 0.3s ease-in-out;
 }
 
@@ -404,20 +399,6 @@ h3 {
   font-size: 0.875rem;
   color: #666;
   text-align: center;
-}
-
-.toast {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #35495e;
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes fadeIn {

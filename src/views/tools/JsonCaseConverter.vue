@@ -4,7 +4,7 @@
     <div class="converter">
       <div class="input-group">
         <div class="input-header">
-          <label for="original-json">原始JSON：</label>
+          <h3><label for="original-json">原始JSON</label></h3>
         </div>
         <textarea
             id="original-json"
@@ -16,7 +16,7 @@
 
       <div class="result-section">
         <div class="input-header">
-          <h3>驼峰命名：</h3>
+          <h3>驼峰命名</h3>
           <button @click="handleCopy(camelCaseJson)" class="copy-btn" :disabled="!camelCaseJson">复制</button>
         </div>
         <textarea
@@ -28,7 +28,7 @@
 
       <div class="result-section">
         <div class="input-header">
-          <h3>下划线命名：</h3>
+          <h3>下划线命名</h3>
           <button @click="handleCopy(snakeCaseJson)" class="copy-btn" :disabled="!snakeCaseJson">复制</button>
         </div>
         <textarea
@@ -147,8 +147,8 @@ h2 {
 label,
 h3 {
   display: block;
-  margin-bottom: 0.5rem;
   color: #666;
+  margin: 0;
 }
 
 h3 {
@@ -167,26 +167,12 @@ h3 {
 }
 
 .copy-btn:hover:not(:disabled) {
-  background: #35495e;
+  background: #38a169;
 }
 
 .copy-btn:disabled {
   background: #ccc;
   cursor: not-allowed;
-}
-
-.toast {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #35495e;
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes fadeIn {

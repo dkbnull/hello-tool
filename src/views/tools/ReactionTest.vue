@@ -173,18 +173,11 @@ h2 {
   font-weight: bold;
 }
 
-.tool-description {
-  text-align: center;
-  color: #666;
-  margin-bottom: 2rem;
-}
-
 .test-container {
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
-  background-color: #f8fafc;
 }
 
 .stats-section {
@@ -235,7 +228,6 @@ h2 {
 
 .instruction {
   font-size: 1.25rem;
-  font-weight: semibold;
   color: #333;
 }
 
@@ -304,7 +296,6 @@ h2 {
 
 .history-title {
   font-size: 1rem;
-  font-weight: semibold;
   color: #333;
   margin-bottom: 0.75rem;
 }

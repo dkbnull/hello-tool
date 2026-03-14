@@ -165,7 +165,6 @@ const renderingError = ref('')
 const previewContainer = ref(null)
 const isRendering = ref(false) // 渲染状态
 
-
 let debounceTimer = null
 
 // 防抖渲染
@@ -348,14 +347,11 @@ onMounted(() => {
 
   // 加载默认示例
   loadExample()
-
-
 })
 </script>
 
 <style scoped>
 .tool-container {
-  max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
 }
@@ -368,10 +364,10 @@ h2 {
   font-weight: bold;
 }
 
-.tool-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 2rem;
+h3 {
+  font-size: 1.25rem;
+  color: #333;
+  margin: 0;
 }
 
 .chart-type-selector {
@@ -482,147 +478,6 @@ h2 {
   cursor: not-allowed;
 }
 
-.download-controls {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.format-select {
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: white;
-  color: #333;
-  font-size: 0.875rem;
-  cursor: pointer;
-  outline: none;
-  min-width: 80px;
-  transition: border-color 0.2s ease;
-}
-
-.format-select:focus {
-  border-color: #4299e1;
-  box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
-}
-
-.format-select:hover {
-  border-color: #cbd5e0;
-}
-
-.download-controls {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.format-select {
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: white;
-  color: #333;
-  font-size: 0.875rem;
-  cursor: pointer;
-  outline: none;
-  min-width: 80px;
-  transition: border-color 0.2s ease;
-}
-
-.format-select:focus {
-  border-color: #4299e1;
-  box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
-}
-
-.format-select:hover {
-  border-color: #cbd5e0;
-}
-
-.download-controls {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.format-select {
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: white;
-  color: #333;
-  font-size: 0.875rem;
-  cursor: pointer;
-  outline: none;
-}
-
-.format-select:focus {
-  border-color: #4299e1;
-}
-
-.download-dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-arrow {
-  margin-left: 0.25rem;
-  font-size: 0.7rem;
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  min-width: 120px;
-  margin-top: 0.25rem;
-}
-
-.dropdown-item {
-  padding: 0.5rem 0.75rem;
-  cursor: pointer;
-  font-size: 0.875rem;
-  color: #333;
-  transition: background 0.2s ease;
-}
-
-.dropdown-item:hover {
-  background: #f7fafc;
-}
-
-.dropdown-item:first-child {
-  border-radius: 4px 4px 0 0;
-}
-
-.dropdown-item:last-child {
-  border-radius: 0 0 4px 4px;
-}
-
-.download-controls {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.format-select {
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: white;
-  color: #333;
-  font-size: 0.875rem;
-  cursor: pointer;
-  outline: none;
-}
-
-.format-select:focus {
-  border-color: #4299e1;
-}
-
 .code-input {
   flex: 1;
   width: 100%;
@@ -719,18 +574,6 @@ h2 {
   .download-controls {
     flex-direction: column;
     gap: 0.5rem;
-  }
-
-  .format-select {
-    padding: 0.4rem;
-    font-size: 0.8rem;
-    min-width: 70px;
-  }
-
-  .format-select {
-    padding: 0.4rem;
-    font-size: 0.8rem;
-    min-width: 70px;
   }
 }
 </style>

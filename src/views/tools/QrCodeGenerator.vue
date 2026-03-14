@@ -136,12 +136,6 @@ h2 {
   font-weight: bold;
 }
 
-.tool-description {
-  text-align: center;
-  color: #666;
-  margin-bottom: 2rem;
-}
-
 .converter-container {
   padding: 2rem;
   display: flex;
@@ -179,7 +173,6 @@ h2 {
 
 h3 {
   font-size: 1.25rem;
-  font-weight: semibold;
   color: #333;
   margin: 0;
 }
@@ -286,13 +279,11 @@ textarea {
   max-height: 100%;
 }
 
-
 .qr-code-placeholder {
   color: #666;
   text-align: center;
   font-size: 1rem;
 }
-
 
 .error-area {
   margin-top: 0.75rem;

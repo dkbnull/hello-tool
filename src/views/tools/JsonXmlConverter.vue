@@ -4,7 +4,7 @@
     <div class="converter">
       <div class="input-group">
         <div class="input-header">
-          <label for="json-input">JSON：</label>
+          <h3><label for="json-input">JSON</label></h3>
           <button @click="handleCopy(jsonInput)" class="copy-btn" :disabled="!jsonInput">复制</button>
         </div>
         <textarea
@@ -17,7 +17,7 @@
       <div class="arrow">⇄</div>
       <div class="input-group">
         <div class="input-header">
-          <label for="xml-input">XML：</label>
+          <h3><label for="xml-input">XML</label></h3>
           <button @click="handleCopy(xmlInput)" class="copy-btn" :disabled="!xmlInput">复制</button>
         </div>
         <textarea
@@ -150,6 +150,12 @@ h2 {
   margin-bottom: 2rem;
 }
 
+h3 {
+  font-size: 1.25rem;
+  color: #333;
+  margin: 0;
+}
+
 .converter {
   display: flex;
   align-items: center;
@@ -192,7 +198,7 @@ label {
 }
 
 .copy-btn:hover:not(:disabled) {
-  background: #35495e;
+  background: #38a169;
 }
 
 .copy-btn:disabled {
@@ -214,20 +220,6 @@ textarea {
   font-size: 2rem;
   color: #42b883;
   font-weight: bold;
-}
-
-.toast {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #35495e;
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes fadeIn {

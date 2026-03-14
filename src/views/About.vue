@@ -5,7 +5,6 @@
         <h1 class="page-title">Hello Tool</h1>
         <p class="page-subtitle">开发工具箱 - 集成多种常用开发工具，提高开发效率</p>
 
-        <!-- 仓库链接 -->
         <div class="about-section">
           <h2 class="section-title">
             <span class="icon">🔗</span>
@@ -23,7 +22,6 @@
           </div>
         </div>
 
-        <!-- 友链 -->
         <div class="about-section">
           <h2 class="section-title">
             <span class="icon">🤝</span>
@@ -41,7 +39,6 @@
           </div>
         </div>
 
-        <!-- 联系方式 -->
         <div class="about-section">
           <h2 class="section-title">
             <span class="icon">💬</span>

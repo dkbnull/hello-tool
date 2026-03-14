@@ -109,7 +109,7 @@ import {showToast} from '../../utils/toast'
 const input = ref('')
 const output = ref('')
 const error = ref('')
-const cryptoMode = ref('base64') // base64, aes, des, tripleDes, md5
+const cryptoMode = ref('base64')
 const aesKey = ref('')
 const desKey = ref('')
 const tripleDesKey = ref('')
@@ -296,7 +296,7 @@ const handleEncrypt = () => {
     md5: md5Encrypt,
     rsa: rsaEncrypt
   }
-  
+
   const encryptor = encryptors[cryptoMode.value]
   if (encryptor) {
     encryptor()
@@ -305,15 +305,15 @@ const handleEncrypt = () => {
 
 // 处理解密操作
 const handleDecrypt = () => {
-  const decryptors = {
+  const decrypts = {
     base64: base64Decrypt,
     aes: aesDecrypt,
     des: desDecrypt,
     tripleDes: tripleDesDecrypt,
     rsa: rsaDecrypt
   }
-  
-  const decryptor = decryptors[cryptoMode.value]
+
+  const decryptor = decrypts[cryptoMode.value]
   if (decryptor) {
     decryptor()
   }
@@ -429,15 +429,8 @@ h2 {
 
 h3 {
   font-size: 1.25rem;
-  font-weight: semibold;
   color: #333;
   margin: 0;
-}
-
-.input-actions,
-.output-actions {
-  display: flex;
-  gap: 0.5rem;
 }
 
 textarea {
@@ -472,14 +465,6 @@ textarea {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-.key-input .mt-2 {
-  margin-top: 0.5rem;
-}
-
-.key-input .mt-2 {
-  margin-top: 0.5rem;
 }
 
 .key-input-field {
@@ -549,7 +534,7 @@ textarea {
 }
 
 .action-btn.copy-btn:hover:not(:disabled) {
-  background: #35495e;
+  background: #38a169;
 }
 
 .action-btn.copy-btn:disabled {
@@ -576,20 +561,6 @@ textarea {
   margin-top: 0.75rem;
   color: #e53e3e;
   font-size: 0.875rem;
-}
-
-.toast {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #35495e;
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes fadeIn {

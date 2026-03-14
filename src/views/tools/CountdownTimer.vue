@@ -97,7 +97,7 @@ const updateTimer = () => {
   if (totalSeconds.value <= 0) {
     clearInterval(timer)
     isRunning.value = false
-    showToast({message: '时间到!'})
+    showToast({message: '时间到'})
     return
   }
 
@@ -140,12 +140,6 @@ h2 {
   font-weight: bold;
 }
 
-.tool-description {
-  text-align: center;
-  color: #666;
-  margin-bottom: 2rem;
-}
-
 .timer-container {
   display: flex;
   flex-direction: column;
@@ -157,7 +151,6 @@ h2 {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
-  background-color: #f8fafc;
 }
 
 .input-header {
@@ -169,7 +162,6 @@ h2 {
 
 h3 {
   font-size: 1.25rem;
-  font-weight: semibold;
   color: #333;
   margin: 0;
 }

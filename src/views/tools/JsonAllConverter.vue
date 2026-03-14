@@ -161,7 +161,6 @@ const jsonToXmlRecursive = (obj, root, indent = 0) => {
   return xml
 }
 
-
 // JSON转YAML
 const jsonToYaml = () => {
   try {
@@ -214,12 +213,6 @@ h2 {
   margin-bottom: 0.5rem;
   font-size: 1.75rem;
   font-weight: bold;
-}
-
-.tool-description {
-  text-align: center;
-  color: #666;
-  margin-bottom: 2rem;
 }
 
 .converter-container {
@@ -275,7 +268,6 @@ h2 {
 
 h3 {
   font-size: 1.25rem;
-  font-weight: semibold;
   color: #333;
   margin: 0;
 }
@@ -375,7 +367,7 @@ textarea {
 }
 
 .action-btn.copy-btn:hover:not(:disabled) {
-  background: #35495e;
+  background: #38a169;
 }
 
 .action-btn.copy-btn:disabled {
@@ -439,20 +431,6 @@ textarea {
   margin-top: 0.75rem;
   color: #e53e3e;
   font-size: 0.875rem;
-}
-
-.toast {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #35495e;
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes fadeIn {

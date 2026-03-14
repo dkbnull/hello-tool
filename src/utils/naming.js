@@ -4,9 +4,9 @@
  * @returns {string} - 驼峰命名的字符串
  */
 export const toCamelCase = (str) => {
-  return str
-      .replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '')
-      .replace(/^./, str => str.toLowerCase())
+    return str
+        .replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '')
+        .replace(/^./, str => str.toLowerCase())
 };
 
 /**
@@ -15,11 +15,11 @@ export const toCamelCase = (str) => {
  * @returns {string} - 下划线命名的字符串
  */
 export const toSnakeCase = (str) => {
-  return str
-      .replace(/([A-Z])/g, '_$1')
-      .replace(/[-\s]+/g, '_')
-      .toLowerCase()
-      .replace(/^_+|_+$/g, '')
+    return str
+        .replace(/([A-Z])/g, '_$1')
+        .replace(/[-\s]+/g, '_')
+        .toLowerCase()
+        .replace(/^_+|_+$/g, '')
 };
 
 /**
@@ -28,8 +28,8 @@ export const toSnakeCase = (str) => {
  * @returns {string} - 帕斯卡命名的字符串
  */
 export const toPascalCase = (str) => {
-  const camelCase = toCamelCase(str);
-  return camelCase.replace(/^./, str => str.toUpperCase());
+    const camelCase = toCamelCase(str);
+    return camelCase.replace(/^./, str => str.toUpperCase());
 };
 
 /**
@@ -38,9 +38,9 @@ export const toPascalCase = (str) => {
  * @returns {string} - 短横线命名的字符串
  */
 export const toKebabCase = (str) => {
-  return str
-      .replace(/([A-Z])/g, '-$1')
-      .replace(/[-_\s]+/g, '-')
-      .toLowerCase()
-      .replace(/^-+|-+$/g, '')
+    return str
+        .replace(/([A-Z])/g, '-$1')
+        .replace(/[-_\s]+/g, '-')
+        .toLowerCase()
+        .replace(/^-+|-+$/g, '')
 };

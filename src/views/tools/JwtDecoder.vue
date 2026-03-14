@@ -3,7 +3,7 @@
     <h2>JWT解密</h2>
     <div class="jwt-decoder">
       <div class="input-group">
-        <label for="jwt-token">JWT令牌：</label>
+        <h3><label for="jwt-token">JWT令牌</label></h3>
         <textarea
             id="jwt-token"
             v-model="jwtToken"
@@ -14,7 +14,7 @@
 
       <div class="result-section header-section">
         <div class="result-header">
-          <h3>Header：</h3>
+          <h3>Header</h3>
           <button v-if="decodedHeader && decodedHeader !== '无效的JWT令牌格式' && decodedHeader !== '解码失败'"
                   @click="handleCopy(decodedHeader)" class="copy-btn">复制
           </button>
@@ -24,7 +24,7 @@
 
       <div class="result-section payload-section">
         <div class="result-header">
-          <h3>Payload：</h3>
+          <h3>Payload</h3>
           <button v-if="decodedPayload" @click="handleCopy(decodedPayload)" class="copy-btn">复制</button>
         </div>
         <pre>{{ decodedPayload }}</pre>
@@ -128,6 +128,12 @@ h2 {
   margin-bottom: 2rem;
 }
 
+h3 {
+  font-size: 1.25rem;
+  color: #333;
+  margin: 0;
+}
+
 .jwt-decoder {
   display: flex;
   flex-direction: column;
@@ -151,10 +157,6 @@ textarea {
   border-radius: 4px;
   font-size: 1rem;
   resize: vertical;
-}
-
-.result-section {
-  margin-top: 1rem;
 }
 
 .result-header {
@@ -181,7 +183,7 @@ textarea {
 }
 
 .copy-btn:hover {
-  background: #35495e;
+  background: #38a169;
 }
 
 .header-section pre {
@@ -228,20 +230,6 @@ textarea {
 .not-expired {
   color: #27ae60;
   font-weight: bold;
-}
-
-.toast {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #35495e;
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes fadeIn {

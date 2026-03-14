@@ -5,13 +5,13 @@
       <button @click="generateRsaKeys" class="generate-btn">生成密钥对</button>
 
       <div class="key-section">
-        <h3>公钥：</h3>
+        <h3>公钥</h3>
         <pre>{{ publicKey }}</pre>
         <button @click="handleCopy(publicKey)" class="copy-btn">复制公钥</button>
       </div>
 
       <div class="key-section">
-        <h3>私钥：</h3>
+        <h3>私钥</h3>
         <pre>{{ privateKey }}</pre>
         <button @click="handleCopy(privateKey)" class="copy-btn">复制私钥</button>
       </div>
@@ -130,7 +130,7 @@ h2 {
 }
 
 .generate-btn:hover {
-  background: #35495e;
+  background: #38a169;
 }
 
 .key-section {
@@ -163,20 +163,6 @@ pre {
   line-height: 1.4;
 }
 
-.toast {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #35495e;
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -191,7 +177,7 @@ pre {
 .copy-btn {
   margin-top: 0.5rem;
   padding: 0.5rem 1rem;
-  background: #35495e;
+  background: #42b883;
   color: white;
   border: none;
   border-radius: 4px;
@@ -201,6 +187,6 @@ pre {
 }
 
 .copy-btn:hover {
-  background: #42b883;
+  background: #38a169;
 }
 </style>

@@ -3,7 +3,7 @@
     <h2>JSON单引号转双引号</h2>
     <div class="converter">
       <div class="input-group">
-        <label for="single-quote-json">单引号JSON：</label>
+        <h3><label for="single-quote-json">单引号JSON</label></h3>
         <textarea
             id="single-quote-json"
             v-model="singleQuoteJson"
@@ -14,7 +14,7 @@
       <div class="arrow">→</div>
       <div class="input-group">
         <div class="input-header">
-          <label for="double-quote-json">双引号JSON：</label>
+          <h3><label for="double-quote-json">双引号JSON</label></h3>
           <button @click="handleCopy(doubleQuoteJson)" class="copy-btn" :disabled="!doubleQuoteJson">复制</button>
         </div>
         <textarea
@@ -83,6 +83,12 @@ h2 {
   margin-bottom: 2rem;
 }
 
+h3 {
+  font-size: 1.25rem;
+  color: #333;
+  margin: 0;
+}
+
 .converter {
   display: flex;
   align-items: center;
@@ -125,26 +131,12 @@ label {
 }
 
 .copy-btn:hover:not(:disabled) {
-  background: #35495e;
+  background: #38a169;
 }
 
 .copy-btn:disabled {
   background: #ccc;
   cursor: not-allowed;
-}
-
-.toast {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #35495e;
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes fadeIn {

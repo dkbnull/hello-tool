@@ -61,7 +61,7 @@
 
 <script setup>
 import {onMounted, ref} from 'vue'
-import {getCurrentTimeInfo, timestampToDateTime, dateTimeToTimestamp} from '../../utils/time'
+import {dateTimeToTimestamp, getCurrentTimeInfo, timestampToDateTime} from '../../utils/time'
 import {copyToClipboard} from '../../utils/clipboard'
 import {showToast} from '../../utils/toast'
 
@@ -225,7 +225,7 @@ input {
 }
 
 .copy-btn:hover {
-  background: #35495e;
+  background: #38a169;
 }
 
 .convert-btn {
@@ -240,27 +240,13 @@ input {
 }
 
 .convert-btn:hover {
-  background: #35495e;
+  background: #38a169;
 }
 
 .arrow {
   font-size: 2rem;
   color: #42b883;
   font-weight: bold;
-}
-
-.toast {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #35495e;
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes fadeIn {
