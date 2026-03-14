@@ -4,6 +4,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 import Home from '../views/Home.vue'
 import About from '../views/About.vue'
 import TimestampConverter from '../views/tools/TimestampConverter.vue'
+import CountdownTimer from "../views/tools/CountdownTimer.vue";
 import JsonAllConverter from "../views/tools/JsonAllConverter.vue";
 import JsonXmlConverter from '../views/tools/JsonXmlConverter.vue'
 import JsonQuoteConverter from '../views/tools/JsonQuoteConverter.vue'
@@ -14,7 +15,9 @@ import RsaKeyGenerator from '../views/tools/RsaKeyGenerator.vue'
 import NamingConverter from '../views/tools/NamingConverter.vue'
 import QrCodeGenerator from '../views/tools/QrCodeGenerator.vue';
 import ImageTool from '../views/tools/ImageTool.vue';
+import MermaidGenerator from "../views/tools/MermaidGenerator.vue";
 import BmiCalculator from "../views/tools/BmiCalculator.vue";
+import ReactionTest from "../views/tools/ReactionTest.vue";
 
 // 创建路由
 const router = createRouter({
@@ -34,6 +37,11 @@ const router = createRouter({
             path: '/timestamp',
             name: 'TimestampConverter',
             component: TimestampConverter
+        },
+        {
+            path: '/countdown',
+            name: 'CountdownTimer',
+            component: CountdownTimer
         },
         {
             path: '/json-all',
@@ -86,9 +94,19 @@ const router = createRouter({
             component: ImageTool
         },
         {
+            path: '/mermaid',
+            name: 'MermaidGenerator',
+            component: MermaidGenerator
+        },
+        {
             path: '/bmi',
             name: 'BmiCalculator',
             component: BmiCalculator
+        },
+        {
+            path: '/reaction',
+            name: 'ReactionTest',
+            component: ReactionTest
         }
     ]
 })

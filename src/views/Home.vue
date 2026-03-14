@@ -21,6 +21,12 @@
               title="时间戳转换"
               description="UNIX时间戳与日期格式互转"
           />
+          <ToolCard
+              to="/countdown"
+              icon="⏲️"
+              title="倒计时定时器"
+              description="设置时间并开始倒计时"
+          />
         </div>
       </div>
 
@@ -111,7 +117,7 @@
         <div class="tool-grid">
           <ToolCard
               to="/qrcode"
-              icon="🔲"
+              icon="📱"
               title="二维码生成器"
               description="将文本转换为二维码"
           />
@@ -120,6 +126,12 @@
               icon="🖼️"
               title="图片处理工具"
               description="图片转Base64和Base64转图片"
+          />
+          <ToolCard
+              to="/mermaid"
+              icon="📊"
+              title="Mermaid UML图"
+              description="基于Mermaid代码生成UML图表"
           />
         </div>
       </div>
@@ -136,6 +148,12 @@
               icon="⚖️"
               title="BMI计算器"
               description="计算您的身体质量指数"
+          />
+          <ToolCard
+              to="/reaction"
+              icon="⚡"
+              title="闪电反应测试"
+              description="测试您的反应速度"
           />
         </div>
       </div>
