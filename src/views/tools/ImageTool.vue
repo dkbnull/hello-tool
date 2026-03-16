@@ -42,7 +42,7 @@
           </div>
         </div>
 
-        <div v-if="error" class="error-area">{{ error }}</div>
+        <div v-if="error" class="error-message">{{ error }}</div>
       </div>
 
       <!-- 右侧输出区域 -->
@@ -51,7 +51,7 @@
           <h3>Base64字符串</h3>
           <div class="output-actions">
             <button @click="handleCopy(base64String)" class="action-btn copy-btn" :disabled="!base64String">
-              <i class="fas fa-copy mr-1"></i>复制Base64
+              <i class="fas fa-copy mr-1"></i>复制
             </button>
           </div>
         </div>
@@ -254,81 +254,15 @@ h4 {
   cursor: pointer;
 }
 
-.action-btn.primary {
-  background: #4299e1;
-  color: white;
-}
-
-.action-btn.primary:hover {
-  background: #3182ce;
-}
-
 .base64-section {
   margin-top: 1rem;
 }
 
 .base64-textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
   font-size: 0.875rem;
   font-family: monospace;
-  resize: vertical;
   min-height: 300px;
   max-height: 500px;
-  overflow: auto;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-
-.action-btn {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: background 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.action-btn.secondary {
-  background: #e2e8f0;
-  color: #4a5568;
-}
-
-.action-btn.secondary:hover {
-  background: #cbd5e0;
-}
-
-.action-btn.success {
-  background: #48bb78;
-  color: white;
-}
-
-.action-btn.success:hover:not(:disabled) {
-  background: #38a169;
-}
-
-.action-btn.success:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
-
-.action-btn.copy-btn {
-  background: #42b883;
-  color: white;
-}
-
-.action-btn.copy-btn:hover:not(:disabled) {
-  background: #38a169;
-}
-
-.action-btn.copy-btn:disabled {
-  background: #ccc;
-  cursor: not-allowed;
 }
 
 .image-container {
@@ -353,12 +287,6 @@ h4 {
   color: #666;
   text-align: center;
   font-size: 1rem;
-}
-
-.error-area {
-  margin-top: 0.75rem;
-  color: #e53e3e;
-  font-size: 0.875rem;
 }
 
 @keyframes fadeIn {

@@ -72,20 +72,13 @@ watch(singleQuoteJson, convertQuotes)
 </script>
 
 <style scoped>
-.tool-container {
-  margin: 0 auto;
-  padding: 2rem;
-}
-
 h2 {
   text-align: center;
-  color: #333;
   margin-bottom: 2rem;
 }
 
 h3 {
   font-size: 1.25rem;
-  color: #333;
   margin: 0;
 }
 
@@ -107,38 +100,6 @@ label {
   color: #666;
 }
 
-.input-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.input-header label {
-  margin: 0;
-  color: #666;
-}
-
-.copy-btn {
-  padding: 0.5rem 1rem;
-  background: #42b883;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: background 0.3s ease;
-}
-
-.copy-btn:hover:not(:disabled) {
-  background: #38a169;
-}
-
-.copy-btn:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -151,17 +112,7 @@ label {
 }
 
 textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
   min-height: 400px;
-  resize: vertical;
-}
-
-textarea[readonly] {
-  background: #f5f5f5;
 }
 
 .arrow {

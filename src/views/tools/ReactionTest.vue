@@ -259,34 +259,9 @@ h2 {
 
 .action-btn {
   padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: background 0.3s ease;
 }
 
-.action-btn.primary {
-  background: #4299e1;
-  color: white;
-}
 
-.action-btn.primary:hover:not(:disabled) {
-  background: #3182ce;
-}
-
-.action-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.select-field {
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  background: white;
-}
 
 .history-section {
   background: #f1f5f9;

@@ -183,18 +183,7 @@ h3 {
 }
 
 textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-family: monospace;
-  resize: vertical;
-  min-height: 200px;
   max-height: 400px;
-  overflow: auto;
-  white-space: pre-wrap;
-  word-wrap: break-word;
 }
 
 .size-setting {
@@ -219,49 +208,6 @@ textarea {
   flex-wrap: wrap;
 }
 
-.action-btn {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: background 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.action-btn.primary {
-  background: #4299e1;
-  color: white;
-}
-
-.action-btn.primary:hover:not(:disabled) {
-  background: #3182ce;
-}
-
-.action-btn.primary:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
-
-.action-btn.secondary {
-  background: #e2e8f0;
-  color: #4a5568;
-}
-
-.action-btn.secondary:hover {
-  background: #cbd5e0;
-}
-
-.action-btn.success {
-  background: #48bb78;
-  color: white;
-}
-
-.action-btn.success:hover {
-  background: #38a169;
-}
 
 .qr-code-container {
   display: flex;

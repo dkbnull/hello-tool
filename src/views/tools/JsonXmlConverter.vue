@@ -64,20 +64,33 @@ const jsonToXml = () => {
   }
 }
 
+// 清理XML标签名，确保符合XML命名规则
+const cleanXmlTagName = (tagName) => {
+  // 移除无效字符，只保留字母、数字、下划线和冒号
+  let cleaned = tagName.replace(/[^a-zA-Z0-9_:]/g, '_')
+  // 确保标签名不以数字或冒号开头
+  if (/^[0-9:]/.test(cleaned)) {
+    cleaned = '_' + cleaned
+  }
+  return cleaned
+}
+
 // 递归转换JSON为XML
 const jsonToXmlRecursive = (obj, root, indent = 0) => {
   const indentStr = '  '.repeat(indent)
-  let xml = `${indentStr}<${root}>`
+  const cleanedRoot = cleanXmlTagName(root)
+  let xml = `${indentStr}<${cleanedRoot}>`
 
   if (typeof obj === 'object' && obj !== null) {
     xml += '\n'
     for (const key in obj) {
+      const cleanedKey = cleanXmlTagName(key)
       if (Array.isArray(obj[key])) {
         obj[key].forEach(item => {
-          xml += jsonToXmlRecursive(item, key, indent + 1)
+          xml += jsonToXmlRecursive(item, cleanedKey, indent + 1)
         })
       } else {
-        xml += jsonToXmlRecursive(obj[key], key, indent + 1)
+        xml += jsonToXmlRecursive(obj[key], cleanedKey, indent + 1)
       }
     }
     xml += indentStr
@@ -85,7 +98,7 @@ const jsonToXmlRecursive = (obj, root, indent = 0) => {
     xml += obj
   }
 
-  xml += `</${root}>`
+  xml += `</${cleanedRoot}>`
   xml += '\n'
   return xml
 }
@@ -133,9 +146,18 @@ const xmlToJsonRecursive = (node) => {
   return obj
 }
 
+// 防抖函数
+const debounce = (func, delay) => {
+  let timeoutId
+  return (...args) => {
+    clearTimeout(timeoutId)
+    timeoutId = setTimeout(() => func.apply(null, args), delay)
+  }
+}
+
 // 监听输入变化
-watch(jsonInput, jsonToXml)
-watch(xmlInput, xmlToJson)
+watch(jsonInput, debounce(jsonToXml, 300))
+watch(xmlInput, debounce(xmlToJson, 300))
 </script>
 
 <style scoped>
@@ -186,34 +208,9 @@ label {
   color: #666;
 }
 
-.copy-btn {
-  padding: 0.5rem 1rem;
-  background: #42b883;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: background 0.3s ease;
-}
-
-.copy-btn:hover:not(:disabled) {
-  background: #38a169;
-}
-
-.copy-btn:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
 
 textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
   min-height: 400px;
-  resize: vertical;
 }
 
 .arrow {

@@ -239,24 +239,7 @@ h3 {
   position: relative;
 }
 
-.input-field {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-}
 
-.input-suffix {
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #666;
-  pointer-events: none;
-  background: white;
-  padding: 0 0.5rem;
-}
 
 .calculate-btn {
   margin-top: 0.5rem;
@@ -264,35 +247,7 @@ h3 {
   font-size: 1rem;
 }
 
-.action-btn {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: background 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-.action-btn.primary {
-  background: #4299e1;
-  color: white;
-}
-
-.action-btn.primary:hover {
-  background: #3182ce;
-}
-
-.action-btn.secondary {
-  background: #e2e8f0;
-  color: #4a5568;
-}
-
-.action-btn.secondary:hover {
-  background: #cbd5e0;
-}
 
 .error-area {
   margin-top: 0.75rem;

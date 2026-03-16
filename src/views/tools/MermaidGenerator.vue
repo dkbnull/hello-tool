@@ -39,7 +39,7 @@
           <div class="preview-actions">
             <div class="download-controls">
               <button @click="downloadImage('png')" class="action-btn success" :disabled="!renderedSvg">
-                下载PNG图片
+                下载
               </button>
             </div>
           </div>
@@ -443,40 +443,6 @@ h3 {
   align-items: center;
 }
 
-.action-btn {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: background 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.action-btn.secondary {
-  background: #e2e8f0;
-  color: #4a5568;
-}
-
-.action-btn.secondary:hover {
-  background: #cbd5e0;
-}
-
-.action-btn.success {
-  background: #48bb78;
-  color: white;
-}
-
-.action-btn.success:hover {
-  background: #38a169;
-}
-
-.action-btn:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
 
 .code-input {
   flex: 1;
@@ -566,10 +532,6 @@ h3 {
     font-size: 0.9rem;
   }
 
-  .action-btn {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
-  }
 
   .download-controls {
     flex-direction: column;

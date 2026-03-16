@@ -107,12 +107,10 @@ watch(originalJson, convertCase)
 .tool-container {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 2rem;
 }
 
 h2 {
   text-align: center;
-  color: #333;
   margin-bottom: 2rem;
 }
 
@@ -127,18 +125,6 @@ h2 {
   width: 100%;
 }
 
-.input-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.input-header label {
-  margin: 0;
-  color: #666;
-}
-
 .input-header h3 {
   margin: 0;
   color: #42b883;
@@ -147,32 +133,11 @@ h2 {
 label,
 h3 {
   display: block;
-  color: #666;
   margin: 0;
 }
 
 h3 {
   color: #42b883;
-}
-
-.copy-btn {
-  padding: 0.5rem 1rem;
-  background: #42b883;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: background 0.3s ease;
-}
-
-.copy-btn:hover:not(:disabled) {
-  background: #38a169;
-}
-
-.copy-btn:disabled {
-  background: #ccc;
-  cursor: not-allowed;
 }
 
 @keyframes fadeIn {
@@ -184,18 +149,5 @@ h3 {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
-}
-
-textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  resize: vertical;
-}
-
-textarea[readonly] {
-  background: #f5f5f5;
 }
 </style>

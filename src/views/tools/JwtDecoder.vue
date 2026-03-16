@@ -171,21 +171,6 @@ textarea {
   color: #42b883;
 }
 
-.copy-btn {
-  padding: 0.5rem 1rem;
-  background: #42b883;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: background 0.3s ease;
-}
-
-.copy-btn:hover {
-  background: #38a169;
-}
-
 .header-section pre {
   background: #e8f4f8;
   padding: 1rem;

@@ -146,26 +146,6 @@ h3 {
   color: #42b883;
 }
 
-.copy-btn {
-  padding: 0.5rem 1rem;
-  background: #42b883;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: background 0.3s ease;
-}
-
-.copy-btn:hover:not(:disabled) {
-  background: #38a169;
-}
-
-.copy-btn:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -175,18 +155,5 @@ h3 {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
-}
-
-textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  resize: vertical;
-}
-
-textarea[readonly] {
-  background: #f5f5f5;
 }
 </style>

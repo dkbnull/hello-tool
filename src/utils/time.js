@@ -1,18 +1,20 @@
 /**
- * 获取当前时间信息
+ * 获取当前时间信息（北京时间，UTC+8）
  * @returns {Object} - 包含当前时间、时间戳（秒）、时间戳（毫秒）的对象
  */
 export const getCurrentTimeInfo = () => {
     const now = new Date();
+    // 转换为北京时间（UTC+8）
+    const beijingTime = new Date(now.getTime() + 8 * 60 * 60 * 1000);
     return {
-        currentTime: now.toISOString().replace('T', ' ').replace('Z', ''),
+        currentTime: beijingTime.toISOString().replace('T', ' ').replace('Z', ''),
         currentTimestamp: Math.floor(now.getTime() / 1000).toString(),
         currentTimestampMs: now.getTime().toString()
     };
 };
 
 /**
- * 时间戳转日期时间
+ * 时间戳转日期时间（北京时间，UTC+8）
  * @param {string} timestamp - 时间戳（秒或毫秒）
  * @returns {Object} - 包含转换结果和错误信息的对象
  */
@@ -36,7 +38,8 @@ export const timestampToDateTime = (timestamp) => {
         return {dateTime: '', error: '时间戳格式错误（应为10位秒或13位毫秒）'};
     }
 
-    const date = new Date(timestampNum);
+    // 转换为北京时间（UTC+8）
+    const date = new Date(timestampNum + 8 * 60 * 60 * 1000);
     if (!isNaN(date.getTime())) {
         return {dateTime: date.toISOString().replace('T', ' ').replace('Z', ''), error: ''};
     } else {
@@ -45,7 +48,7 @@ export const timestampToDateTime = (timestamp) => {
 };
 
 /**
- * 日期时间转时间戳
+ * 日期时间转时间戳（北京时间，UTC+8）
  * @param {string} dateTime - 日期时间字符串
  * @returns {Object} - 包含转换结果和错误信息的对象
  */
@@ -54,9 +57,12 @@ export const dateTimeToTimestamp = (dateTime) => {
         return {timestamp: '', error: ''};
     }
 
+    // 解析为北京时间（UTC+8）
     const date = new Date(dateTime);
     if (!isNaN(date.getTime())) {
-        return {timestamp: Math.floor(date.getTime() / 1000).toString(), error: ''};
+        // 转换为UTC时间戳（减去8小时）
+        const utcTimestamp = Math.floor((date.getTime() - 8 * 60 * 60 * 1000) / 1000);
+        return {timestamp: utcTimestamp.toString(), error: ''};
     } else {
         return {timestamp: '', error: '无效的日期格式'};
     }

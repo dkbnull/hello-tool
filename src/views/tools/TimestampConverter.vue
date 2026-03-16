@@ -215,17 +215,7 @@ input {
 }
 
 .copy-btn {
-  padding: 0.75rem 1rem;
-  background: #42b883;
-  color: white;
-  border: none;
   border-radius: 0 4px 4px 0;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.copy-btn:hover {
-  background: #38a169;
 }
 
 .convert-btn {

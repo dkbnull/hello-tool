@@ -54,7 +54,7 @@
           </div>
         </div>
         <pre class="output-area">{{ output }}</pre>
-        <div v-if="error" class="error-area">{{ error }}</div>
+        <div v-if="error" class="error-message">{{ error }}</div>
       </div>
     </div>
   </div>
@@ -279,13 +279,6 @@ h3 {
 }
 
 textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-family: monospace;
-  resize: vertical;
   min-height: 300px;
 }
 
@@ -303,7 +296,6 @@ textarea {
   width: 100%;
 }
 
-.action-btn,
 .option-btn {
   padding: 0.5rem 1rem;
   border: none;
@@ -314,79 +306,8 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.action-btn.primary {
-  background: #4299e1;
   color: white;
-}
-
-.action-btn.primary:hover {
-  background: #3182ce;
-}
-
-.action-btn.secondary {
-  background: #e2e8f0;
-  color: #4a5568;
-}
-
-.action-btn.secondary:hover {
-  background: #cbd5e0;
-}
-
-.action-btn.success {
-  background: #48bb78;
-  color: white;
-}
-
-.action-btn.success:hover {
-  background: #38a169;
-}
-
-.action-btn.warning {
-  background: #ed8936;
-  color: white;
-}
-
-.action-btn.warning:hover {
-  background: #dd6b20;
-}
-
-.action-btn.purple {
-  background: #9f7aea;
-  color: white;
-}
-
-.action-btn.purple:hover {
-  background: #805ad5;
-}
-
-.action-btn.copy-btn {
-  background: #42b883;
-  color: white;
-}
-
-.action-btn.copy-btn:hover:not(:disabled) {
-  background: #38a169;
-}
-
-.action-btn.copy-btn:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
-
-.option-btn {
   width: 100%;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: background 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
 }
 
 .option-btn.indigo {
@@ -425,12 +346,6 @@ textarea {
   height: 300px;
   white-space: pre-wrap;
   word-wrap: break-word;
-}
-
-.error-area {
-  margin-top: 0.75rem;
-  color: #e53e3e;
-  font-size: 0.875rem;
 }
 
 @keyframes fadeIn {

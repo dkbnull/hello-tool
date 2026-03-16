@@ -182,18 +182,8 @@ h3 {
 
 .input-field {
   width: 80px;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
   font-size: 1.25rem;
   text-align: center;
-  transition: all 0.3s ease;
-}
-
-.input-field:focus {
-  border-color: #4299e1;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
 }
 
 .field-label {
@@ -219,37 +209,6 @@ h3 {
 
 .action-btn {
   padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: background 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.action-btn.primary {
-  background: #4299e1;
-  color: white;
-}
-
-.action-btn.primary:hover:not(:disabled) {
-  background: #3182ce;
-}
-
-.action-btn.secondary {
-  background: #e2e8f0;
-  color: #4a5568;
-}
-
-.action-btn.secondary:hover:not(:disabled) {
-  background: #cbd5e0;
-}
-
-.action-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }
 
 @media (max-width: 768px) {

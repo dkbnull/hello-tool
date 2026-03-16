@@ -2,7 +2,7 @@
   <div class="tool-container">
     <h2>生成RSA密钥</h2>
     <div class="rsa-generator">
-      <button @click="generateRsaKeys" class="generate-btn">生成密钥对</button>
+      <button @click="generateRsaKeys" class="action-btn success">生成密钥对</button>
 
       <div class="key-section">
         <h3>公钥</h3>
@@ -118,19 +118,9 @@ h2 {
   gap: 1.5rem;
 }
 
-.generate-btn {
+.action-btn.success {
   padding: 1rem 2rem;
-  background: #42b883;
-  color: white;
-  border: none;
-  border-radius: 4px;
   font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.generate-btn:hover {
-  background: #38a169;
 }
 
 .key-section {
@@ -176,17 +166,5 @@ pre {
 
 .copy-btn {
   margin-top: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: #42b883;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.copy-btn:hover {
-  background: #38a169;
 }
 </style>
