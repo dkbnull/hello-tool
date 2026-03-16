@@ -100,6 +100,12 @@
         </h2>
         <div class="tool-grid">
           <ToolCard
+              to="/encoding"
+              icon="🔤"
+              title="编码转换工具"
+              description="Unicode/中文/ASCII/URL编码互转"
+          />
+          <ToolCard
               to="/naming"
               icon="📝"
               title="命名格式转换"

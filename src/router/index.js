@@ -12,6 +12,7 @@ import JsonCaseConverter from '../views/tools/JsonCaseConverter.vue'
 import JwtDecoder from '../views/tools/JwtDecoder.vue'
 import CryptoTool from '../views/tools/CryptoTool.vue';
 import RsaKeyGenerator from '../views/tools/RsaKeyGenerator.vue'
+import EncodingConverter from '../views/tools/EncodingConverter.vue';
 import NamingConverter from '../views/tools/NamingConverter.vue'
 import QrCodeGenerator from '../views/tools/QrCodeGenerator.vue';
 import ImageTool from '../views/tools/ImageTool.vue';
@@ -77,6 +78,11 @@ const router = createRouter({
             path: '/rsa',
             name: 'RsaKeyGenerator',
             component: RsaKeyGenerator
+        },
+        {
+            path: '/encoding',
+            name: 'EncodingConverter',
+            component: EncodingConverter
         },
         {
             path: '/naming',
