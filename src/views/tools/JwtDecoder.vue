@@ -2,40 +2,46 @@
   <div class="tool-container">
     <h2>JWT解密</h2>
     <div class="jwt-decoder">
-      <div class="input-group">
-        <h3><label for="jwt-token">JWT令牌</label></h3>
-        <textarea
-            id="jwt-token"
-            v-model="jwtToken"
-            placeholder="输入JWT令牌"
-            rows="4"
-        ></textarea>
+      <!-- 左侧输入区域 -->
+      <div class="input-section">
+        <div class="input-group">
+          <h3><label for="jwt-token">JWT令牌</label></h3>
+          <textarea
+              id="jwt-token"
+              v-model="jwtToken"
+              placeholder="输入JWT令牌"
+              rows="12"
+          ></textarea>
+        </div>
       </div>
 
-      <div class="result-section header-section">
-        <div class="result-header">
-          <h3>Header</h3>
-          <button v-if="decodedHeader && decodedHeader !== '无效的JWT令牌格式' && decodedHeader !== '解码失败'"
-                  @click="handleCopy(decodedHeader)" class="copy-btn">复制
-          </button>
+      <!-- 右侧输出区域 -->
+      <div class="output-section">
+        <div class="result-section header-section">
+          <div class="result-header">
+            <h3>Header</h3>
+            <button v-if="decodedHeader && decodedHeader !== '无效的JWT令牌格式' && decodedHeader !== '解码失败'"
+                    @click="handleCopy(decodedHeader)" class="copy-btn">复制
+            </button>
+          </div>
+          <pre>{{ decodedHeader }}</pre>
         </div>
-        <pre>{{ decodedHeader }}</pre>
-      </div>
 
-      <div class="result-section payload-section">
-        <div class="result-header">
-          <h3>Payload</h3>
-          <button v-if="decodedPayload" @click="handleCopy(decodedPayload)" class="copy-btn">复制</button>
-        </div>
-        <pre>{{ decodedPayload }}</pre>
+        <div class="result-section payload-section">
+          <div class="result-header">
+            <h3>Payload</h3>
+            <button v-if="decodedPayload" @click="handleCopy(decodedPayload)" class="copy-btn">复制</button>
+          </div>
+          <pre>{{ decodedPayload }}</pre>
 
-        <div v-if="expirationInfo" class="expiration-info">
-          <div class="expiration-item">
-            <span>过期时间：</span>
-            <span>{{ expirationInfo.date }}</span>
-            <span :class="expirationInfo.isExpired ? 'expired' : 'not-expired'">
-              {{ expirationInfo.isExpired ? '已过期' : '未过期' }}
-            </span>
+          <div v-if="expirationInfo" class="expiration-info">
+            <div class="expiration-item">
+              <span>过期时间：</span>
+              <span>{{ expirationInfo.date }}</span>
+              <span :class="expirationInfo.isExpired ? 'expired' : 'not-expired'">
+                {{ expirationInfo.isExpired ? '已过期' : '未过期' }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -117,7 +123,6 @@ watch(jwtToken, decodeJwt)
 
 <style scoped>
 .tool-container {
-  max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
 }
@@ -136,8 +141,26 @@ h3 {
 
 .jwt-decoder {
   display: flex;
+  gap: 2rem;
+}
+
+.input-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+.output-section {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .jwt-decoder {
+    flex-direction: column;
+  }
 }
 
 .input-group {
@@ -148,15 +171,6 @@ label {
   display: block;
   margin-bottom: 0.5rem;
   color: #666;
-}
-
-textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  resize: vertical;
 }
 
 .result-header {

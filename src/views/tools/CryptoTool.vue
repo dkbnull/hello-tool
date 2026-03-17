@@ -3,75 +3,74 @@
     <h2>加解密工具</h2>
     <p class="tool-description">支持Base64、AES、DES、3DES和MD5加解密</p>
 
-    <div class="converter-container">
+    <!-- 控制区域 -->
+    <div class="control-section">
+      <div class="control-row">
+        <!-- 加密模式选择 -->
+        <div class="mode-selector">
+          <label>加密模式：</label>
+          <select v-model="cryptoMode" class="mode-select">
+            <option value="base64">Base64</option>
+            <option value="aes">AES</option>
+            <option value="des">DES</option>
+            <option value="tripleDes">3DES</option>
+            <option value="md5">MD5</option>
+          </select>
+        </div>
 
-      <!-- 控制区域 -->
-      <div class="control-section">
-        <div class="control-row">
-          <!-- 加密模式选择 -->
-          <div class="mode-selector">
-            <label>加密模式：</label>
-            <select v-model="cryptoMode" class="mode-select">
-              <option value="base64">Base64</option>
-              <option value="aes">AES</option>
-              <option value="des">DES</option>
-              <option value="tripleDes">3DES</option>
-              <option value="md5">MD5</option>
-            </select>
+        <!-- 密钥输入 -->
+        <div class="key-input-container">
+          <!-- AES密钥输入 -->
+          <div v-if="cryptoMode === 'aes'" class="key-input">
+            <label for="aesKey">AES密钥：</label>
+            <input
+                type="text"
+                id="aesKey"
+                v-model="aesKey"
+                placeholder="请输入AES密钥"
+                class="key-input-field"
+            />
           </div>
 
-          <!-- 密钥输入 -->
-          <div class="key-input-container">
-            <!-- AES密钥输入 -->
-            <div v-if="cryptoMode === 'aes'" class="key-input">
-              <label for="aesKey">AES密钥：</label>
-              <input
-                  type="text"
-                  id="aesKey"
-                  v-model="aesKey"
-                  placeholder="请输入AES密钥"
-                  class="key-input-field"
-              />
-            </div>
-
-            <!-- DES密钥输入 -->
-            <div v-if="cryptoMode === 'des'" class="key-input">
-              <label for="desKey">DES密钥：</label>
-              <input
-                  type="text"
-                  id="desKey"
-                  v-model="desKey"
-                  placeholder="请输入DES密钥"
-                  class="key-input-field"
-              />
-            </div>
-
-            <!-- 3DES密钥输入 -->
-            <div v-if="cryptoMode === 'tripleDes'" class="key-input">
-              <label for="tripleDesKey">3DES密钥：</label>
-              <input
-                  type="text"
-                  id="tripleDesKey"
-                  v-model="tripleDesKey"
-                  placeholder="请输入3DES密钥"
-                  class="key-input-field"
-              />
-            </div>
+          <!-- DES密钥输入 -->
+          <div v-if="cryptoMode === 'des'" class="key-input">
+            <label for="desKey">DES密钥：</label>
+            <input
+                type="text"
+                id="desKey"
+                v-model="desKey"
+                placeholder="请输入DES密钥"
+                class="key-input-field"
+            />
           </div>
 
-          <!-- 加密解密按钮 -->
-          <div class="input-buttons">
-            <button @click="handleEncrypt" class="action-btn success">
-              <i class="fas fa-lock mr-1"></i>加密
-            </button>
-            <button @click="handleDecrypt" class="action-btn warning">
-              <i class="fas fa-unlock mr-1"></i>解密
-            </button>
+          <!-- 3DES密钥输入 -->
+          <div v-if="cryptoMode === 'tripleDes'" class="key-input">
+            <label for="tripleDesKey">3DES密钥：</label>
+            <input
+                type="text"
+                id="tripleDesKey"
+                v-model="tripleDesKey"
+                placeholder="请输入3DES密钥"
+                class="key-input-field"
+            />
           </div>
         </div>
-      </div>
 
-      <!-- 输入区域 -->
+        <!-- 加密解密按钮 -->
+        <div class="input-buttons">
+          <button @click="handleEncrypt" class="action-btn success">
+            <i class="fas fa-lock mr-1"></i>加密
+          </button>
+          <button @click="handleDecrypt" class="action-btn warning">
+            <i class="fas fa-unlock mr-1"></i>解密
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="converter-container">
+      <!-- 左侧输入区域 -->
       <div class="input-section">
         <div class="input-header">
           <h3>输入</h3>
@@ -81,11 +80,11 @@
         </div>
         <textarea
             v-model="input"
-            rows="8"
+            rows="12"
         ></textarea>
       </div>
 
-      <!-- 输出区域 -->
+      <!-- 右侧输出区域 -->
       <div class="output-section">
         <div class="output-header">
           <h3>结果</h3>
@@ -344,13 +343,26 @@ h2 {
 
 .converter-container {
   display: flex;
-  flex-direction: column;
   gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .converter-container {
+    flex-direction: column;
+  }
 }
 
 .input-section,
-.output-section,
+.output-section {
+  flex: 1;
+  min-width: 300px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
 .control-section {
   width: 100%;
   background: white;
@@ -466,18 +478,9 @@ h3 {
 }
 
 .output-area {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-family: monospace;
+  @extend textarea;
   background: #f7fafc;
-  overflow: auto;
-  min-height: 200px;
-  max-height: 500px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
+  min-height: 250px;
 }
 
 @keyframes fadeIn {
