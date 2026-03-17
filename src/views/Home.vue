@@ -142,6 +142,22 @@
         </div>
       </div>
 
+      <!-- 文档工具 -->
+      <div id="document-tools" class="tool-section">
+        <h2 class="section-title">
+          <span class="icon">📄</span>
+          文档工具
+        </h2>
+        <div class="tool-grid">
+          <ToolCard
+              to="/pdf-converter"
+              icon="📄"
+              title="PDF转Word/Excel"
+              description="将PDF文档转换为Word或Excel格式"
+          />
+        </div>
+      </div>
+
       <!-- 生活工具 -->
       <div id="life-tools" class="tool-section">
         <h2 class="section-title">

@@ -54,6 +54,16 @@
       </li>
       <li>
         <a
+            href="#document-tools"
+            class="sidebar-link"
+            :class="{ active: activeCategory === 'document-tools' }"
+        >
+          <span class="icon">📄</span>
+          <span>文档工具</span>
+        </a>
+      </li>
+      <li>
+        <a
             href="#life-tools"
             class="sidebar-link"
             :class="{ active: activeCategory === 'life-tools' }"

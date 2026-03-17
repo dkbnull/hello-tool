@@ -17,6 +17,7 @@ import NamingConverter from '../views/tools/NamingConverter.vue'
 import QrCodeGenerator from '../views/tools/QrCodeGenerator.vue';
 import ImageTool from '../views/tools/ImageTool.vue';
 import MermaidGenerator from "../views/tools/MermaidGenerator.vue";
+import PdfConverter from "../views/tools/PdfConverter.vue";
 import BmiCalculator from "../views/tools/BmiCalculator.vue";
 import ReactionTest from "../views/tools/ReactionTest.vue";
 
@@ -103,6 +104,11 @@ const router = createRouter({
             path: '/mermaid',
             name: 'MermaidGenerator',
             component: MermaidGenerator
+        },
+        {
+            path: '/pdf-converter',
+            name: 'PdfConverter',
+            component: PdfConverter
         },
         {
             path: '/bmi',
