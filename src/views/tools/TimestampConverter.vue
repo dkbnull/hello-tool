@@ -185,7 +185,7 @@ h2 {
 
 .input-group {
   flex: 1;
-  min-width: 300px;
+  min-width: 400px;
 }
 
 label {

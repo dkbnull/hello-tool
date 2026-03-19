@@ -246,15 +246,16 @@ h2 {
 
 /* 输入输出容器 */
 .converter-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   gap: 1.5rem;
   margin-bottom: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .input-section,
 .output-section {
-  width: 100%;
+  flex: 1;
+  min-width: 400px;
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

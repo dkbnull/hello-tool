@@ -142,16 +142,17 @@ h3 {
 .jwt-decoder {
   display: flex;
   gap: 2rem;
+  flex-wrap: wrap;
 }
 
 .input-section {
   flex: 1;
-  min-width: 300px;
+  min-width: 400px;
 }
 
 .output-section {
   flex: 1;
-  min-width: 300px;
+  min-width: 400px;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;

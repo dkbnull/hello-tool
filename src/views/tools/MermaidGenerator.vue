@@ -398,13 +398,15 @@ h3 {
 }
 
 .mermaid-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   gap: 2rem;
   height: 600px;
+  flex-wrap: wrap;
 }
 
 .code-section, .preview-section {
+  flex: 1;
+  min-width: 400px;
   background: white;
   border: 1px solid #ddd;
   border-radius: 8px;
