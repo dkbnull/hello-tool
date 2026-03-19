@@ -37,6 +37,9 @@
           <button id="toXmlBtn" @click="jsonToXml" class="option-btn indigo">
             <i class="fas fa-code mr-1"></i>转XML
           </button>
+          <button id="toCsvBtn" @click="jsonToCsv" class="option-btn teal">
+            <i class="fas fa-file-csv mr-1"></i>转CSV
+          </button>
           <button id="toYamlBtn" @click="jsonToYaml" class="option-btn amber">
             <i class="fas fa-file-alt mr-1"></i>转YAML
           </button>
@@ -159,6 +162,72 @@ const jsonToXmlRecursive = (obj, root, indent = 0) => {
   xml += `</${root}>`
   xml += '\n'
   return xml
+}
+
+// JSON转CSV
+const jsonToCsv = () => {
+  try {
+    const obj = JSON.parse(jsonInput.value)
+    output.value = convertJsonToCsv(obj)
+    error.value = ''
+  } catch (err) {
+    error.value = '无效的JSON格式'
+  }
+}
+
+// 转换JSON为CSV
+const convertJsonToCsv = (data) => {
+  // 处理数组类型的JSON
+  if (Array.isArray(data)) {
+    if (data.length === 0) {
+      return ''
+    }
+
+    // 获取所有字段名
+    const headers = new Set()
+    data.forEach(item => {
+      if (typeof item === 'object' && item !== null) {
+        Object.keys(item).forEach(key => headers.add(key))
+      }
+    })
+
+    const headerArray = Array.from(headers)
+    let csv = headerArray.join(',') + '\n'
+
+    // 生成CSV内容
+    data.forEach(item => {
+      const row = headerArray.map(header => {
+        const value = item[header]
+        // 处理字符串类型，添加引号
+        if (typeof value === 'string') {
+          return `"${value.replace(/"/g, '""')}"`
+        }
+        return value === undefined ? '' : value
+      })
+      csv += row.join(',') + '\n'
+    })
+
+    return csv
+  }
+  // 处理对象类型的JSON
+  else if (typeof data === 'object' && data !== null) {
+    const headers = Object.keys(data)
+    let csv = headers.join(',') + '\n'
+    const row = headers.map(header => {
+      const value = data[header]
+      // 处理字符串类型，添加引号
+      if (typeof value === 'string') {
+        return `"${value.replace(/"/g, '""')}"`
+      }
+      return value === undefined ? '' : value
+    })
+    csv += row.join(',') + '\n'
+    return csv
+  }
+  // 处理其他类型
+  else {
+    return String(data)
+  }
 }
 
 // JSON转YAML

@@ -13,6 +13,7 @@
             placeholder="输入JSON"
             rows="8"
         ></textarea>
+        <div v-if="jsonError" class="error-message">{{ jsonError }}</div>
       </div>
       <div class="arrow">⇄</div>
       <div class="input-group">
@@ -26,6 +27,7 @@
             placeholder="输入XML"
             rows="8"
         ></textarea>
+        <div v-if="xmlError" class="error-message">{{ xmlError }}</div>
       </div>
     </div>
   </div>
@@ -38,6 +40,8 @@ import {showToast} from '../../utils/toast'
 
 const jsonInput = ref('')
 const xmlInput = ref('')
+const jsonError = ref('')
+const xmlError = ref('')
 
 // 复制到剪贴板
 const handleCopy = async (text) => {
@@ -53,14 +57,16 @@ const handleCopy = async (text) => {
 const jsonToXml = () => {
   if (!jsonInput.value) {
     xmlInput.value = ''
+    jsonError.value = ''
     return
   }
 
   try {
     const obj = JSON.parse(jsonInput.value)
     xmlInput.value = jsonToXmlRecursive(obj, 'root')
+    jsonError.value = ''
   } catch (error) {
-    xmlInput.value = '无效的JSON格式'
+    jsonError.value = '无效的JSON格式'
   }
 }
 
@@ -107,17 +113,27 @@ const jsonToXmlRecursive = (obj, root, indent = 0) => {
 const xmlToJson = () => {
   if (!xmlInput.value) {
     jsonInput.value = ''
+    xmlError.value = ''
     return
   }
 
   try {
     const parser = new DOMParser()
     const xmlDoc = parser.parseFromString(xmlInput.value, 'text/xml')
+
+    // 检查是否有解析错误
+    const parserError = xmlDoc.querySelector('parsererror')
+    if (parserError) {
+      xmlError.value = '无效的XML格式'
+      return
+    }
+
     const root = xmlDoc.documentElement
     const obj = xmlToJsonRecursive(root)
     jsonInput.value = JSON.stringify(obj, null, 2)
+    xmlError.value = ''
   } catch (error) {
-    jsonInput.value = '无效的XML格式'
+    xmlError.value = '无效的XML格式'
   }
 }
 
@@ -156,8 +172,8 @@ const debounce = (func, delay) => {
 }
 
 // 监听输入变化
-watch(jsonInput, debounce(jsonToXml, 300))
-watch(xmlInput, debounce(xmlToJson, 300))
+watch(jsonInput, debounce(jsonToXml, 500))
+watch(xmlInput, debounce(xmlToJson, 500))
 </script>
 
 <style scoped>
@@ -217,6 +233,13 @@ textarea {
   font-size: 2rem;
   color: #42b883;
   font-weight: bold;
+}
+
+.error-message {
+  padding: 0.5rem;
+  background: #fed7d7;
+  border-radius: 4px;
+  border-left: 4px solid #e53e3e;
 }
 
 @keyframes fadeIn {

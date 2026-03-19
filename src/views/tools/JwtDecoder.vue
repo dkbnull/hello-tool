@@ -5,7 +5,14 @@
       <!-- 左侧输入区域 -->
       <div class="input-section">
         <div class="input-group">
-          <h3><label for="jwt-token">JWT令牌</label></h3>
+          <div class="input-header">
+            <h3><label for="jwt-token">JWT令牌</label></h3>
+            <div class="input-actions">
+              <button @click="clearInput" class="action-btn secondary">
+                <i class="fas fa-trash-alt mr-1"></i>清空
+              </button>
+            </div>
+          </div>
           <textarea
               id="jwt-token"
               v-model="jwtToken"
@@ -67,6 +74,14 @@ const handleCopy = async (text) => {
       message: success ? '已复制到剪贴板' : '复制失败'
     })
   }
+}
+
+// 清空输入
+const clearInput = () => {
+  jwtToken.value = ''
+  decodedHeader.value = ''
+  decodedPayload.value = ''
+  payloadObject.value = null
 }
 
 const decodeJwt = () => {
