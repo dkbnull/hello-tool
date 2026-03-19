@@ -1,7 +1,7 @@
 <template>
   <div class="tool-container">
     <h2>编码转换工具</h2>
-    <p class="tool-description">支持Unicode与中文互转、ASCII与Unicode互转、URL编码解码</p>
+    <p class="tool-description">支持Unicode与中文互转、ASCII与Unicode互转、ASCII与中文互转、URL编码解码</p>
 
     <!-- 转换模式选择 -->
     <div class="mode-section">
@@ -68,6 +68,8 @@ const conversionModes = [
   {value: 'chineseToUnicode', label: '中文转Unicode'},
   {value: 'asciiToUnicode', label: 'ASCII转Unicode'},
   {value: 'unicodeToAscii', label: 'Unicode转ASCII'},
+  {value: 'asciiToChinese', label: 'ASCII转中文'},
+  {value: 'chineseToAscii', label: '中文转ASCII'},
   {value: 'urlEncode', label: 'URL编码'},
   {value: 'urlDecode', label: 'URL解码'}
 ]
@@ -152,6 +154,41 @@ const unicodeToAscii = () => {
   }
 }
 
+// ASCII转中文
+const asciiToChinese = () => {
+  try {
+    // 处理ASCII码，格式如：65 66 67 或 65,66,67
+    const asciiCodes = input.value.split(/[\s,]+/).filter(code => code.trim() !== '')
+    let result = ''
+    for (const code of asciiCodes) {
+      const charCode = parseInt(code)
+      if (!isNaN(charCode)) {
+        result += String.fromCharCode(charCode)
+      }
+    }
+    output.value = result
+    error.value = ''
+  } catch (err) {
+    error.value = '转换失败: ' + err.message
+  }
+}
+
+// 中文转ASCII
+const chineseToAscii = () => {
+  try {
+    let result = ''
+    for (let i = 0; i < input.value.length; i++) {
+      const charCode = input.value.charCodeAt(i)
+      result += charCode + ' '
+    }
+    // 去除末尾空格
+    output.value = result.trim()
+    error.value = ''
+  } catch (err) {
+    error.value = '转换失败: ' + err.message
+  }
+}
+
 // URL编码
 const urlEncode = () => {
   try {
@@ -179,6 +216,8 @@ const handleConvert = () => {
     chineseToUnicode: chineseToUnicode,
     asciiToUnicode: asciiToUnicode,
     unicodeToAscii: unicodeToAscii,
+    asciiToChinese: asciiToChinese,
+    chineseToAscii: chineseToAscii,
     urlEncode: urlEncode,
     urlDecode: urlDecode
   }
