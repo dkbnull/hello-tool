@@ -3,6 +3,15 @@
  */
 export class DownloadService {
     /**
+     * 格式到扩展名的映射
+     * @private
+     */
+    static FORMAT_EXTENSIONS = {
+        word: 'docx',
+        excel: 'xlsx'
+    };
+
+    /**
      * 下载文件
      * @param {Blob} blob - 文件Blob对象
      * @param {string} filename - 文件名
@@ -31,7 +40,7 @@ export class DownloadService {
      * @returns {string} 下载文件名
      */
     static generateFilename(originalFile, format) {
-        const extension = format === 'word' ? 'docx' : 'xlsx';
+        const extension = this.FORMAT_EXTENSIONS[format] || 'pdf';
 
         if (!originalFile) {
             return `converted.${extension}`;

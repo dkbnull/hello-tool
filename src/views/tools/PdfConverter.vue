@@ -69,6 +69,18 @@ import {ref} from 'vue'
 import {HttpService} from '../../utils/http'
 import {DownloadService} from '../../utils/download'
 
+// 常量定义
+const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
+const API_PATHS = {
+  word: '/convert/pdf-to-word',
+  excel: '/convert/pdf-to-excel'
+}
+const FORMAT_NAMES = {
+  word: 'Word',
+  excel: 'Excel'
+}
+
+// 状态管理
 const fileInput = ref(null)
 const selectedFile = ref(null)
 const outputFormat = ref('word')
@@ -77,7 +89,7 @@ const conversionResult = ref(null)
 
 // 触发文件选择
 const triggerFileInput = () => {
-  fileInput.value.click()
+  fileInput.value?.click()
 }
 
 // 处理文件选择
@@ -92,23 +104,29 @@ const handleFileDrop = (event) => {
   handleFile(file)
 }
 
+// 验证文件
+const validateFile = (file) => {
+  // 验证文件类型
+  if (file.type !== 'application/pdf') {
+    return {valid: false, message: '请上传PDF格式文件'}
+  }
+
+  // 验证文件大小
+  if (file.size > MAX_FILE_SIZE) {
+    return {valid: false, message: '文件大小不能超过10MB'}
+  }
+
+  return {valid: true}
+}
+
 // 处理文件
 const handleFile = (file) => {
   if (!file) return
 
-  // 验证文件类型
-  if (file.type !== 'application/pdf') {
+  const validation = validateFile(file)
+  if (!validation.valid) {
     conversionResult.value = {
-      message: '请上传PDF格式文件',
-      error: true
-    }
-    return
-  }
-
-  // 验证文件大小（10MB限制）
-  if (file.size > 10 * 1024 * 1024) {
-    conversionResult.value = {
-      message: '文件大小不能超过10MB',
+      message: validation.message,
       error: true
     }
     return
@@ -116,16 +134,6 @@ const handleFile = (file) => {
 
   selectedFile.value = file
   conversionResult.value = null
-}
-
-// 获取API URL
-const getApiUrl = (format) => {
-  return format === 'word' ? '/convert/pdf-to-word' : '/convert/pdf-to-excel'
-}
-
-// 获取格式名称
-const getFormatName = (format) => {
-  return format === 'word' ? 'Word' : 'Excel'
 }
 
 // 转换PDF
@@ -141,7 +149,7 @@ const convertPdf = async () => {
     formData.append('file', selectedFile.value)
 
     // 根据输出格式选择接口地址
-    const apiUrl = getApiUrl(outputFormat.value)
+    const apiUrl = API_PATHS[outputFormat.value]
 
     // 调用后端接口
     const result = await HttpService.post(apiUrl, formData)
@@ -149,7 +157,7 @@ const convertPdf = async () => {
     // 处理转换结果
     if (result.code === 200) {
       conversionResult.value = {
-        message: `PDF已成功转换为${getFormatName(outputFormat.value)}格式，请尽快下载，文件将在10分钟后自动删除。`,
+        message: `PDF已成功转换为${FORMAT_NAMES[outputFormat.value]}格式，请尽快下载，文件将在10分钟后自动删除。`,
         downloadUrl: `/convert/download/${result.data.filename}`,
         filename: result.data.filename
       }
