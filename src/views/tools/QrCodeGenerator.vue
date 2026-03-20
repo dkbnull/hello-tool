@@ -19,21 +19,20 @@
             placeholder="请输入要转换为二维码的内容，如文本、网址等"
         ></textarea>
 
-        <!-- 二维码大小设置 -->
-        <div class="size-setting">
-          <label for="qrSize">二维码大小：</label>
-          <input
-              type="number"
-              id="qrSize"
-              v-model.number="qrCodeSize"
-              min="100"
-              max="500"
-              class="size-input"
-          />
-          <span>px</span>
-        </div>
-
-        <div class="input-buttons">
+        <!-- 二维码大小设置和生成按钮 -->
+        <div class="size-control-row">
+          <div class="size-setting">
+            <label>二维码大小：</label>
+            <input
+                type="range"
+                v-model.number="qrCodeSize"
+                min="100"
+                max="500"
+                step="1"
+                class="size-slider"
+            />
+            <span class="size-value">{{ qrCodeSize }}px</span>
+          </div>
           <button @click="generateQRCode" class="action-btn success">
             <i class="fas fa-qrcode mr-1"></i>生成二维码
           </button>
@@ -188,26 +187,41 @@ textarea {
   max-height: 400px;
 }
 
-.size-setting {
+.size-control-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
   margin: 1rem 0;
+}
+
+.size-setting {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex: 1;
+  min-width: 200px;
 }
 
-.size-input {
-  width: 100px;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
+.size-slider {
+  flex: 1;
+  min-width: 150px;
 }
 
-.input-buttons {
-  display: flex;
-  gap: 0.75rem;
-  margin-top: 1rem;
-  flex-wrap: wrap;
+.size-value {
+  min-width: 80px;
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .size-control-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .size-setting {
+    width: 100%;
+  }
 }
 
 
