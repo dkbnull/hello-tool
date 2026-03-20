@@ -134,6 +134,12 @@
               description="图片转Base64和Base64转图片"
           />
           <ToolCard
+              to="/image-compressor"
+              icon="📷"
+              title="图片压缩工具"
+              description="压缩图片大小，调整质量和尺寸"
+          />
+          <ToolCard
               to="/mermaid"
               icon="📊"
               title="Mermaid UML图"

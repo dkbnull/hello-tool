@@ -16,6 +16,7 @@ import EncodingConverter from '../views/tools/EncodingConverter.vue';
 import NamingConverter from '../views/tools/NamingConverter.vue'
 import QrCodeGenerator from '../views/tools/QrCodeGenerator.vue';
 import ImageTool from '../views/tools/ImageTool.vue';
+import ImageCompressor from '../views/tools/ImageCompressor.vue';
 import MermaidGenerator from "../views/tools/MermaidGenerator.vue";
 import PdfConverter from "../views/tools/PdfConverter.vue";
 import BmiCalculator from "../views/tools/BmiCalculator.vue";
@@ -99,6 +100,11 @@ const router = createRouter({
             path: '/image',
             name: 'ImageTool',
             component: ImageTool
+        },
+        {
+            path: '/image-compressor',
+            name: 'ImageCompressor',
+            component: ImageCompressor
         },
         {
             path: '/mermaid',
