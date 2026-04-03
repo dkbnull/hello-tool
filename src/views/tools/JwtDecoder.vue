@@ -60,6 +60,7 @@
 import {computed, ref, watch} from 'vue'
 import {copyToClipboard} from '../../utils/clipboard'
 import {showToast} from '../../utils/toast'
+import {timestampToDateTime} from '../../utils/time'
 
 const jwtToken = ref('')
 const decodedHeader = ref('')
@@ -123,12 +124,14 @@ const expirationInfo = computed(() => {
     return null
   }
 
-  const expTimestamp = payloadObject.value.exp * 1000
-  const expDate = new Date(expTimestamp)
-  const isExpired = expTimestamp < Date.now()
+  const expTimestamp = payloadObject.value.exp.toString()
+  const {dateTime} = timestampToDateTime(expTimestamp)
+  // 只保留到秒，去除毫秒部分
+  const dateTimeWithoutMs = dateTime.split('.')[0]
+  const isExpired = payloadObject.value.exp * 1000 < Date.now()
 
   return {
-    date: expDate.toISOString().replace('T', ' ').replace('Z', ''),
+    date: dateTimeWithoutMs,
     isExpired
   }
 })
