@@ -30,9 +30,8 @@
 }
 
 .container {
-  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 4rem;
   display: flex;
   justify-content: space-between;
   align-items: center;

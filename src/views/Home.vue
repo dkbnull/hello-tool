@@ -186,12 +186,45 @@
         </div>
       </div>
     </div>
+
+    <!-- 回到顶部按钮 -->
+    <button
+        v-if="showBackToTop"
+        @click="backToTop"
+        class="back-to-top"
+        aria-label="回到顶部"
+    >
+      ↑
+    </button>
   </div>
 </template>
 
 <script setup>
+import {onMounted, onUnmounted, ref} from 'vue';
 import Sidebar from '../components/Sidebar.vue';
 import ToolCard from '../components/ToolCard.vue';
+
+// 回到顶部按钮相关
+const showBackToTop = ref(false);
+
+const handleScroll = () => {
+  showBackToTop.value = window.scrollY > 300;
+};
+
+const backToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+};
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
 </script>
 
 <style scoped>
@@ -275,6 +308,46 @@ import ToolCard from '../components/ToolCard.vue';
 @media (max-width: 480px) {
   .tool-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* 回到顶部按钮样式 */
+.back-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #42b883;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.back-to-top:hover {
+  background-color: #35495e;
+  transform: translateY(-3px);
+}
+
+.back-to-top:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .back-to-top {
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
   }
 }
 </style>
