@@ -229,7 +229,7 @@
         class="back-to-top"
         aria-label="回到顶部"
     >
-      ↑
+      <Top class="back-to-top-icon"/>
     </button>
   </div>
 </template>
@@ -237,6 +237,7 @@
 <script setup>
 import {onMounted, onUnmounted, ref} from 'vue';
 import {ElMessageBox} from 'element-plus';
+import {Top} from '@element-plus/icons-vue';
 import Sidebar from '../components/Sidebar.vue';
 import ToolCard from '../components/ToolCard.vue';
 import {favoritesManager} from '../utils/favorites.js';
@@ -469,10 +470,14 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
   z-index: 1000;
+}
+
+.back-to-top-icon {
+  width: 24px;
+  height: 24px;
 }
 
 .back-to-top:hover {
