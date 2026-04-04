@@ -8,6 +8,41 @@
       <h1 class="page-title">开发工具箱</h1>
       <p class="page-subtitle">集成多种常用开发工具，提高开发效率</p>
 
+      <!-- 收藏工具区域 -->
+      <div v-if="favoriteTools.length > 0" id="favorite-tools" class="tool-section favorite-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <span class="icon">⭐</span>
+            我的收藏
+            <span class="favorite-count">({{ favoriteTools.length }})</span>
+          </h2>
+          <button
+              @click="clearFavorites"
+              class="clear-favorites-btn"
+          >
+            清空收藏
+          </button>
+        </div>
+        <div class="tool-grid">
+          <ToolCard
+              v-for="tool in favoriteTools"
+              :key="tool.to"
+              :to="tool.to"
+              :icon="tool.icon"
+              :title="tool.title"
+              :description="tool.description"
+          />
+        </div>
+      </div>
+
+      <div v-else class="no-favorites">
+        <div class="no-favorites-content">
+          <span class="no-favorites-icon">⭐</span>
+          <h3>暂无收藏的工具</h3>
+          <p>点击工具卡片上的星形按钮来收藏常用工具</p>
+        </div>
+      </div>
+
       <!-- 时间工具 -->
       <div id="time-tools" class="tool-section">
         <h2 class="section-title">
@@ -201,11 +236,40 @@
 
 <script setup>
 import {onMounted, onUnmounted, ref} from 'vue';
+import {ElMessageBox} from 'element-plus';
 import Sidebar from '../components/Sidebar.vue';
 import ToolCard from '../components/ToolCard.vue';
+import {favoritesManager} from '../utils/favorites.js';
+
+// 收藏工具列表
+const favoriteTools = ref([]);
 
 // 回到顶部按钮相关
 const showBackToTop = ref(false);
+
+// 加载收藏工具
+const loadFavorites = () => {
+  favoriteTools.value = favoritesManager.getFavorites();
+};
+
+// 清空收藏
+const clearFavorites = async () => {
+  await ElMessageBox.confirm('确定要清空所有收藏的工具吗？此操作不可撤销。', '清空收藏', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    favoritesManager.clearFavorites();
+    loadFavorites();
+    // 触发全局事件，更新所有ToolCard组件的收藏状态
+    window.dispatchEvent(new CustomEvent('favoritesChanged'));
+  });
+};
+
+// 监听收藏变化
+const handleFavoritesChange = () => {
+  loadFavorites();
+};
 
 const handleScroll = () => {
   showBackToTop.value = window.scrollY > 300;
@@ -219,10 +283,16 @@ const backToTop = () => {
 };
 
 onMounted(() => {
+  // 初始加载收藏
+  loadFavorites();
+
+  // 监听收藏变化事件
+  window.addEventListener('favoritesChanged', handleFavoritesChange);
   window.addEventListener('scroll', handleScroll);
 });
 
 onUnmounted(() => {
+  window.removeEventListener('favoritesChanged', handleFavoritesChange);
   window.removeEventListener('scroll', handleScroll);
 });
 </script>
@@ -280,6 +350,79 @@ onUnmounted(() => {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1.5rem;
+}
+
+/* 收藏区域样式 */
+.favorite-section {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #e9ecef;
+  margin-bottom: 3rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.favorite-count {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: normal;
+  margin-left: 0.5rem;
+}
+
+.clear-favorites-btn {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.clear-favorites-btn:hover {
+  background: #ff5252;
+  transform: translateY(-2px);
+}
+
+/* 无收藏提示样式 */
+.no-favorites {
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.no-favorites-content {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.no-favorites-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.no-favorites h3 {
+  color: #666;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.no-favorites p {
+  color: #999;
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
 /* 响应式设计 */

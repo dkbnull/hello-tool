@@ -4,6 +4,16 @@
     <ul class="sidebar-menu">
       <li>
         <a
+            href="#favorite-tools"
+            class="sidebar-link"
+            :class="{ active: activeCategory === 'favorite-tools' }"
+        >
+          <span class="icon">⭐</span>
+          <span>我的收藏</span>
+        </a>
+      </li>
+      <li>
+        <a
             href="#time-tools"
             class="sidebar-link"
             :class="{ active: activeCategory === 'time-tools' }"
