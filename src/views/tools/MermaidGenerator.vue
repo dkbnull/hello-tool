@@ -400,13 +400,14 @@ h3 {
 .mermaid-container {
   display: flex;
   gap: 2rem;
-  height: 600px;
+  min-height: 600px;
   flex-wrap: wrap;
 }
 
 .code-section, .preview-section {
   flex: 1;
   min-width: 400px;
+  min-height: 500px;
   background: white;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -470,15 +471,15 @@ h3 {
   overflow: auto;
   background: #f7fafc;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 }
 
 .mermaid-output {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 }
 
@@ -511,12 +512,12 @@ h3 {
 
 @media (max-width: 1024px) {
   .mermaid-container {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     height: auto;
   }
 
   .code-section, .preview-section {
-    height: 400px;
+    min-height: 400px;
   }
 }
 
