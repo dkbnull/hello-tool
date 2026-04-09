@@ -57,12 +57,12 @@ export const dateTimeToTimestamp = (dateTime) => {
         return {timestamp: '', error: ''};
     }
 
-    // 解析为北京时间（UTC+8）
+    // 解析为本地时间
     const date = new Date(dateTime);
     if (!isNaN(date.getTime())) {
-        // 转换为UTC时间戳（减去8小时）
-        const utcTimestamp = Math.floor((date.getTime() - 8 * 60 * 60 * 1000) / 1000);
-        return {timestamp: utcTimestamp.toString(), error: ''};
+        // 转换为时间戳（秒）
+        const timestamp = Math.floor(date.getTime() / 1000);
+        return {timestamp: timestamp.toString(), error: ''};
     } else {
         return {timestamp: '', error: '无效的日期格式'};
     }
