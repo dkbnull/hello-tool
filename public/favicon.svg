@@ -1,16 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
-    <!-- 背景方形，圆弧20 -->
-    <rect x="10" y="10" width="180" height="180" rx="20" fill="white"/>
-
-    <!-- 图表节点 -->
-    <rect x="40" y="40" width="40" height="40" rx="8" fill="#4CAF50"/>
-    <rect x="120" y="40" width="40" height="40" rx="8" fill="#4CAF50"/>
-    <rect x="40" y="120" width="40" height="40" rx="8" fill="#4CAF50"/>
-    <rect x="120" y="120" width="40" height="40" rx="8" fill="#4CAF50"/>
-
-    <!-- 连接线 -->
-    <path d="M80 60 L120 60" stroke="#4CAF50" stroke-width="5"/>
-    <path d="M60 80 L60 120" stroke="#4CAF50" stroke-width="5"/>
-    <path d="M80 140 L120 140" stroke="#4CAF50" stroke-width="5"/>
-    <path d="M140 80 L140 120" stroke="#4CAF50" stroke-width="5"/>
+    <rect width="200" height="200" rx="48" fill="#42b883"/>
+    <g transform="translate(100,95)" fill="none" stroke="white" stroke-width="7" stroke-linecap="round"
+       stroke-linejoin="round">
+        <path d="M-30,-45 L-15,-45 L-5,-35 L-5,-20 L-20,-5 L-35,-5 L-45,-15 L-45,-30 Z"/>
+        <circle cx="-25" cy="-25" r="8" fill="white" stroke="none"/>
+        <path d="M10,5 L45,40 L40,50 L30,50 L0,20"/>
+        <g transform="translate(30,-15)">
+            <circle cx="0" cy="0" r="22" stroke-width="6"/>
+            <circle cx="0" cy="0" r="8" fill="white" stroke="none"/>
+            <line x1="0" y1="-22" x2="0" y2="-30"/>
+            <line x1="0" y1="22" x2="0" y2="30"/>
+            <line x1="-22" y1="0" x2="-30" y2="0"/>
+            <line x1="22" y1="0" x2="30" y2="0"/>
+            <line x1="-15.6" y1="-15.6" x2="-21.2" y2="-21.2"/>
+            <line x1="15.6" y1="15.6" x2="21.2" y2="21.2"/>
+            <line x1="-15.6" y1="15.6" x2="-21.2" y2="21.2"/>
+            <line x1="15.6" y1="-15.6" x2="21.2" y2="-21.2"/>
+        </g>
+    </g>
 </svg>

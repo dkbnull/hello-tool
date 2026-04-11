@@ -1,61 +1,55 @@
 <template>
   <footer class="footer">
-    <div class="container">
-      <div class="footer-info">
-        <p>&copy; {{ new Date().getFullYear() }} null. 版权所有.</p>
-      </div>
+    <div class="footer-inner">
+      <p>&copy; {{ new Date().getFullYear() }} null. 版权所有.</p>
       <div class="footer-records">
-        <div class="record-item">
-          <a href="https://beian.miit.gov.cn/" target="_blank" class="record-link">鲁ICP备2026010010号-1</a>
-        </div>
-        <div class="record-item">
-          <a href="https://beian.mps.gov.cn/#/query/webSearch" target="_blank" class="record-link">
-            <img src="https://beian.mps.gov.cn/web/assets/logo01.6189a29f.png" class="record-icon" alt="公安备案图标">
-            鲁公网安备37021402007219号
-          </a>
-        </div>
+        <a href="https://beian.miit.gov.cn/" target="_blank" class="record-link">鲁ICP备2026010010号-1</a>
+        <a href="https://beian.mps.gov.cn/#/query/webSearch" target="_blank" class="record-link">
+          <img src="https://beian.mps.gov.cn/web/assets/logo01.6189a29f.png" class="record-icon" alt="">
+          鲁公网安备37021402007219号
+        </a>
       </div>
     </div>
   </footer>
 </template>
 
-<script setup>
-</script>
-
 <style scoped>
 .footer {
   background-color: #f5f5f5;
-  color: #333333;
-  font-size: 0.9rem;
+  color: var(--color-text);
+  font-size: 0.85rem;
   text-align: center;
   padding: 1rem;
   margin-top: auto;
-  border-top: 1px solid #e0e0e0;
-  transition: background-color 0.3s, color 0.3s;
+  border-top: 1px solid var(--color-border);
+}
+
+.footer-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .footer-records {
   display: flex;
-  gap: 30px;
+  gap: 1.5rem;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
 }
 
-.record-item {
+.record-link {
+  color: var(--color-text);
+  text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 5px;
-}
-
-.record-link {
-  color: #333333;
-  text-decoration: none;
-  transition: color 0.3s ease;
+  gap: 4px;
+  transition: color 0.2s;
 }
 
 .record-link:hover {
-  text-decoration: none;
+  color: var(--color-primary);
 }
 
 .record-icon {
@@ -64,12 +58,10 @@
   vertical-align: middle;
 }
 
-/* 响应式设计 */
 @media (max-width: 768px) {
   .footer-records {
     flex-direction: column;
-    align-items: center;
-    gap: 0;
+    gap: 0.25rem;
   }
 }
 </style>

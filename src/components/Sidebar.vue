@@ -6,80 +6,20 @@
         <a
             href="#favorite-tools"
             class="sidebar-link"
-            :class="{ active: activeCategory === 'favorite-tools' }"
+            :class="{active: activeCategory === 'favorite-tools'}"
         >
           <span class="icon">⭐</span>
           <span>我的收藏</span>
         </a>
       </li>
-      <li>
+      <li v-for="category in categories" :key="category.id">
         <a
-            href="#time-tools"
+            :href="`#${category.id}-tools`"
             class="sidebar-link"
-            :class="{ active: activeCategory === 'time-tools' }"
+            :class="{active: activeCategory === `${category.id}-tools`}"
         >
-          <span class="icon">⏰</span>
-          <span>时间工具</span>
-        </a>
-      </li>
-      <li>
-        <a
-            href="#json-tools"
-            class="sidebar-link"
-            :class="{ active: activeCategory === 'json-tools' }"
-        >
-          <span class="icon">📋</span>
-          <span>JSON工具</span>
-        </a>
-      </li>
-      <li>
-        <a
-            href="#security-tools"
-            class="sidebar-link"
-            :class="{ active: activeCategory === 'security-tools' }"
-        >
-          <span class="icon">🔒</span>
-          <span>安全工具</span>
-        </a>
-      </li>
-      <li>
-        <a
-            href="#text-tools"
-            class="sidebar-link"
-            :class="{ active: activeCategory === 'text-tools' }"
-        >
-          <span class="icon">📝</span>
-          <span>文本工具</span>
-        </a>
-      </li>
-      <li>
-        <a
-            href="#image-tools"
-            class="sidebar-link"
-            :class="{ active: activeCategory === 'image-tools' }"
-        >
-          <span class="icon">🖼️</span>
-          <span>图形工具</span>
-        </a>
-      </li>
-      <li>
-        <a
-            href="#document-tools"
-            class="sidebar-link"
-            :class="{ active: activeCategory === 'document-tools' }"
-        >
-          <span class="icon">📄</span>
-          <span>文档工具</span>
-        </a>
-      </li>
-      <li>
-        <a
-            href="#life-tools"
-            class="sidebar-link"
-            :class="{ active: activeCategory === 'life-tools' }"
-        >
-          <span class="icon">🏠</span>
-          <span>生活工具</span>
+          <span class="icon">{{ category.icon }}</span>
+          <span>{{ category.name }}</span>
         </a>
       </li>
     </ul>
@@ -87,58 +27,56 @@
 </template>
 
 <script setup>
-import {onMounted, ref} from 'vue';
+import {onMounted, onUnmounted, ref} from 'vue'
+import {getCategories} from '../config/tools'
 
-// 当前激活的分类
-const activeCategory = ref('');
+const categories = getCategories()
+const activeCategory = ref('')
 
-// 监听滚动，更新激活的分类
+let scrollHandler = null
+
 onMounted(() => {
-  const handleScroll = () => {
-    const sections = document.querySelectorAll('.tool-section');
-    let current = '';
-
+  scrollHandler = () => {
+    const sections = document.querySelectorAll('.tool-section')
+    let current = ''
     sections.forEach(section => {
-      const sectionTop = section.offsetTop;
-      if (scrollY >= sectionTop - 100) {
-        current = section.getAttribute('id');
+      if (scrollY >= section.offsetTop - 100) {
+        current = section.getAttribute('id')
       }
-    });
+    })
+    activeCategory.value = current
+  }
+  window.addEventListener('scroll', scrollHandler)
+  scrollHandler()
+})
 
-    activeCategory.value = current;
-  };
-
-  window.addEventListener('scroll', handleScroll);
-  // 初始执行一次
-  handleScroll();
-
-  return () => window.removeEventListener('scroll', handleScroll);
-});
+onUnmounted(() => {
+  if (scrollHandler) {
+    window.removeEventListener('scroll', scrollHandler)
+  }
+})
 </script>
 
 <style scoped>
 .sidebar {
   width: 220px;
   background: #f8f9fa;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--color-border);
   position: sticky;
-  top: 2rem;
+  top: 5rem;
   align-self: flex-start;
   height: fit-content;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
 }
 
 .sidebar-title {
-  color: #42b883;
+  color: var(--color-primary);
   margin-top: 0;
   margin-bottom: 1.5rem;
   font-size: 1.2rem;
   font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 .sidebar-menu {
@@ -153,24 +91,24 @@ onMounted(() => {
 
 .sidebar-link {
   text-decoration: none;
-  color: #333;
-  transition: all 0.3s ease;
+  color: var(--color-text);
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: 0.95rem;
 }
 
 .sidebar-link:hover {
-  background: #e8f5e8;
-  color: #42b883;
-  transform: translateX(5px);
+  background: var(--color-bg-hover);
+  color: var(--color-primary);
+  transform: translateX(4px);
 }
 
 .sidebar-link.active {
-  background: #42b883;
+  background: var(--color-primary);
   color: white;
   font-weight: 500;
 }
@@ -181,7 +119,6 @@ onMounted(() => {
   text-align: center;
 }
 
-/* 响应式设计 */
 @media (max-width: 768px) {
   .sidebar {
     width: 100%;

@@ -1,66 +1,57 @@
 <template>
   <div class="about">
-    <div class="container">
-      <div class="content">
-        <h1 class="page-title">Hello Tool</h1>
-        <p class="page-subtitle">开发工具箱 - 集成多种常用开发工具，提高开发效率</p>
+    <div class="content">
+      <h1 class="page-title">Hello Tool</h1>
+      <p class="page-subtitle">开发工具箱 - 集成多种常用开发工具，提高开发效率</p>
 
-        <div class="about-section">
-          <h2 class="section-title">
-            <span class="icon">🔗</span>
-            仓库地址
-          </h2>
-          <div class="repo-links">
-            <a href="https://github.com/dkbnull/hello-tool" target="_blank" class="repo-link card">
-              <span class="icon">🐙</span>
-              <span>GitHub</span>
-            </a>
-            <a href="https://gitee.com/dkbnull/hello-tool" target="_blank" class="repo-link card">
-              <span class="icon">🎯</span>
-              <span>Gitee</span>
-            </a>
-          </div>
+      <div class="about-section">
+        <h2 class="section-title">
+          <span class="icon">🔗</span>
+          仓库地址
+        </h2>
+        <div class="link-grid">
+          <a href="https://github.com/dkbnull/hello-tool" target="_blank" class="link-card section-card">
+            <span class="icon">🐙</span>
+            <span>GitHub</span>
+          </a>
+          <a href="https://gitee.com/dkbnull/hello-tool" target="_blank" class="link-card section-card">
+            <span class="icon">🎯</span>
+            <span>Gitee</span>
+          </a>
         </div>
+      </div>
 
-        <div class="about-section">
-          <h2 class="section-title">
-            <span class="icon">🤝</span>
-            友链
-          </h2>
-          <div class="friend-links">
-            <a href="https://www.wbnull.cn" target="_blank" class="friend-link card">
-              <span class="icon">🏠</span>
-              <span>主站</span>
-            </a>
-            <a href="https://blog.wbnull.cn" target="_blank" class="friend-link card">
-              <span class="icon">📝</span>
-              <span>博客</span>
-            </a>
-          </div>
+      <div class="about-section">
+        <h2 class="section-title">
+          <span class="icon">🤝</span>
+          友链
+        </h2>
+        <div class="link-grid">
+          <a href="https://www.wbnull.cn" target="_blank" class="link-card section-card">
+            <span class="icon">🏠</span>
+            <span>主站</span>
+          </a>
+          <a href="https://blog.wbnull.cn" target="_blank" class="link-card section-card">
+            <span class="icon">📝</span>
+            <span>博客</span>
+          </a>
         </div>
+      </div>
 
-        <div class="about-section">
-          <h2 class="section-title">
-            <span class="icon">💬</span>
-            微信公众号
-          </h2>
-          <div class="contact-info">
-            <div class="contact-links">
-              <div class="contact-item card">
-                <div class="wechat-qrcode">
-                  <img src="../assets/weixin.jpg" alt="微信二维码" class="qrcode-image">
-                </div>
-              </div>
-            </div>
+      <div class="about-section">
+        <h2 class="section-title">
+          <span class="icon">💬</span>
+          微信公众号
+        </h2>
+        <div class="qrcode-wrapper">
+          <div class="section-card qrcode-card">
+            <img src="../assets/weixin.jpg" alt="微信二维码" class="qrcode-image">
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
-<script setup>
-</script>
 
 <style scoped>
 .about {
@@ -74,7 +65,7 @@
 
 .page-title {
   text-align: center;
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 0.5rem;
   font-size: 2rem;
   font-weight: 700;
@@ -82,21 +73,20 @@
 
 .page-subtitle {
   text-align: center;
-  color: #666;
+  color: var(--color-text-secondary);
   margin-bottom: 3rem;
   font-size: 1.1rem;
 }
 
 .about-section {
   margin-bottom: 3.5rem;
-  scroll-margin-top: 2rem;
 }
 
 .section-title {
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 1.5rem;
   padding-bottom: 0.75rem;
-  border-bottom: 2px solid #42b883;
+  border-bottom: 2px solid var(--color-primary);
   font-size: 1.4rem;
   font-weight: 600;
   display: flex;
@@ -108,113 +98,56 @@
   font-size: 1.2rem;
 }
 
-/* 仓库链接样式 */
-.repo-links {
+.link-grid {
   display: flex;
   gap: 1.5rem;
   flex-wrap: wrap;
 }
 
-.repo-link {
+.link-card {
   text-decoration: none;
-  color: #333;
-  transition: all 0.3s ease;
+  color: var(--color-text);
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   gap: 0.75rem;
   min-width: 150px;
 }
 
-.repo-link:hover {
-  transform: translateY(-5px);
-  border-color: #42b883;
+.link-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-primary);
 }
 
-.repo-link .icon {
+.link-card .icon {
   font-size: 1.5rem;
-  color: #42b883;
+  color: var(--color-primary);
 }
 
-/* 友链样式 */
-.friend-links {
+.qrcode-wrapper {
   display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.friend-link {
-  text-decoration: none;
-  color: #333;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  min-width: 150px;
-}
-
-.friend-link:hover {
-  transform: translateY(-5px);
-  border-color: #42b883;
-}
-
-.friend-link .icon {
-  font-size: 1.5rem;
-  color: #42b883;
-}
-
-/* 联系方式样式 */
-.contact-info {
-  line-height: 1.8;
-  color: #555;
-  font-size: 1rem;
-}
-
-.dark-mode .contact-info {
-  color: #999;
-}
-
-.contact-info p {
-  margin-bottom: 1.5rem;
-}
-
-.contact-links {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
   justify-content: center;
 }
 
-.contact-item {
+.qrcode-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  min-width: 200px;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
-.contact-item:hover {
-  transform: translateY(-5px);
-  border-color: #42b883;
-}
-
-.contact-item .icon {
-  font-size: 1.5rem;
-  color: #42b883;
-}
-
-.wechat-qrcode {
-  margin-top: 0.5rem;
+.qrcode-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-primary);
 }
 
 .qrcode-image {
   width: 200px;
   height: 200px;
-  border-radius: 8px;
-  border: 1px solid #e9ecef;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
 }
 
-/* 响应式设计 */
 @media (max-width: 768px) {
   .content {
     padding: 0 1rem;
@@ -229,29 +162,23 @@
     margin-bottom: 2rem;
   }
 
-  .repo-link,
-  .friend-link,
-  .contact-item {
+  .link-card {
     padding: 1.25rem;
     min-width: 120px;
   }
 
   .qrcode-image {
-    width: 120px;
-    height: 120px;
+    width: 150px;
+    height: 150px;
   }
 }
 
 @media (max-width: 480px) {
-  .repo-links,
-  .friend-links,
-  .contact-links {
+  .link-grid {
     flex-direction: column;
   }
 
-  .repo-link,
-  .friend-link,
-  .contact-item {
+  .link-card {
     width: 100%;
     justify-content: center;
   }

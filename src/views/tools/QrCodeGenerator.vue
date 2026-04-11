@@ -3,59 +3,52 @@
     <h2>二维码生成器</h2>
 
     <div class="converter-container">
-      <!-- 左侧输入区域 -->
-      <div class="input-section">
-        <div class="input-header">
+      <div class="section-card">
+        <div class="section-header">
           <h3>输入内容</h3>
-          <div class="input-actions">
-            <button @click="clearInput" class="action-btn secondary">
-              <i class="fas fa-trash-alt mr-1"></i>清空
-            </button>
-          </div>
+          <button @click="clearInput" class="btn btn-secondary btn-sm">清空</button>
         </div>
-        <textarea
-            v-model="input"
-            rows="6"
-            placeholder="请输入要转换为二维码的内容，如文本、网址等"
-        ></textarea>
+        <div class="input-group">
+          <textarea v-model="text" placeholder="请输入要生成二维码的文本或URL" rows="4"></textarea>
+        </div>
 
-        <!-- 二维码大小设置和生成按钮 -->
-        <div class="size-control-row">
-          <div class="size-setting">
-            <label>二维码大小：</label>
+        <div class="options">
+          <div class="option-row">
+            <label>尺寸：</label>
             <input
                 type="range"
-                v-model.number="qrCodeSize"
-                min="100"
-                max="500"
+                v-model.number="size"
+                min="128"
+                max="512"
                 step="1"
                 class="size-slider"
             />
-            <span class="size-value">{{ qrCodeSize }}px</span>
+            <span class="size-value">{{ size }}px</span>
           </div>
-          <button @click="generateQRCode" class="action-btn success">
-            <i class="fas fa-qrcode mr-1"></i>生成二维码
-          </button>
+          <div class="option-row">
+            <label>容错级别：</label>
+            <select v-model="errorCorrectionLevel">
+              <option value="L">L (低)</option>
+              <option value="M">M (中)</option>
+              <option value="Q">Q (较高)</option>
+              <option value="H">H (高)</option>
+            </select>
+          </div>
+          <button @click="generateQrCode" class="btn btn-success" :disabled="!text">生成二维码</button>
         </div>
       </div>
 
-      <!-- 右侧输出区域 -->
-      <div class="output-section">
-        <div class="output-header">
+      <div class="section-card">
+        <div class="section-header">
           <h3>二维码</h3>
-          <div class="output-actions">
-            <button @click="downloadQRCode" class="action-btn success" :disabled="!qrCodeUrl">
-              <i class="fas fa-download mr-1"></i>下载
-            </button>
-          </div>
+          <button @click="downloadQrCode" class="btn btn-primary" :disabled="!qrCodeUrl">下载二维码</button>
         </div>
-        <div class="qr-code-container">
-          <img v-if="qrCodeUrl" :src="qrCodeUrl" alt="二维码" class="qr-code-image"/>
+        <div class="qrcode-image-wrapper">
+          <img v-if="qrCodeUrl" :src="qrCodeUrl" alt="QR Code" class="qrcode-image"/>
           <div v-else class="qr-code-placeholder">
-            请输入内容并点击生成按钮
+            请输入内容并点击生成二维码按钮
           </div>
         </div>
-        <div v-if="error" class="error-area">{{ error }}</div>
       </div>
     </div>
   </div>
@@ -65,191 +58,98 @@
 import {ref} from 'vue'
 import QRCode from 'qrcode'
 
-const input = ref('')
-const error = ref('')
+const text = ref('')
+const size = ref(256)
+const errorCorrectionLevel = ref('M')
 const qrCodeUrl = ref('')
-const qrCodeSize = ref(200)
 
-// 清空输入
 const clearInput = () => {
-  input.value = ''
+  text.value = ''
   qrCodeUrl.value = ''
-  error.value = ''
 }
 
-// 生成二维码
-const generateQRCode = () => {
-  if (!input.value) {
-    error.value = '请输入内容'
-    return
-  }
-
+const generateQrCode = async () => {
+  if (!text.value) return
   try {
-    QRCode.toDataURL(input.value, {
-      width: qrCodeSize.value,
-      margin: 1,
-      color: {
-        dark: '#000000',
-        light: '#FFFFFF'
-      }
+    qrCodeUrl.value = await QRCode.toDataURL(text.value, {
+      width: size.value,
+      margin: 2,
+      errorCorrectionLevel: errorCorrectionLevel.value,
     })
-        .then(url => {
-          qrCodeUrl.value = url
-          error.value = ''
-        })
-        .catch(err => {
-          error.value = '生成失败: ' + err.message
-        })
-  } catch (err) {
-    error.value = '生成失败: ' + err.message
+  } catch (e) {
+    qrCodeUrl.value = ''
   }
 }
 
-// 下载二维码
-const downloadQRCode = () => {
-  if (!qrCodeUrl.value) {
-    error.value = '请先生成二维码'
-    return
-  }
-
+const downloadQrCode = () => {
+  if (!qrCodeUrl.value) return
   const link = document.createElement('a')
-  link.href = qrCodeUrl.value
   link.download = 'qrcode.png'
+  link.href = qrCodeUrl.value
   link.click()
 }
 </script>
 
 <style scoped>
-.tool-container {
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 1rem;
-  box-sizing: border-box;
-}
-
-h2 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 0.5rem;
-  font-size: 1.75rem;
-  font-weight: bold;
-}
-
 .converter-container {
-  padding: 2rem;
   display: flex;
   gap: 1.5rem;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
 }
 
-@media (min-width: 1024px) {
-  .converter-container {
-    flex-wrap: nowrap;
-  }
-
-  .input-section,
-  .output-section {
-    flex: 1;
-  }
-}
-
-.input-section,
-.output-section {
+.converter-container .section-card {
   flex: 1;
-  min-width: 400px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
+  min-width: 300px;
 }
 
-.input-header,
-.output-header {
+.options {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-h3 {
-  font-size: 1.25rem;
-  color: #333;
-  margin: 0;
-}
-
-.input-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-textarea {
-  max-height: 400px;
-}
-
-.size-control-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: center;
+  gap: 1.5rem;
   margin: 1rem 0;
+  flex-wrap: wrap;
 }
 
-.size-setting {
+.option-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  flex: 1;
-  min-width: 200px;
+  gap: 0.75rem;
 }
 
 .size-slider {
   flex: 1;
-  min-width: 150px;
+  min-width: 200px;
 }
 
-.size-value {
-  min-width: 80px;
-  text-align: right;
+.option-row > label {
+  color: var(--color-text-secondary);
+  font-weight: bold;
+  white-space: nowrap;
 }
 
-@media (max-width: 768px) {
-  .size-control-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .size-setting {
-    width: 100%;
-  }
+.option-row select {
+  padding: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  background: white;
 }
 
-
-.qr-code-container {
+.qrcode-image-wrapper {
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   min-height: 300px;
-  border: 1px solid #ddd;
   border-radius: 4px;
   background: #f7fafc;
-  padding: 2rem;
 }
 
-.qr-code-image {
-  max-width: 100%;
-  max-height: 100%;
+.qrcode-image {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
 }
 
 .qr-code-placeholder {
   color: #666;
   text-align: center;
   font-size: 1rem;
-}
-
-.error-area {
-  margin-top: 0.75rem;
-  color: #e53e3e;
-  font-size: 0.875rem;
 }
 </style>

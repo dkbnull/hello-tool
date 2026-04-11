@@ -1,35 +1,31 @@
 <template>
   <header class="header">
-    <div class="container">
+    <div class="header-inner">
       <h1 class="logo">
-        <router-link to="/">Hello Tool</router-link>
+        <router-link to="/">
+          <img src="/favicon.svg" alt="Logo" class="logo-img"/>
+          <span>Hello Tool</span>
+        </router-link>
       </h1>
-      <div class="header-right">
-        <nav class="nav">
-          <router-link to="/" class="nav-link">首页</router-link>
-          <router-link to="/about" class="nav-link">关于</router-link>
-        </nav>
-      </div>
+      <nav class="nav">
+        <router-link to="/" class="nav-link">首页</router-link>
+        <router-link to="/about" class="nav-link">关于</router-link>
+      </nav>
     </div>
   </header>
 </template>
 
-<script setup>
-</script>
-
 <style scoped>
 .header {
-  background-color: #ffffff;
-  color: #333333;
+  background-color: var(--color-bg-card);
   padding: 1rem 0;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s, color 0.3s;
+  box-shadow: var(--shadow-sm);
 }
 
-.container {
+.header-inner {
   margin: 0 auto;
   padding: 0 4rem;
   display: flex;
@@ -43,27 +39,50 @@
 }
 
 .logo a {
-  color: #333333;
+  color: var(--color-text);
   text-decoration: none;
-  transition: color 0.3s;
-}
-
-.header-right {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 0.5rem;
+  transition: color 0.2s;
+}
+
+.logo a:hover {
+  color: var(--color-primary);
+}
+
+.logo-img {
+  width: 28px;
+  height: 28px;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .nav-link {
-  color: #333333;
+  color: var(--color-text);
   text-decoration: none;
-  margin-left: 2rem;
   padding: 0.5rem 1rem;
-  border-radius: 4px;
-  transition: background 0.3s ease, color 0.3s;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s ease, color 0.2s;
+  font-size: 0.95rem;
 }
 
 .nav-link:hover {
   background: rgba(0, 0, 0, 0.05);
+  color: var(--color-primary);
+}
+
+@media (max-width: 768px) {
+  .header-inner {
+    padding: 0 1.5rem;
+  }
+
+  .logo {
+    font-size: 1.2rem;
+  }
 }
 </style>

@@ -1,32 +1,23 @@
 <template>
   <div class="tool-container">
     <h2>JSON与XML互转</h2>
-    <div class="converter">
-      <div class="input-group">
-        <div class="input-header">
-          <h3><label for="json-input">JSON</label></h3>
-          <button @click="handleCopy(jsonInput)" class="copy-btn" :disabled="!jsonInput">复制</button>
+
+    <div class="converter-container">
+      <div class="section-card">
+        <div class="section-header">
+          <h3>JSON</h3>
+          <button @click="handleCopy(jsonInput)" class="btn btn-copy btn-sm" :disabled="!jsonInput">复制</button>
         </div>
-        <textarea
-            id="json-input"
-            v-model="jsonInput"
-            placeholder="输入JSON"
-            rows="8"
-        ></textarea>
+        <textarea v-model="jsonInput" placeholder="输入JSON" rows="20"></textarea>
         <div v-if="jsonError" class="error-message">{{ jsonError }}</div>
       </div>
-      <div class="arrow">⇄</div>
-      <div class="input-group">
-        <div class="input-header">
-          <h3><label for="xml-input">XML</label></h3>
-          <button @click="handleCopy(xmlInput)" class="copy-btn" :disabled="!xmlInput">复制</button>
+
+      <div class="section-card">
+        <div class="section-header">
+          <h3>XML</h3>
+          <button @click="handleCopy(xmlInput)" class="btn btn-copy btn-sm" :disabled="!xmlInput">复制</button>
         </div>
-        <textarea
-            id="xml-input"
-            v-model="xmlInput"
-            placeholder="输入XML"
-            rows="8"
-        ></textarea>
+        <textarea v-model="xmlInput" placeholder="输入XML" rows="20"></textarea>
         <div v-if="xmlError" class="error-message">{{ xmlError }}</div>
       </div>
     </div>
@@ -35,221 +26,116 @@
 
 <script setup>
 import {ref, watch} from 'vue'
-import {copyToClipboard} from '../../utils/clipboard'
-import {showToast} from '../../utils/toast'
+import {useCopy} from '../../composables/useCopy'
+
+const {handleCopy} = useCopy()
 
 const jsonInput = ref('')
 const xmlInput = ref('')
 const jsonError = ref('')
 const xmlError = ref('')
 
-// 复制到剪贴板
-const handleCopy = async (text) => {
-  if (text) {
-    const success = await copyToClipboard(text)
-    showToast({
-      message: success ? '已复制到剪贴板' : '复制失败'
-    })
-  }
-}
-
-// JSON转XML
-const jsonToXml = () => {
-  if (!jsonInput.value) {
-    xmlInput.value = ''
-    jsonError.value = ''
-    return
-  }
-
-  try {
-    const obj = JSON.parse(jsonInput.value)
-    xmlInput.value = jsonToXmlRecursive(obj, 'root')
-    jsonError.value = ''
-  } catch (error) {
-    jsonError.value = '无效的JSON格式'
-  }
-}
-
-// 清理XML标签名，确保符合XML命名规则
-const cleanXmlTagName = (tagName) => {
-  // 移除无效字符，只保留字母、数字、下划线和冒号
-  let cleaned = tagName.replace(/[^a-zA-Z0-9_:]/g, '_')
-  // 确保标签名不以数字或冒号开头
-  if (/^[0-9:]/.test(cleaned)) {
-    cleaned = '_' + cleaned
-  }
+const cleanTagName = (name) => {
+  let cleaned = name.replace(/[^a-zA-Z0-9_:]/g, '_')
+  if (/^[0-9:]/.test(cleaned)) cleaned = '_' + cleaned
   return cleaned
 }
 
-// 递归转换JSON为XML
-const jsonToXmlRecursive = (obj, root, indent = 0) => {
-  const indentStr = '  '.repeat(indent)
-  const cleanedRoot = cleanXmlTagName(root)
-  let xml = `${indentStr}<${cleanedRoot}>`
-
+const jsonToXmlRecursive = (obj, tag, indent = 0) => {
+  const pad = '  '.repeat(indent)
+  const cleanTag = cleanTagName(tag)
+  let xml = `${pad}<${cleanTag}>`
   if (typeof obj === 'object' && obj !== null) {
     xml += '\n'
     for (const key in obj) {
-      const cleanedKey = cleanXmlTagName(key)
+      const cleanKey = cleanTagName(key)
       if (Array.isArray(obj[key])) {
         obj[key].forEach(item => {
-          xml += jsonToXmlRecursive(item, cleanedKey, indent + 1)
+          xml += jsonToXmlRecursive(item, cleanKey, indent + 1)
         })
       } else {
-        xml += jsonToXmlRecursive(obj[key], cleanedKey, indent + 1)
+        xml += jsonToXmlRecursive(obj[key], cleanKey, indent + 1)
       }
     }
-    xml += indentStr
+    xml += pad
   } else {
     xml += obj
   }
-
-  xml += `</${cleanedRoot}>`
-  xml += '\n'
+  xml += `</${cleanTag}>\n`
   return xml
 }
 
-// XML转JSON
-const xmlToJson = () => {
-  if (!xmlInput.value) {
-    jsonInput.value = ''
-    xmlError.value = ''
-    return
-  }
-
-  try {
-    const parser = new DOMParser()
-    const xmlDoc = parser.parseFromString(xmlInput.value, 'text/xml')
-
-    // 检查是否有解析错误
-    const parserError = xmlDoc.querySelector('parsererror')
-    if (parserError) {
-      xmlError.value = '无效的XML格式'
-      return
-    }
-
-    const root = xmlDoc.documentElement
-    const obj = xmlToJsonRecursive(root)
-    jsonInput.value = JSON.stringify(obj, null, 2)
-    xmlError.value = ''
-  } catch (error) {
-    xmlError.value = '无效的XML格式'
-  }
-}
-
-// 递归转换XML为JSON
 const xmlToJsonRecursive = (node) => {
-  const obj = {}
-
   if (node.childNodes.length === 1 && node.childNodes[0].nodeType === 3) {
     return node.textContent
   }
-
+  const obj = {}
   for (let i = 0; i < node.childNodes.length; i++) {
     const child = node.childNodes[i]
     if (child.nodeType === 1) {
       if (obj[child.nodeName]) {
-        if (!Array.isArray(obj[child.nodeName])) {
-          obj[child.nodeName] = [obj[child.nodeName]]
-        }
+        if (!Array.isArray(obj[child.nodeName])) obj[child.nodeName] = [obj[child.nodeName]]
         obj[child.nodeName].push(xmlToJsonRecursive(child))
       } else {
         obj[child.nodeName] = xmlToJsonRecursive(child)
       }
     }
   }
-
   return obj
 }
 
-// 防抖函数
-const debounce = (func, delay) => {
-  let timeoutId
-  return (...args) => {
-    clearTimeout(timeoutId)
-    timeoutId = setTimeout(() => func.apply(null, args), delay)
+const jsonToXml = () => {
+  if (!jsonInput.value) {
+    xmlInput.value = '';
+    jsonError.value = '';
+    return
+  }
+  try {
+    xmlInput.value = jsonToXmlRecursive(JSON.parse(jsonInput.value), 'root')
+    jsonError.value = ''
+  } catch {
+    jsonError.value = '无效的JSON格式'
   }
 }
 
-// 监听输入变化
-watch(jsonInput, debounce(jsonToXml, 500))
-watch(xmlInput, debounce(xmlToJson, 500))
+const xmlToJson = () => {
+  if (!xmlInput.value) {
+    jsonInput.value = '';
+    xmlError.value = '';
+    return
+  }
+  try {
+    const xmlDoc = new DOMParser().parseFromString(xmlInput.value, 'text/xml')
+    if (xmlDoc.querySelector('parsererror')) {
+      xmlError.value = '无效的XML格式';
+      return
+    }
+    jsonInput.value = JSON.stringify(xmlToJsonRecursive(xmlDoc.documentElement), null, 2)
+    xmlError.value = ''
+  } catch {
+    xmlError.value = '无效的XML格式'
+  }
+}
+
+let jsonTimer, xmlTimer
+watch(jsonInput, () => {
+  clearTimeout(jsonTimer);
+  jsonTimer = setTimeout(jsonToXml, 500)
+})
+watch(xmlInput, () => {
+  clearTimeout(xmlTimer);
+  xmlTimer = setTimeout(xmlToJson, 500)
+})
 </script>
 
 <style scoped>
-.tool-container {
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-h2 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 2rem;
-}
-
-h3 {
-  font-size: 1.25rem;
-  color: #333;
-  margin: 0;
-}
-
-.converter {
+.converter-container {
   display: flex;
-  align-items: center;
-  gap: 2rem;
-  flex-wrap: wrap;
+  gap: 1.5rem;
 }
 
-.input-group {
+.converter-container .section-card {
   flex: 1;
-  min-width: 400px;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #666;
-}
-
-.input-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.input-header label {
-  margin: 0;
-  color: #666;
-}
-
-
-textarea {
-  min-height: 400px;
-}
-
-.arrow {
-  font-size: 2rem;
-  color: #42b883;
-  font-weight: bold;
-}
-
-.error-message {
-  padding: 0.5rem;
-  background: #fed7d7;
-  border-radius: 4px;
-  border-left: 4px solid #e53e3e;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
+  min-width: 300px;
 }
 </style>

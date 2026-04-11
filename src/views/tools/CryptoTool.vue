@@ -1,15 +1,12 @@
 <template>
   <div class="tool-container">
     <h2>加解密工具</h2>
-    <p class="tool-description">支持Base64、AES、DES、3DES和MD5加解密</p>
 
-    <!-- 控制区域 -->
-    <div class="control-section">
+    <div class="section-card">
       <div class="control-row">
-        <!-- 加密模式选择 -->
-        <div class="mode-selector">
+        <div class="input-group">
           <label>加密模式：</label>
-          <select v-model="cryptoMode" class="mode-select">
+          <select v-model="cryptoMode">
             <option value="base64">Base64</option>
             <option value="aes">AES</option>
             <option value="des">DES</option>
@@ -18,79 +15,39 @@
           </select>
         </div>
 
-        <!-- 密钥输入 -->
-        <div class="key-input-container">
-          <!-- AES密钥输入 -->
-          <div v-if="cryptoMode === 'aes'" class="key-input">
-            <label for="aesKey">AES密钥：</label>
-            <input
-                type="text"
-                id="aesKey"
-                v-model="aesKey"
-                placeholder="请输入AES密钥"
-                class="key-input-field"
-            />
-          </div>
-
-          <!-- DES密钥输入 -->
-          <div v-if="cryptoMode === 'des'" class="key-input">
-            <label for="desKey">DES密钥：</label>
-            <input
-                type="text"
-                id="desKey"
-                v-model="desKey"
-                placeholder="请输入DES密钥"
-                class="key-input-field"
-            />
-          </div>
-
-          <!-- 3DES密钥输入 -->
-          <div v-if="cryptoMode === 'tripleDes'" class="key-input">
-            <label for="tripleDesKey">3DES密钥：</label>
-            <input
-                type="text"
-                id="tripleDesKey"
-                v-model="tripleDesKey"
-                placeholder="请输入3DES密钥"
-                class="key-input-field"
-            />
-          </div>
+        <div v-if="cryptoMode === 'aes'" class="input-group">
+          <label>AES密钥：</label>
+          <input type="text" v-model="aesKey" placeholder="请输入AES密钥"/>
+        </div>
+        <div v-if="cryptoMode === 'des'" class="input-group">
+          <label>DES密钥：</label>
+          <input type="text" v-model="desKey" placeholder="请输入DES密钥"/>
+        </div>
+        <div v-if="cryptoMode === 'tripleDes'" class="input-group">
+          <label>3DES密钥：</label>
+          <input type="text" v-model="tripleDesKey" placeholder="请输入3DES密钥"/>
         </div>
 
-        <!-- 加密解密按钮 -->
-        <div class="input-buttons">
-          <button @click="handleEncrypt" class="action-btn success">
-            <i class="fas fa-lock mr-1"></i>加密
-          </button>
-          <button @click="handleDecrypt" class="action-btn warning">
-            <i class="fas fa-unlock mr-1"></i>解密
-          </button>
+        <div class="button-group-inline">
+          <button @click="handleEncrypt" class="btn btn-success">加密</button>
+          <button @click="handleDecrypt" class="btn btn-warning" :disabled="cryptoMode === 'md5'">解密</button>
         </div>
       </div>
     </div>
 
     <div class="converter-container">
-      <!-- 左侧输入区域 -->
-      <div class="input-section">
-        <div class="input-header">
+      <div class="input-section section-card">
+        <div class="section-header">
           <h3>输入</h3>
-          <button @click="clearInput" class="action-btn secondary">
-            <i class="fas fa-trash-alt mr-1"></i>清空
-          </button>
+          <button @click="clearInput" class="btn btn-secondary btn-sm">清空</button>
         </div>
-        <textarea
-            v-model="input"
-            rows="12"
-        ></textarea>
+        <textarea v-model="input" rows="15"></textarea>
       </div>
 
-      <!-- 右侧输出区域 -->
-      <div class="output-section">
-        <div class="output-header">
+      <div class="output-section section-card">
+        <div class="section-header">
           <h3>结果</h3>
-          <button @click="handleCopy(output)" class="action-btn copy-btn" :disabled="!output">
-            <i class="fas fa-copy mr-1"></i>复制
-          </button>
+          <button @click="handleCopy(output)" class="btn btn-copy btn-sm" :disabled="!output">复制</button>
         </div>
         <pre class="output-area">{{ output }}</pre>
         <div v-if="error" class="error-message">{{ error }}</div>
@@ -102,8 +59,9 @@
 <script setup>
 import {ref} from 'vue'
 import CryptoJS from 'crypto-js'
-import {copyToClipboard} from '../../utils/clipboard'
-import {showToast} from '../../utils/toast'
+import {useCopy} from '../../composables/useCopy'
+
+const {handleCopy} = useCopy()
 
 const input = ref('')
 const output = ref('')
@@ -112,386 +70,207 @@ const cryptoMode = ref('base64')
 const aesKey = ref('')
 const desKey = ref('')
 const tripleDesKey = ref('')
-const rsaPublicKey = ref('')
-const rsaPrivateKey = ref('')
 
-// 复制到剪贴板
-const handleCopy = async (text) => {
-  if (text) {
-    const success = await copyToClipboard(text)
-    showToast({
-      message: success ? '已复制到剪贴板' : '复制失败'
-    })
-  }
-}
-
-// 清空输入
 const clearInput = () => {
   input.value = ''
   output.value = ''
   error.value = ''
 }
 
-// Base64加密
-const base64Encrypt = () => {
-  try {
-    output.value = btoa(unescape(encodeURIComponent(input.value)))
-    error.value = ''
-  } catch (err) {
-    error.value = '加密失败: ' + err.message
+const encryptors = {
+  base64: () => {
+    try {
+      output.value = btoa(unescape(encodeURIComponent(input.value)))
+      error.value = ''
+    } catch (e) {
+      error.value = '加密失败: ' + e.message
+    }
+  },
+  aes: () => {
+    if (!aesKey.value) {
+      error.value = '请输入密钥';
+      return
+    }
+    try {
+      output.value = CryptoJS.AES.encrypt(input.value, aesKey.value).toString()
+      error.value = ''
+    } catch (e) {
+      error.value = '加密失败: ' + e.message
+    }
+  },
+  des: () => {
+    if (!desKey.value) {
+      error.value = '请输入DES密钥';
+      return
+    }
+    try {
+      output.value = CryptoJS.DES.encrypt(input.value, desKey.value).toString()
+      error.value = ''
+    } catch (e) {
+      error.value = '加密失败: ' + e.message
+    }
+  },
+  tripleDes: () => {
+    if (!tripleDesKey.value) {
+      error.value = '请输入3DES密钥';
+      return
+    }
+    try {
+      output.value = CryptoJS.TripleDES.encrypt(input.value, tripleDesKey.value).toString()
+      error.value = ''
+    } catch (e) {
+      error.value = '加密失败: ' + e.message
+    }
+  },
+  md5: () => {
+    try {
+      output.value = CryptoJS.MD5(input.value).toString()
+      error.value = ''
+    } catch (e) {
+      error.value = '加密失败: ' + e.message
+    }
   }
 }
 
-// Base64解密
-const base64Decrypt = () => {
-  try {
-    output.value = decodeURIComponent(escape(atob(input.value)))
-    error.value = ''
-  } catch (err) {
-    error.value = '解密失败: ' + err.message
+const decryptors = {
+  base64: () => {
+    try {
+      output.value = decodeURIComponent(escape(atob(input.value)))
+      error.value = ''
+    } catch (e) {
+      error.value = '解密失败: ' + e.message
+    }
+  },
+  aes: () => {
+    if (!aesKey.value) {
+      error.value = '请输入密钥';
+      return
+    }
+    try {
+      output.value = CryptoJS.AES.decrypt(input.value, aesKey.value).toString(CryptoJS.enc.Utf8)
+      error.value = ''
+    } catch (e) {
+      error.value = '解密失败: ' + e.message
+    }
+  },
+  des: () => {
+    if (!desKey.value) {
+      error.value = '请输入DES密钥';
+      return
+    }
+    try {
+      output.value = CryptoJS.DES.decrypt(input.value, desKey.value).toString(CryptoJS.enc.Utf8)
+      error.value = ''
+    } catch (e) {
+      error.value = '解密失败: ' + e.message
+    }
+  },
+  tripleDes: () => {
+    if (!tripleDesKey.value) {
+      error.value = '请输入3DES密钥';
+      return
+    }
+    try {
+      output.value = CryptoJS.TripleDES.decrypt(input.value, tripleDesKey.value).toString(CryptoJS.enc.Utf8)
+      error.value = ''
+    } catch (e) {
+      error.value = '解密失败: ' + e.message
+    }
   }
 }
 
-// AES加密
-const aesEncrypt = () => {
-  if (!aesKey.value) {
-    error.value = '请输入密钥'
-    return
-  }
-  try {
-    const encrypted = CryptoJS.AES.encrypt(input.value, aesKey.value).toString()
-    output.value = encrypted
-    error.value = ''
-  } catch (err) {
-    error.value = '加密失败: ' + err.message
-  }
-}
-
-// AES解密
-const aesDecrypt = () => {
-  if (!aesKey.value) {
-    error.value = '请输入密钥'
-    return
-  }
-  try {
-    const decrypted = CryptoJS.AES.decrypt(input.value, aesKey.value).toString(CryptoJS.enc.Utf8)
-    output.value = decrypted
-    error.value = ''
-  } catch (err) {
-    error.value = '解密失败: ' + err.message
-  }
-}
-
-// DES加密
-const desEncrypt = () => {
-  if (!desKey.value) {
-    error.value = '请输入DES密钥'
-    return
-  }
-  try {
-    const encrypted = CryptoJS.DES.encrypt(input.value, desKey.value).toString()
-    output.value = encrypted
-    error.value = ''
-  } catch (err) {
-    error.value = '加密失败: ' + err.message
-  }
-}
-
-// DES解密
-const desDecrypt = () => {
-  if (!desKey.value) {
-    error.value = '请输入DES密钥'
-    return
-  }
-  try {
-    const decrypted = CryptoJS.DES.decrypt(input.value, desKey.value).toString(CryptoJS.enc.Utf8)
-    output.value = decrypted
-    error.value = ''
-  } catch (err) {
-    error.value = '解密失败: ' + err.message
-  }
-}
-
-// 3DES加密
-const tripleDesEncrypt = () => {
-  if (!tripleDesKey.value) {
-    error.value = '请输入3DES密钥'
-    return
-  }
-  try {
-    const encrypted = CryptoJS.TripleDES.encrypt(input.value, tripleDesKey.value).toString()
-    output.value = encrypted
-    error.value = ''
-  } catch (err) {
-    error.value = '加密失败: ' + err.message
-  }
-}
-
-// 3DES解密
-const tripleDesDecrypt = () => {
-  if (!tripleDesKey.value) {
-    error.value = '请输入3DES密钥'
-    return
-  }
-  try {
-    const decrypted = CryptoJS.TripleDES.decrypt(input.value, tripleDesKey.value).toString(CryptoJS.enc.Utf8)
-    output.value = decrypted
-    error.value = ''
-  } catch (err) {
-    error.value = '解密失败: ' + err.message
-  }
-}
-
-// MD5加密
-const md5Encrypt = () => {
-  try {
-    const encrypted = CryptoJS.MD5(input.value).toString()
-    output.value = encrypted
-    error.value = ''
-  } catch (err) {
-    error.value = '加密失败: ' + err.message
-  }
-}
-
-// RSA加密（使用Web Crypto API）
-const rsaEncrypt = () => {
-  if (!rsaPublicKey.value) {
-    error.value = '请输入RSA公钥'
-    return
-  }
-  try {
-    // 这里使用简化的RSA加密实现
-    // 实际项目中可能需要更复杂的实现
-    output.value = 'RSA加密功能需要完整的Web Crypto API实现'
-    error.value = ''
-  } catch (err) {
-    error.value = '加密失败: ' + err.message
-  }
-}
-
-// RSA解密（使用Web Crypto API）
-const rsaDecrypt = () => {
-  if (!rsaPrivateKey.value) {
-    error.value = '请输入RSA私钥'
-    return
-  }
-  try {
-    // 这里使用简化的RSA解密实现
-    // 实际项目中可能需要更复杂的实现
-    output.value = 'RSA解密功能需要完整的Web Crypto API实现'
-    error.value = ''
-  } catch (err) {
-    error.value = '解密失败: ' + err.message
-  }
-}
-
-// 处理加密操作
 const handleEncrypt = () => {
-  const encryptors = {
-    base64: base64Encrypt,
-    aes: aesEncrypt,
-    des: desEncrypt,
-    tripleDes: tripleDesEncrypt,
-    md5: md5Encrypt,
-    rsa: rsaEncrypt
-  }
-
-  const encryptor = encryptors[cryptoMode.value]
-  if (encryptor) {
-    encryptor()
-  }
+  const fn = encryptors[cryptoMode.value]
+  if (fn) fn()
 }
 
-// 处理解密操作
 const handleDecrypt = () => {
-  const decrypts = {
-    base64: base64Decrypt,
-    aes: aesDecrypt,
-    des: desDecrypt,
-    tripleDes: tripleDesDecrypt,
-    rsa: rsaDecrypt
-  }
-
-  const decryptor = decrypts[cryptoMode.value]
-  if (decryptor) {
-    decryptor()
-  }
+  const fn = decryptors[cryptoMode.value]
+  if (fn) fn()
 }
 </script>
 
 <style scoped>
-.tool-container {
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 1rem;
-  box-sizing: border-box;
+.control-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
 }
 
-h2 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 0.5rem;
-  font-size: 1.75rem;
-  font-weight: bold;
+.control-row .input-group {
+  flex: 1;
+  min-width: 200px;
 }
 
-.tool-description {
-  text-align: center;
-  color: #666;
-  margin-bottom: 2rem;
+.control-row select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  background: white;
+}
+
+.control-row select:focus {
+  border-color: var(--color-info);
+  outline: none;
+}
+
+.control-row .input-group select {
+  max-width: 200px;
+}
+
+.control-row .input-group input {
+  width: 500px;
+}
+
+.control-row .input-group select,
+.control-row .input-group input {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.button-group-inline {
+  display: flex;
+  gap: 0.75rem;
 }
 
 .converter-container {
   display: flex;
   gap: 1.5rem;
   margin-top: 1.5rem;
-  flex-wrap: wrap;
+}
+
+.converter-container .input-section,
+.converter-container .output-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+.output-area {
+  min-height: 310px;
+  padding: 0.75rem;
+  background: #f7fafc;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow: auto;
 }
 
 @media (max-width: 768px) {
   .converter-container {
     flex-direction: column;
   }
-}
 
-.input-section,
-.output-section {
-  flex: 1;
-  min-width: 400px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
-}
-
-.control-section {
-  width: 100%;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
-}
-
-.control-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: flex-end;
-}
-
-.mode-selector {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex: 1;
-  min-width: 200px;
-}
-
-.key-input-container {
-  flex: 2;
-  min-width: 300px;
-}
-
-.key-input {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  width: 100%;
-}
-
-.key-input-field {
-  flex: 1;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  min-width: 200px;
-}
-
-.input-buttons {
-  display: flex;
-  gap: 0.75rem;
-}
-
-@media (max-width: 768px) {
   .control-row {
     flex-direction: column;
     align-items: stretch;
-  }
-
-  .mode-selector,
-  .key-input-container,
-  .input-buttons {
-    width: 100%;
-  }
-
-  .key-input {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.5rem;
-  }
-}
-
-.input-header,
-.output-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-h3 {
-  font-size: 1.25rem;
-  color: #333;
-  margin: 0;
-}
-
-.mode-selector {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.mode-select {
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-.key-input {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.key-input-field {
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-.input-buttons {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.output-area {
-  @extend textarea;
-  background: #f7fafc;
-  min-height: 250px;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
   }
 }
 </style>

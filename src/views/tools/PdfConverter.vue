@@ -1,64 +1,33 @@
 <template>
   <div class="tool-container">
     <h2>PDF转Word/Excel</h2>
-    <p class="tool-description">上传PDF文档并转换为Word或Excel格式</p>
 
-    <div class="card">
-      <!-- 上传区域 -->
-      <div class="upload-section">
-        <div
-            class="upload-area"
-            @click="triggerFileInput"
-            @dragover.prevent
-            @drop.prevent="handleFileDrop"
-            :class="{ 'has-file': selectedFile }"
-        >
-          <input
-              type="file"
-              ref="fileInput"
-              accept=".pdf"
-              @change="handleFileSelect"
-              style="display: none;"
-          />
-          <div class="upload-content">
-            <span class="upload-icon">📄</span>
-            <p class="upload-text">{{ selectedFile ? selectedFile.name : '点击或拖拽文件到此处上传' }}</p>
-            <p class="upload-hint">支持PDF格式文件，最大10MB</p>
-          </div>
+    <div class="section-card center-narrow">
+      <div class="upload-area" @click="triggerFileInput" @dragover.prevent @drop.prevent="handleFileDrop"
+           :class="{'has-file': selectedFile}">
+        <input type="file" ref="fileInput" accept=".pdf" @change="handleFileSelect" class="hidden-input"/>
+        <div class="upload-content">
+          <span class="upload-icon">📄</span>
+          <p>{{ selectedFile ? selectedFile.name : '点击或拖拽文件到此处上传' }}</p>
+          <p class="upload-hint">支持PDF格式文件，最大10MB</p>
         </div>
       </div>
 
-      <!-- 转换选项 -->
-      <div class="options-section" v-if="selectedFile">
-        <h3 class="section-subtitle">转换选项</h3>
-        <div class="options">
-          <select v-model="outputFormat" class="select-field">
+      <div v-if="selectedFile" class="options-section">
+        <div class="options-row">
+          <select v-model="outputFormat" class="size-select">
             <option value="word">Word (.docx)</option>
             <option value="excel">Excel (.xlsx)</option>
           </select>
-          <button
-              @click="convertPdf"
-              class="action-btn primary"
-              :disabled="isConverting"
-          >
+          <button @click="convertPdf" class="btn btn-primary" :disabled="isConverting">
             {{ isConverting ? '转换中...' : '开始转换' }}
           </button>
         </div>
       </div>
 
-      <!-- 转换结果 -->
-      <div class="result-section" v-if="conversionResult">
-        <h3 class="section-subtitle">转换结果</h3>
-        <div class="result">
-          <p class="result-message" :class="{ 'error': conversionResult.error }">{{ conversionResult.message }}</p>
-          <button
-              @click="downloadResult"
-              class="action-btn success"
-              v-if="conversionResult.downloadUrl"
-          >
-            下载文件
-          </button>
-        </div>
+      <div v-if="conversionResult" class="result-section">
+        <p :class="{'error-text': conversionResult.error}">{{ conversionResult.message }}</p>
+        <button v-if="conversionResult.downloadUrl" @click="downloadResult" class="btn btn-success">下载文件</button>
       </div>
     </div>
   </div>
@@ -69,130 +38,72 @@ import {ref} from 'vue'
 import {HttpService} from '../../utils/http'
 import {DownloadService} from '../../utils/download'
 
-// 常量定义
-const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
-const API_PATHS = {
-  word: '/convert/pdf-to-word',
-  excel: '/convert/pdf-to-excel'
-}
-const FORMAT_NAMES = {
-  word: 'Word',
-  excel: 'Excel'
-}
+const MAX_FILE_SIZE = 10 * 1024 * 1024
+const API_PATHS = {word: '/convert/pdf-to-word', excel: '/convert/pdf-to-excel'}
+const FORMAT_NAMES = {word: 'Word', excel: 'Excel'}
 
-// 状态管理
 const fileInput = ref(null)
 const selectedFile = ref(null)
 const outputFormat = ref('word')
 const isConverting = ref(false)
 const conversionResult = ref(null)
 
-// 触发文件选择
 const triggerFileInput = () => {
   fileInput.value?.click()
 }
-
-// 处理文件选择
-const handleFileSelect = (event) => {
-  const file = event.target.files[0]
-  handleFile(file)
+const handleFileSelect = (e) => {
+  handleFile(e.target.files[0])
+}
+const handleFileDrop = (e) => {
+  handleFile(e.dataTransfer.files[0])
 }
 
-// 处理文件拖拽
-const handleFileDrop = (event) => {
-  const file = event.dataTransfer.files[0]
-  handleFile(file)
-}
-
-// 验证文件
-const validateFile = (file) => {
-  // 验证文件类型
-  if (file.type !== 'application/pdf') {
-    return {valid: false, message: '请上传PDF格式文件'}
-  }
-
-  // 验证文件大小
-  if (file.size > MAX_FILE_SIZE) {
-    return {valid: false, message: '文件大小不能超过10MB'}
-  }
-
-  return {valid: true}
-}
-
-// 处理文件
 const handleFile = (file) => {
   if (!file) return
-
-  const validation = validateFile(file)
-  if (!validation.valid) {
-    conversionResult.value = {
-      message: validation.message,
-      error: true
-    }
+  if (file.type !== 'application/pdf') {
+    conversionResult.value = {message: '请上传PDF格式文件', error: true};
     return
   }
-
+  if (file.size > MAX_FILE_SIZE) {
+    conversionResult.value = {message: '文件大小不能超过10MB', error: true};
+    return
+  }
   selectedFile.value = file
   conversionResult.value = null
 }
 
-// 转换PDF
 const convertPdf = async () => {
   if (!selectedFile.value) return
-
   isConverting.value = true
   conversionResult.value = null
-
   try {
-    // 创建FormData对象
     const formData = new FormData()
     formData.append('file', selectedFile.value)
-
-    // 根据输出格式选择接口地址
-    const apiUrl = API_PATHS[outputFormat.value]
-
-    // 调用后端接口
-    const result = await HttpService.post(apiUrl, formData)
-
-    // 处理转换结果
+    const result = await HttpService.post(API_PATHS[outputFormat.value], formData)
     if (result.code === 200) {
       conversionResult.value = {
-        message: `PDF已成功转换为${FORMAT_NAMES[outputFormat.value]}格式，请尽快下载，文件将在10分钟后自动删除。`,
+        message: `PDF已成功转换为${FORMAT_NAMES[outputFormat.value]}格式，请尽快下载。`,
         downloadUrl: `/convert/download/${result.data.filename}`,
-        filename: result.data.filename
+        filename: result.data.filename,
       }
     } else {
       throw new Error(result.message || '转换失败')
     }
-  } catch (error) {
-    conversionResult.value = {
-      message: '转换失败，请重试',
-      error: error.message
-    }
+  } catch (e) {
+    conversionResult.value = {message: '转换失败，请重试', error: e.message}
   } finally {
     isConverting.value = false
   }
 }
 
-// 下载结果
 const downloadResult = async () => {
   if (!conversionResult.value?.downloadUrl) return
-
   try {
-    // 使用HttpService下载文件
     const blob = await HttpService.download(conversionResult.value.downloadUrl)
-
-    // 生成下载文件名
-    const downloadFilename = DownloadService.generateFilename(selectedFile.value, outputFormat.value)
-
-    // 下载文件
-    DownloadService.downloadFile(blob, downloadFilename)
-  } catch (error) {
-    console.error('下载失败:', error)
-    conversionResult.value = {
-      message: '下载失败，请重试',
-      error: error.message
-    }
+    const filename = DownloadService.generateFilename(selectedFile.value, outputFormat.value)
+    DownloadService.downloadFile(blob, filename)
+  } catch (e) {
+    conversionResult.value = {message: '下载失败，请重试', error: e.message}
   }
 }
 </script>
@@ -202,122 +113,90 @@ const downloadResult = async () => {
   max-width: 600px;
 }
 
-h2 {
-  text-align: center;
-  margin-bottom: 0.5rem;
-  font-size: 1.75rem;
-  font-weight: bold;
-}
-
-.tool-description {
-  text-align: center;
-  color: #666;
-  margin-bottom: 2rem;
-}
-
-.upload-section {
-  margin-bottom: 1.5rem;
-}
-
 .upload-area {
   width: 100%;
-  min-height: 200px;
-  border: 2px dashed #cbd5e1;
-  border-radius: 8px;
+  min-height: 180px;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease;
-  background-color: #f1f5f9;
+  transition: all 0.2s ease;
+  background: #f8f9fa;
 }
 
 .upload-area:hover {
-  border-color: #4299e1;
-  background-color: #edf2f7;
+  border-color: var(--color-primary);
+  background: var(--color-bg-hover);
 }
 
 .upload-area.has-file {
-  border-color: #48bb78;
-  background-color: #f0fff4;
+  border-color: var(--color-success);
+  background: #f0fff4;
 }
 
 .upload-content {
   text-align: center;
-  padding: 2rem;
+  padding: 1.5rem;
 }
 
 .upload-icon {
-  font-size: 3rem;
+  font-size: 2.5rem;
   display: block;
-  margin-bottom: 1rem;
-}
-
-.upload-text {
-  font-size: 1.1rem;
-  color: #4a5568;
-  margin-bottom: 0.5rem;
-}
-
-.upload-hint {
-  font-size: 0.875rem;
-  color: #718096;
-}
-
-.options-section {
-  margin-bottom: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #e2e8f0;
-}
-
-.section-subtitle {
-  font-size: 1rem;
-  color: #333;
   margin-bottom: 0.75rem;
 }
 
-.options {
+.upload-content p {
+  margin: 0.25rem 0;
+  color: var(--color-text-secondary);
+}
+
+.upload-hint {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.options-section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.options-row {
   display: flex;
   gap: 1rem;
   align-items: center;
 }
 
-.select-field {
+.size-select {
   flex: 1;
-}
-
-.action-btn {
-  padding: 0.75rem;
+  padding: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
 }
 
 .result-section {
-  background: #f1f5f9;
-  border-radius: 8px;
-  padding: 1rem;
   margin-top: 1.5rem;
+  padding: 1rem;
+  background: #f1f5f9;
+  border-radius: var(--radius-md);
+  text-align: center;
 }
 
-.result-message {
-  color: #4a5568;
-  margin-bottom: 1rem;
+.result-section p {
+  margin: 0 0 0.75rem;
+  color: var(--color-text-secondary);
 }
 
-.result-message.error {
-  color: #e53e3e;
+.error-text {
+  color: var(--color-danger);
 }
 
 @media (max-width: 768px) {
-  .options {
+  .options-row {
     flex-direction: column;
-    align-items: stretch;
-  }
-
-  .action-btn {
-    width: 100%;
-  }
-
-  .select-field {
-    width: 100%;
   }
 }
 </style>

@@ -1,55 +1,66 @@
 <template>
   <div class="tool-container">
     <h2>JWT解密</h2>
-    <div class="jwt-decoder">
-      <!-- 左侧输入区域 -->
-      <div class="input-section">
-        <div class="input-group">
-          <div class="input-header">
-            <h3><label for="jwt-token">JWT令牌</label></h3>
-            <div class="input-actions">
-              <button @click="clearInput" class="action-btn secondary">
-                <i class="fas fa-trash-alt mr-1"></i>清空
-              </button>
+
+    <div class="jwt-layout">
+      <div class="left-panel">
+        <div class="section-card">
+          <div class="section-header">
+            <h3>JWT 令牌</h3>
+            <button @click="clearInput" class="btn btn-secondary btn-sm">清空</button>
+          </div>
+          <textarea v-model="token" placeholder="请输入JWT Token" rows="6" @input="parseJwt"></textarea>
+        </div>
+
+        <div v-if="error" class="error-message">{{ error }}</div>
+
+        <div v-if="parsed" class="section-card">
+          <h3>常用字段说明</h3>
+          <div class="claims-list">
+            <div v-for="claim in parsed.claims" :key="claim.key" class="claim-item">
+              <span class="claim-key">{{ claim.key }}</span>
+              <span class="claim-desc">{{ claim.description }}</span>
+              <span class="claim-value">{{ claim.value }}</span>
             </div>
           </div>
-          <textarea
-              id="jwt-token"
-              v-model="jwtToken"
-              placeholder="输入JWT令牌"
-              rows="12"
-          ></textarea>
         </div>
       </div>
 
-      <!-- 右侧输出区域 -->
-      <div class="output-section">
-        <div class="result-section header-section">
-          <div class="result-header">
-            <h3>Header</h3>
-            <button v-if="decodedHeader && decodedHeader !== '无效的JWT令牌格式' && decodedHeader !== '解码失败'"
-                    @click="handleCopy(decodedHeader)" class="copy-btn">复制
-            </button>
+      <div class="right-panel">
+        <template v-if="parsed">
+          <div class="section-card">
+            <div class="section-header">
+              <h3>Header</h3>
+              <button @click="handleCopy(parsed.header)" class="btn btn-copy btn-sm">复制</button>
+            </div>
+            <pre class="json-output">{{ parsed.header }}</pre>
           </div>
-          <pre>{{ decodedHeader }}</pre>
-        </div>
 
-        <div class="result-section payload-section">
-          <div class="result-header">
-            <h3>Payload</h3>
-            <button v-if="decodedPayload" @click="handleCopy(decodedPayload)" class="copy-btn">复制</button>
-          </div>
-          <pre>{{ decodedPayload }}</pre>
-
-          <div v-if="expirationInfo" class="expiration-info">
-            <div class="expiration-item">
-              <span>过期时间：</span>
-              <span>{{ expirationInfo.date }}</span>
-              <span :class="expirationInfo.isExpired ? 'expired' : 'not-expired'">
-                {{ expirationInfo.isExpired ? '已过期' : '未过期' }}
-              </span>
+          <div class="section-card">
+            <div class="section-header">
+              <h3>Payload</h3>
+              <button @click="handleCopy(parsed.payload)" class="btn btn-copy btn-sm">复制</button>
+            </div>
+            <pre class="json-output">{{ parsed.payload }}</pre>
+            <div v-if="expInfo" class="exp-badge" :class="expInfo.expired ? 'exp-expired' : 'exp-valid'">
+              <span class="exp-icon">{{ expInfo.expired ? '🔴' : '🟢' }}</span>
+              <span>{{ expInfo.text }}</span>
             </div>
           </div>
+
+          <div class="section-card">
+            <div class="section-header">
+              <h3>Signature</h3>
+              <button @click="handleCopy(parsed.signature)" class="btn btn-copy btn-sm">复制</button>
+            </div>
+            <div class="signature-display">
+              <span class="mono">{{ parsed.signature }}</span>
+            </div>
+          </div>
+        </template>
+
+        <div v-if="!parsed && !error" class="section-card empty-hint">
+          <p>请在左侧输入JWT令牌进行解析</p>
         </div>
       </div>
     </div>
@@ -57,207 +68,243 @@
 </template>
 
 <script setup>
-import {computed, ref, watch} from 'vue'
-import {copyToClipboard} from '../../utils/clipboard'
-import {showToast} from '../../utils/toast'
-import {timestampToDateTime} from '../../utils/time'
+import {computed, ref} from 'vue'
+import {useCopy} from '../../composables/useCopy'
 
-const jwtToken = ref('')
-const decodedHeader = ref('')
-const decodedPayload = ref('')
-const payloadObject = ref(null)
+const {handleCopy} = useCopy()
 
-// 复制到剪贴板
-const handleCopy = async (text) => {
-  if (text) {
-    const success = await copyToClipboard(text)
-    showToast({
-      message: success ? '已复制到剪贴板' : '复制失败'
-    })
+const token = ref('')
+const parsed = ref(null)
+const error = ref('')
+
+const claimDescriptions = {
+  iss: '签发者',
+  sub: '主题',
+  aud: '受众',
+  exp: '过期时间',
+  nbf: '生效时间',
+  iat: '签发时间',
+  jti: 'JWT ID',
+}
+
+const expInfo = computed(() => {
+  if (!parsed.value) return null
+  try {
+    const payload = JSON.parse(parsed.value.payload)
+    if (payload.exp) {
+      const expDate = new Date(payload.exp * 1000)
+      const now = new Date()
+      const expired = now > expDate
+      return {
+        expired,
+        text: expired
+            ? `已过期（${expDate.toLocaleString('zh-CN')}）`
+            : `未过期（${expDate.toLocaleString('zh-CN')}）`,
+      }
+    }
+  } catch (e) { /* ignore */
   }
-}
+  return null
+})
 
-// 清空输入
 const clearInput = () => {
-  jwtToken.value = ''
-  decodedHeader.value = ''
-  decodedPayload.value = ''
-  payloadObject.value = null
+  token.value = ''
+  parsed.value = null
+  error.value = ''
 }
 
-const decodeJwt = () => {
-  if (!jwtToken.value) {
-    decodedHeader.value = ''
-    decodedPayload.value = ''
-    payloadObject.value = null
+const parseJwt = () => {
+  error.value = ''
+  parsed.value = null
+
+  const parts = token.value.trim().split('.')
+  if (parts.length !== 3) {
+    if (token.value.trim()) error.value = '无效的JWT格式，应包含3个部分（用.分隔）'
     return
   }
 
   try {
-    const parts = jwtToken.value.split('.')
-    if (parts.length !== 3) {
-      decodedHeader.value = '无效的JWT令牌格式'
-      decodedPayload.value = ''
-      payloadObject.value = null
-      return
+    const decodeBase64 = (str) => {
+      let base64 = str.replace(/-/g, '+').replace(/_/g, '/')
+      while (base64.length % 4) base64 += '='
+      return decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''))
     }
 
-    // 解码Header
-    const header = atob(parts[0].replace(/-/g, '+').replace(/_/g, '/'))
-    decodedHeader.value = JSON.stringify(JSON.parse(header), null, 2)
+    const header = JSON.parse(decodeBase64(parts[0]))
+    const payload = JSON.parse(decodeBase64(parts[1]))
 
-    // 解码Payload
-    const payload = atob(parts[1].replace(/-/g, '+').replace(/_/g, '/'))
-    const payloadObj = JSON.parse(payload)
-    payloadObject.value = payloadObj
-    decodedPayload.value = JSON.stringify(payloadObj, null, 2)
-  } catch (error) {
-    decodedHeader.value = '解码失败'
-    decodedPayload.value = ''
-    payloadObject.value = null
+    const claims = Object.entries(payload)
+        .filter(([key]) => claimDescriptions[key])
+        .map(([key, value]) => {
+          let displayValue = value
+          if (typeof value === 'number' && key !== 'jti') {
+            const date = new Date(value * 1000)
+            if (!isNaN(date.getTime())) {
+              displayValue = `${value} (${date.toLocaleString('zh-CN')})`
+            }
+          }
+          return {key, description: claimDescriptions[key], value: displayValue}
+        })
+
+    parsed.value = {
+      header: JSON.stringify(header, null, 2),
+      payload: JSON.stringify(payload, null, 2),
+      signature: parts[2],
+      claims,
+    }
+  } catch (e) {
+    error.value = '解析失败：' + e.message
   }
 }
-
-// 计算过期时间和是否过期
-const expirationInfo = computed(() => {
-  if (!payloadObject.value || !payloadObject.value.exp) {
-    return null
-  }
-
-  const expTimestamp = payloadObject.value.exp.toString()
-  const {dateTime} = timestampToDateTime(expTimestamp)
-  // 只保留到秒，去除毫秒部分
-  const dateTimeWithoutMs = dateTime.split('.')[0]
-  const isExpired = payloadObject.value.exp * 1000 < Date.now()
-
-  return {
-    date: dateTimeWithoutMs,
-    isExpired
-  }
-})
-
-watch(jwtToken, decodeJwt)
 </script>
 
 <style scoped>
-.tool-container {
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-h2 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 2rem;
-}
-
-h3 {
-  font-size: 1.25rem;
-  color: #333;
-  margin: 0;
-}
-
-.jwt-decoder {
+.jwt-layout {
   display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
+  gap: 1.5rem;
 }
 
-.input-section {
+.left-panel,
+.right-panel {
   flex: 1;
-  min-width: 400px;
-}
-
-.output-section {
-  flex: 1;
-  min-width: 400px;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-@media (max-width: 768px) {
-  .jwt-decoder {
-    flex-direction: column;
-  }
+.empty-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 305px;
 }
 
-.input-group {
-  width: 100%;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #666;
-}
-
-.result-header {
+.section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-.result-header h3 {
+.section-header h3 {
   margin: 0;
-  color: #42b883;
+  color: var(--color-primary);
 }
 
-.header-section pre {
-  background: #e8f4f8;
+.json-output {
+  background: #f8f9fa;
   padding: 1rem;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   overflow-x: auto;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
   white-space: pre-wrap;
-  border-left: 4px solid #3498db;
+  word-wrap: break-word;
 }
 
-.payload-section pre {
-  background: #f8f4e8;
+.exp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.exp-expired {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.exp-valid {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
+}
+
+.exp-icon {
+  font-size: 0.75rem;
+}
+
+.signature-display {
   padding: 1rem;
-  border-radius: 4px;
-  overflow-x: auto;
-  white-space: pre-wrap;
-  border-left: 4px solid #f39c12;
+  background: #f8f9fa;
+  border-radius: var(--radius-sm);
 }
 
-.expiration-info {
-  margin-top: 1rem;
-  padding: 1rem;
-  background: #f5f5f5;
-  border-radius: 4px;
-  border-left: 4px solid #9b59b6;
+.signature-display .mono {
+  word-break: break-all;
+  font-size: 0.85rem;
+  font-family: 'Consolas', 'Monaco', monospace;
+  color: var(--color-text-secondary);
 }
 
-.expiration-item {
+.claims-list {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.expiration-item span:first-child {
+.claim-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  background: #f8f9fa;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+}
+
+.claim-key {
   font-weight: bold;
+  font-family: 'Consolas', 'Monaco', monospace;
+  min-width: 40px;
+  color: var(--color-primary);
 }
 
-.expired {
-  color: #e74c3c;
-  font-weight: bold;
+.claim-desc {
+  min-width: 70px;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
 }
 
-.not-expired {
-  color: #27ae60;
-  font-weight: bold;
+.claim-value {
+  flex: 1;
+  word-break: break-all;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.85rem;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.8);
+.empty-hint {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: var(--color-text-muted);
+}
+
+.empty-hint p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .jwt-layout {
+    flex-direction: column;
   }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+
+  .left-panel {
+    width: 100%;
+  }
+
+  .claim-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
   }
 }
 </style>
