@@ -1,88 +1,174 @@
 <template>
   <header class="header">
-    <div class="header-inner">
-      <h1 class="logo">
-        <router-link to="/">
-          <img src="/favicon.svg" alt="Logo" class="logo-img"/>
-          <span>Hello Tool</span>
+    <div class="container header-inner">
+      <router-link to="/" class="brand">
+        <img src="/favicon.svg" class="logo" alt="logo"/>
+        <span class="brand-text">Hello Tool</span>
+      </router-link>
+
+      <nav :class="['nav', { 'nav-open': menuOpen }]">
+        <router-link
+            v-for="link in navLinks"
+            :key="link.path"
+            :to="link.path"
+            class="nav-link"
+            @click="menuOpen = false"
+        >
+          {{ link.name }}
         </router-link>
-      </h1>
-      <nav class="nav">
-        <router-link to="/" class="nav-link">首页</router-link>
-        <router-link to="/about" class="nav-link">关于</router-link>
       </nav>
+
+      <button
+          class="menu-toggle"
+          :aria-label="menuOpen ? '关闭菜单' : '打开菜单'"
+          @click="menuOpen = !menuOpen"
+      >
+        <span :class="['hamburger', { active: menuOpen }]">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
     </div>
   </header>
 </template>
 
+<script setup>
+import {ref} from 'vue'
+
+const menuOpen = ref(false)
+
+const navLinks = [
+  {name: '首页', path: '/'},
+  {name: '页于', path: '/about'}
+]
+</script>
+
 <style scoped>
 .header {
   background-color: var(--color-bg-card);
-  padding: 1rem 0;
+  border-bottom: 1px solid var(--color-border);
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: var(--shadow-sm);
 }
 
 .header-inner {
-  margin: 0 auto;
-  padding: 0 4rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 64px;
+  margin: 0 auto;
+  padding: 0 4rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  text-decoration: none;
 }
 
 .logo {
-  margin: 0;
-  font-size: 1.5rem;
+  width: 32px;
+  height: 32px;
 }
 
-.logo a {
+.brand-text {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
   color: var(--color-text);
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: color 0.2s;
+  letter-spacing: -0.02em;
 }
 
-.logo a:hover {
+.brand-text:hover {
   color: var(--color-primary);
-}
-
-.logo-img {
-  width: 28px;
-  height: 28px;
 }
 
 .nav {
   display: flex;
+  gap: var(--spacing-xs);
   align-items: center;
-  gap: 0.5rem;
 }
 
 .nav-link {
-  color: var(--color-text);
-  text-decoration: none;
-  padding: 0.5rem 1rem;
+  padding: 6px 14px;
   border-radius: var(--radius-sm);
-  transition: background 0.2s ease, color 0.2s;
-  font-size: 0.95rem;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: var(--transition-fast);
 }
 
-.nav-link:hover {
-  background: rgba(0, 0, 0, 0.05);
+.nav-link:hover,
+.nav-link.router-link-active {
   color: var(--color-primary);
+  background-color: var(--color-primary-light);
+}
+
+.menu-toggle {
+  display: none;
+  padding: var(--spacing-sm);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 22px;
+}
+
+.hamburger span {
+  display: block;
+  height: 2px;
+  background-color: var(--color-text);
+  border-radius: 1px;
+  transition: var(--transition-fast);
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
 }
 
 @media (max-width: 768px) {
-  .header-inner {
-    padding: 0 1.5rem;
+  .menu-toggle {
+    display: block;
   }
 
-  .logo {
-    font-size: 1.2rem;
+  .nav {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background-color: var(--color-bg-card);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--spacing-md);
+    gap: var(--spacing-xs);
+    box-shadow: var(--shadow);
+  }
+
+  .nav-open {
+    display: flex;
+  }
+
+  .nav-link {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-align: left;
   }
 }
 </style>

@@ -1,13 +1,18 @@
 <template>
   <footer class="footer">
-    <div class="footer-inner">
-      <p>&copy; {{ new Date().getFullYear() }} null. 版权所有.</p>
-      <div class="footer-records">
-        <a href="https://beian.miit.gov.cn/" target="_blank" class="record-link">鲁ICP备2026010010号-1</a>
-        <a href="https://beian.mps.gov.cn/#/query/webSearch" target="_blank" class="record-link">
-          <img src="https://beian.mps.gov.cn/web/assets/logo01.6189a29f.png" class="record-icon" alt="">
-          鲁公网安备37021402007219号
-        </a>
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; {{ new Date().getFullYear() }} null. All rights reserved.</p>
+        <div class="records">
+          <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" class="record-link">
+            鲁ICP备2026010010号-1
+          </a>
+          <a href="https://beian.mps.gov.cn/#/query/webSearch" target="_blank" rel="noopener noreferrer"
+             class="record-link">
+            <img src="https://beian.mps.gov.cn/web/assets/logo01.6189a29f.png" class="record-icon" alt="公安备案图标">
+            鲁公网安备37021402007219号
+          </a>
+        </div>
       </div>
     </div>
   </footer>
@@ -15,37 +20,35 @@
 
 <style scoped>
 .footer {
-  background-color: #f5f5f5;
-  color: var(--color-text);
-  font-size: 0.85rem;
-  text-align: center;
-  padding: 1rem;
-  margin-top: auto;
+  background-color: var(--color-bg-footer);
   border-top: 1px solid var(--color-border);
+  padding: var(--spacing-md) 0 var(--spacing-md);
+  margin-top: auto;
 }
 
-.footer-inner {
+.footer-bottom {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  gap: 0.5rem;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin: 0 auto;
+  padding: 0 4rem;
 }
 
-.footer-records {
+.records {
   display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+  gap: var(--spacing-md);
 }
 
 .record-link {
-  color: var(--color-text);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
   text-decoration: none;
-  display: flex;
+  transition: var(--transition-fast);
+  display: inline-flex;
   align-items: center;
   gap: 4px;
-  transition: color 0.2s;
 }
 
 .record-link:hover {
@@ -53,15 +56,20 @@
 }
 
 .record-icon {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
+  width: var(--font-size-xs);
+  height: var(--font-size-xs);
 }
 
 @media (max-width: 768px) {
-  .footer-records {
+  .footer-bottom {
     flex-direction: column;
-    gap: 0.25rem;
+    gap: var(--spacing-sm);
+    text-align: center;
+  }
+
+  .records {
+    flex-direction: column;
+    gap: var(--spacing-xs);
   }
 }
 </style>
