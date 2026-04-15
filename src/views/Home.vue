@@ -6,46 +6,25 @@
       <h1 class="page-title">开发工具箱</h1>
       <p class="page-subtitle">集成多种常用开发工具，提高开发效率</p>
 
-      <div v-if="favoriteTools.length > 0" id="favorite-tools" class="tool-section favorite-section">
-        <div class="section-header-row">
-          <h2 class="section-title">
-            <span class="icon">⭐</span>
-            我的收藏
-            <span class="favorite-count">({{ favoriteTools.length }})</span>
-          </h2>
-          <button @click="clearFavorites" class="btn btn-danger btn-sm">清空收藏</button>
-        </div>
-        <div class="tool-grid">
-          <ToolCard
-              v-for="tool in favoriteTools"
-              :key="tool.to"
-              :to="tool.to"
-              :icon="tool.icon"
-              :title="tool.title"
-              :description="tool.description"
-          />
-        </div>
+      <div class="search-bar">
+        <el-input
+            v-model="searchQuery"
+            placeholder="搜索工具名称或描述..."
+            size="large"
+            clearable
+            :prefix-icon="Search"
+        />
       </div>
 
-      <div v-else class="no-favorites">
-        <span class="no-favorites-icon">⭐</span>
-        <h3>暂无收藏的工具</h3>
-        <p>点击工具卡片上的星形按钮来收藏常用工具</p>
-      </div>
-
-      <div
-          v-for="category in categories"
-          :key="category.id"
-          :id="`${category.id}-tools`"
-          class="tool-section"
-      >
+      <div v-if="searchQuery.trim()" class="tool-section search-results-section">
         <h2 class="section-title">
-          <span class="icon">{{ category.icon }}</span>
-          {{ category.name }}
+          <span class="icon">🔍</span>
+          搜索结果
+          <span class="search-count" v-if="searchResults.length > 0">({{ searchResults.length }})</span>
         </h2>
-        <div class="tool-grid">
+        <div v-if="searchResults.length > 0" class="tool-grid">
           <ToolCard
-              v-for="tool in getToolsByCategory(category.id)"
+              v-for="tool in searchResults"
               :key="tool.path"
               :to="tool.path"
               :icon="tool.icon"
@@ -53,7 +32,63 @@
               :description="tool.description"
           />
         </div>
+        <div v-else class="no-results">
+          <span class="no-results-icon">🔍</span>
+          <h3>未找到匹配的工具</h3>
+          <p>请尝试其他关键词</p>
+        </div>
       </div>
+
+      <template v-else>
+        <div v-if="favoriteTools.length > 0" id="favorite-tools" class="tool-section favorite-section">
+          <div class="section-header-row">
+            <h2 class="section-title">
+              <span class="icon">⭐</span>
+              我的收藏
+              <span class="favorite-count">({{ favoriteTools.length }})</span>
+            </h2>
+            <button @click="clearFavorites" class="btn btn-danger btn-sm">清空收藏</button>
+          </div>
+          <div class="tool-grid">
+            <ToolCard
+                v-for="tool in favoriteTools"
+                :key="tool.to"
+                :to="tool.to"
+                :icon="tool.icon"
+                :title="tool.title"
+                :description="tool.description"
+            />
+          </div>
+        </div>
+
+        <div v-else class="no-favorites">
+          <span class="no-favorites-icon">⭐</span>
+          <h3>暂无收藏的工具</h3>
+          <p>点击工具卡片上的星形按钮来收藏常用工具</p>
+        </div>
+
+        <div
+            v-for="category in categories"
+            :key="category.id"
+            :id="`${category.id}-tools`"
+            class="tool-section"
+        >
+          <h2 class="section-title">
+            <span class="icon">{{ category.icon }}</span>
+            {{ category.name }}
+          </h2>
+          <div class="tool-grid">
+            <ToolCard
+                v-for="tool in getToolsByCategory(category.id)"
+                :key="tool.path"
+                :to="tool.path"
+                :icon="tool.icon"
+                :title="tool.title"
+                :description="tool.description"
+            />
+          </div>
+        </div>
+      </template>
     </div>
 
     <button
@@ -68,17 +103,22 @@
 </template>
 
 <script setup>
-import {onMounted, onUnmounted, ref} from 'vue'
+import {computed, onMounted, onUnmounted, ref} from 'vue'
 import {ElMessageBox} from 'element-plus'
-import {Top} from '@element-plus/icons-vue'
+import {Search, Top} from '@element-plus/icons-vue'
 import Sidebar from '../components/Sidebar.vue'
 import ToolCard from '../components/ToolCard.vue'
 import {favoritesManager} from '../utils/favorites.js'
-import {getCategories, getToolsByCategory} from '../config/tools'
+import {getCategories, getToolsByCategory, searchTools} from '../config/tools'
 
 const categories = getCategories()
 const favoriteTools = ref([])
 const showBackToTop = ref(false)
+const searchQuery = ref('')
+
+const searchResults = computed(() => {
+  return searchTools(searchQuery.value)
+})
 
 const loadFavorites = () => {
   favoriteTools.value = favoritesManager.getFavorites()
@@ -141,8 +181,64 @@ onUnmounted(() => {
 .page-subtitle {
   text-align: center;
   color: var(--color-text-secondary);
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   font-size: 1.1rem;
+}
+
+.search-bar {
+  max-width: 560px;
+  margin: 0 auto 2.5rem;
+}
+
+.search-bar :deep(.el-input__wrapper) {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 0.25rem 1rem;
+}
+
+.search-bar :deep(.el-input__wrapper:hover) {
+  box-shadow: var(--shadow-lg);
+}
+
+.search-bar :deep(.el-input__inner) {
+  font-size: 1rem;
+}
+
+.search-results-section {
+  scroll-margin-top: 5rem;
+}
+
+.search-count {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  font-weight: normal;
+  margin-left: 0.5rem;
+}
+
+.no-results {
+  background: #f8f9fa;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.no-results-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.no-results h3 {
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.no-results p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
 }
 
 .tool-section {

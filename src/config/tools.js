@@ -249,6 +249,15 @@ export function getToolsByCategory(categoryId) {
     return tools.filter(t => t.category === categoryId)
 }
 
+export function searchTools(query) {
+    if (!query || !query.trim()) return []
+    const q = query.trim().toLowerCase()
+    return tools.filter(t =>
+        t.title.toLowerCase().includes(q) ||
+        t.description.toLowerCase().includes(q)
+    )
+}
+
 export function getToolRoutes() {
     return tools.map(tool => ({
         path: tool.path,
