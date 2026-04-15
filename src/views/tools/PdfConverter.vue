@@ -18,6 +18,7 @@
           <select v-model="outputFormat" class="size-select">
             <option value="word">Word (.docx)</option>
             <option value="excel">Excel (.xlsx)</option>
+            <option value="scan">扫描件</option>
           </select>
           <button @click="convertPdf" class="btn btn-primary" :disabled="isConverting">
             {{ isConverting ? '转换中...' : '开始转换' }}
@@ -26,7 +27,7 @@
       </div>
 
       <div v-if="conversionResult" class="result-section">
-        <p :class="{'error-text': conversionResult.error}">{{ conversionResult.message }}</p>
+        <p :class="{'error-text': conversionResult.error}" v-html="conversionResult.message"></p>
         <button v-if="conversionResult.downloadUrl" @click="downloadResult" class="btn btn-success">下载文件</button>
       </div>
     </div>
@@ -39,8 +40,8 @@ import {HttpService} from '../../utils/http'
 import {DownloadService} from '../../utils/download'
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024
-const API_PATHS = {word: '/convert/pdf-to-word', excel: '/convert/pdf-to-excel'}
-const FORMAT_NAMES = {word: 'Word', excel: 'Excel'}
+const API_PATHS = {word: '/convert/pdf-to-word', excel: '/convert/pdf-to-excel', scan: '/convert/pdf-scan-to-word'}
+const FORMAT_NAMES = {word: 'Word', excel: 'Excel', scan: '扫描件'}
 
 const fileInput = ref(null)
 const selectedFile = ref(null)
@@ -82,7 +83,7 @@ const convertPdf = async () => {
     const result = await HttpService.post(API_PATHS[outputFormat.value], formData)
     if (result.code === 200) {
       conversionResult.value = {
-        message: `PDF已成功转换为${FORMAT_NAMES[outputFormat.value]}格式，请尽快下载。`,
+        message: `PDF已成功转换为${FORMAT_NAMES[outputFormat.value]}格式，请尽快下载。<br>文件将在10分钟后自动删除。`,
         downloadUrl: `/convert/download/${result.data.filename}`,
         filename: result.data.filename,
       }
@@ -186,7 +187,7 @@ const downloadResult = async () => {
 }
 
 .result-section p {
-  margin: 0 0 0.75rem;
+  margin: 0.75rem 0;
   color: var(--color-text-secondary);
 }
 

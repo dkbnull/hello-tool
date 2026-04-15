@@ -8,7 +8,8 @@ export class DownloadService {
      */
     static FORMAT_EXTENSIONS = {
         word: 'docx',
-        excel: 'xlsx'
+        excel: 'xlsx',
+        scan: 'docx'
     };
 
     /**
