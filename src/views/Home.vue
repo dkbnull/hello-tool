@@ -194,10 +194,22 @@ onUnmounted(() => {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   padding: 0.25rem 1rem;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
 }
 
 .search-bar :deep(.el-input__wrapper:hover) {
   box-shadow: var(--shadow-lg);
+}
+
+.search-bar :deep(.el-input__wrapper.is-focus) {
+  border: 1px solid var(--color-border);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.search-bar :deep(.el-input__wrapper.is-filled) {
+  border-color: var(--color-primary);
 }
 
 .search-bar :deep(.el-input__inner) {
