@@ -12,6 +12,8 @@
             <option value="des">DES</option>
             <option value="tripleDes">3DES</option>
             <option value="md5">MD5</option>
+            <option value="sha">SHA</option>
+            <option value="sha256">SHA256</option>
           </select>
         </div>
 
@@ -30,7 +32,7 @@
 
         <div class="button-group-inline">
           <button @click="handleEncrypt" class="btn btn-success">加密</button>
-          <button @click="handleDecrypt" class="btn btn-warning" :disabled="cryptoMode === 'md5'">解密</button>
+          <button @click="handleDecrypt" class="btn btn-warning" :disabled="isHashMode">解密</button>
         </div>
       </div>
     </div>
@@ -57,7 +59,7 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
+import {computed, ref} from 'vue'
 import CryptoJS from 'crypto-js'
 import {useCopy} from '../../composables/useCopy'
 
@@ -70,6 +72,8 @@ const cryptoMode = ref('base64')
 const aesKey = ref('')
 const desKey = ref('')
 const tripleDesKey = ref('')
+
+const isHashMode = computed(() => ['md5', 'sha', 'sha256'].includes(cryptoMode.value))
 
 const clearInput = () => {
   input.value = ''
@@ -125,6 +129,22 @@ const encryptors = {
   md5: () => {
     try {
       output.value = CryptoJS.MD5(input.value).toString()
+      error.value = ''
+    } catch (e) {
+      error.value = '加密失败: ' + e.message
+    }
+  },
+  sha: () => {
+    try {
+      output.value = CryptoJS.SHA1(input.value).toString()
+      error.value = ''
+    } catch (e) {
+      error.value = '加密失败: ' + e.message
+    }
+  },
+  sha256: () => {
+    try {
+      output.value = CryptoJS.SHA256(input.value).toString()
       error.value = ''
     } catch (e) {
       error.value = '加密失败: ' + e.message

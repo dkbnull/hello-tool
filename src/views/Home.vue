@@ -195,7 +195,7 @@ onUnmounted(() => {
   box-shadow: var(--shadow-md);
   padding: 0.25rem 1rem;
   border: 1px solid transparent;
-  transition: all 0.2s ease;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .search-bar :deep(.el-input__wrapper:hover) {
@@ -203,7 +203,6 @@ onUnmounted(() => {
 }
 
 .search-bar :deep(.el-input__wrapper.is-focus) {
-  border: 1px solid var(--color-border);
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px var(--color-primary-light);
 }
