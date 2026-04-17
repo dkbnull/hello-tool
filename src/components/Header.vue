@@ -40,7 +40,7 @@ const menuOpen = ref(false)
 
 const navLinks = [
   {name: '首页', path: '/'},
-  {name: '页于', path: '/about'}
+  {name: '关于', path: '/about'}
 ]
 </script>
 
