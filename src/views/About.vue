@@ -5,48 +5,57 @@
       <p class="page-subtitle">开发工具箱 - 集成多种常用开发工具，提高开发效率</p>
 
       <div class="about-section">
-        <h2 class="section-title">
-          <span class="icon">🔗</span>
-          仓库地址
-        </h2>
+        <h2 class="section-title">仓库地址</h2>
         <div class="link-grid">
           <a href="https://github.com/dkbnull/hello-tool" target="_blank" class="link-card section-card">
-            <span class="icon">🐙</span>
+            <img src="https://github.com/favicon.ico" alt="GitHub" class="link-icon">
             <span>GitHub</span>
           </a>
           <a href="https://gitee.com/dkbnull/hello-tool" target="_blank" class="link-card section-card">
-            <span class="icon">🎯</span>
+            <img src="https://gitee.com/favicon.ico" alt="Gitee" class="link-icon">
             <span>Gitee</span>
           </a>
         </div>
       </div>
 
       <div class="about-section">
-        <h2 class="section-title">
-          <span class="icon">🤝</span>
-          友链
-        </h2>
+        <h2 class="section-title">友链</h2>
         <div class="link-grid">
           <a href="https://www.wbnull.cn" target="_blank" class="link-card section-card">
-            <span class="icon">🏠</span>
+            <img src="https://www.wbnull.cn/favicon.svg" alt="主站" class="link-icon">
             <span>主站</span>
           </a>
           <a href="https://blog.wbnull.cn" target="_blank" class="link-card section-card">
-            <span class="icon">📝</span>
+            <img src="https://blog.wbnull.cn/favicon.svg" alt="博客" class="link-icon">
             <span>博客</span>
+          </a>
+          <a href="https://game.wbnull.cn" target="_blank" class="link-card section-card">
+            <img src="https://game.wbnull.cn/favicon.svg" alt="游戏" class="link-icon">
+            <span>游戏</span>
           </a>
         </div>
       </div>
 
       <div class="about-section">
-        <h2 class="section-title">
-          <span class="icon">💬</span>
-          微信公众号
-        </h2>
+        <h2 class="section-title">微信公众号</h2>
         <div class="qrcode-wrapper">
           <div class="section-card qrcode-card">
             <img src="../assets/weixin.jpg" alt="微信二维码" class="qrcode-image">
           </div>
+        </div>
+      </div>
+
+      <div class="about-section">
+        <h2 class="section-title">反馈建议</h2>
+        <div class="link-grid">
+          <a href="https://github.com/dkbnull/hello-tool/issues" target="_blank" class="link-card section-card">
+            <img src="https://github.com/favicon.ico" alt="GitHub Issues" class="link-icon">
+            <span>GitHub Issues</span>
+          </a>
+          <a href="https://gitee.com/dkbnull/hello-tool/issues" target="_blank" class="link-card section-card">
+            <img src="https://gitee.com/favicon.ico" alt="Gitee Issues" class="link-icon">
+            <span>Gitee Issues</span>
+          </a>
         </div>
       </div>
     </div>
@@ -63,39 +72,12 @@
   margin: 0 auto;
 }
 
-.page-title {
-  text-align: center;
-  color: var(--color-text);
-  margin-bottom: 0.5rem;
-  font-size: 2rem;
-  font-weight: 700;
-}
-
 .page-subtitle {
-  text-align: center;
-  color: var(--color-text-secondary);
   margin-bottom: 3rem;
-  font-size: 1.1rem;
 }
 
 .about-section {
   margin-bottom: 3.5rem;
-}
-
-.section-title {
-  color: var(--color-text);
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 2px solid var(--color-primary);
-  font-size: 1.4rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.section-title .icon {
-  font-size: 1.2rem;
 }
 
 .link-grid {
@@ -119,9 +101,11 @@
   border-color: var(--color-primary);
 }
 
-.link-card .icon {
-  font-size: 1.5rem;
-  color: var(--color-primary);
+.link-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .qrcode-wrapper {
@@ -153,12 +137,7 @@
     padding: 0 1rem;
   }
 
-  .page-title {
-    font-size: 1.5rem;
-  }
-
   .page-subtitle {
-    font-size: 0.9rem;
     margin-bottom: 2rem;
   }
 

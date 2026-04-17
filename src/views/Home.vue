@@ -170,21 +170,6 @@ onUnmounted(() => {
   flex: 1;
 }
 
-.page-title {
-  text-align: center;
-  color: var(--color-text);
-  margin-bottom: 0.5rem;
-  font-size: 2rem;
-  font-weight: 700;
-}
-
-.page-subtitle {
-  text-align: center;
-  color: var(--color-text-secondary);
-  margin-bottom: 2rem;
-  font-size: 1.1rem;
-}
-
 .search-bar {
   max-width: 560px;
   margin: 0 auto 2.5rem;
@@ -255,22 +240,6 @@ onUnmounted(() => {
 .tool-section {
   margin-bottom: 3.5rem;
   scroll-margin-top: 5rem;
-}
-
-.section-title {
-  color: var(--color-text);
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 2px solid var(--color-primary);
-  font-size: 1.4rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.section-title .icon {
-  font-size: 1.2rem;
 }
 
 .tool-grid {
@@ -358,7 +327,7 @@ onUnmounted(() => {
 }
 
 .back-to-top:hover {
-  background-color: var(--color-primary-dark);
+  background-color: var(--color-primary-hover);
   transform: translateY(-2px);
 }
 
@@ -367,15 +336,6 @@ onUnmounted(() => {
     flex-direction: column;
     padding: 1rem;
     gap: 1.5rem;
-  }
-
-  .page-title {
-    font-size: 1.5rem;
-  }
-
-  .page-subtitle {
-    font-size: 0.9rem;
-    margin-bottom: 2rem;
   }
 
   .tool-grid {
