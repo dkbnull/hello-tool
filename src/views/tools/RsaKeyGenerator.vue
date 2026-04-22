@@ -241,7 +241,7 @@ const generateRsaKeys = async () => {
 }
 
 .key-output {
-  background: #f8f9fa;
+  background: var(--color-bg-output);
   padding: 1rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);

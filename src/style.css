@@ -17,6 +17,7 @@
     --color-text-link: #42b883;
 
     --color-border: #e0e0e0;
+    --color-border-input: #dddddd;
     --color-border-sidebar: #e9ecef;
 
     --color-shadow: rgba(0, 0, 0, 0.1);
@@ -26,6 +27,8 @@
     --color-bg-card: #ffffff;
     --color-bg-sidebar: #f8f9fa;
     --color-bg-code: #f0f0f0;
+    --color-bg-output: #f8f9fa;
+    --color-bg-output-hover: #f7fafc;
     --color-bg-hover: rgba(0, 0, 0, 0.05);
     --color-bg-tag: #f0f0f0;
     --color-bg-footer: #f5f5f5;
@@ -306,7 +309,7 @@ textarea:focus {
 }
 
 textarea[readonly] {
-    background: #f7fafc;
+    background: var(--color-bg-output-hover);
 }
 
 .output-area {
@@ -316,7 +319,7 @@ textarea[readonly] {
     border-radius: var(--radius-sm);
     font-size: 1rem;
     font-family: 'Consolas', 'Monaco', monospace;
-    background: #f7fafc;
+    background: var(--color-bg-output-hover);
     overflow: auto;
     min-height: 200px;
     white-space: pre-wrap;

@@ -249,7 +249,7 @@ const handleDecrypt = () => {
 .control-row .input-group input {
   padding: 0.5rem;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-size: 1rem;
 }
 

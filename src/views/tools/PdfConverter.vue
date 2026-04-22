@@ -124,7 +124,7 @@ const downloadResult = async () => {
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  background: #f8f9fa;
+  background: var(--color-bg-output);
 }
 
 .upload-area:hover {
@@ -181,7 +181,7 @@ const downloadResult = async () => {
 .result-section {
   margin-top: 1.5rem;
   padding: 1rem;
-  background: #f1f5f9;
+  background: var(--color-bg-code);
   border-radius: var(--radius-md);
   text-align: center;
 }

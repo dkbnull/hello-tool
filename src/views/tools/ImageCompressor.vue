@@ -244,7 +244,7 @@ const downloadCompressedImage = () => {
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  background: #f8f9fa;
+  background: var(--color-bg-output);
 }
 
 .upload-area:hover {
@@ -298,7 +298,7 @@ const downloadCompressedImage = () => {
   gap: 1rem;
   margin-top: 0.75rem;
   padding: 0.75rem;
-  background: #f7fafc;
+  background: var(--color-bg-output-hover);
   border-radius: var(--radius-sm);
   font-size: 0.85rem;
   color: var(--color-text-secondary);

@@ -273,7 +273,7 @@ const decodeQrCode = () => {
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  background: #f8f9fa;
+  background: var(--color-bg-output);
 }
 
 .image-area:hover {
@@ -337,7 +337,7 @@ const decodeQrCode = () => {
   align-items: center;
   gap: 0.5rem;
   color: var(--color-text-secondary);
-  background: #f7fafc;
+  background: var(--color-bg-output-hover);
 }
 
 .decode-error {

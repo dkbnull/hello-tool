@@ -212,7 +212,7 @@ onMounted(() => {
   border-radius: var(--radius-sm);
   padding: 1rem;
   overflow: auto;
-  background: #f7fafc;
+  background: var(--color-bg-output-hover);
   display: flex;
   align-items: flex-start;
   justify-content: center;

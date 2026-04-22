@@ -120,8 +120,8 @@ const filterCodes = () => {
 
 input {
   padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-sm);
   font-size: 1rem;
 }
 
@@ -176,7 +176,7 @@ input {
   align-items: center;
   gap: 1rem;
   padding: 0.75rem;
-  background: #f8f9fa;
+  background: var(--color-bg-output);
   border-radius: var(--radius-sm);
   transition: background 0.2s;
 }

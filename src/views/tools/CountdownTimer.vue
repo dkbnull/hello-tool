@@ -182,7 +182,7 @@ const resetCountdown = () => {
 }
 
 .input-row input:disabled {
-  background: #f5f5f5;
+  background: var(--color-bg);
   cursor: not-allowed;
 }
 

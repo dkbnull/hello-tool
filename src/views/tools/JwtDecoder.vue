@@ -193,7 +193,7 @@ const parseJwt = () => {
 }
 
 .json-output {
-  background: #f8f9fa;
+  background: var(--color-bg-output);
   padding: 1rem;
   border-radius: var(--radius-sm);
   overflow-x: auto;
@@ -234,7 +234,7 @@ const parseJwt = () => {
 
 .signature-display {
   padding: 1rem;
-  background: #f8f9fa;
+  background: var(--color-bg-output);
   border-radius: var(--radius-sm);
 }
 
@@ -256,7 +256,7 @@ const parseJwt = () => {
   align-items: center;
   gap: 0.75rem;
   padding: 0.6rem 0.75rem;
-  background: #f8f9fa;
+  background: var(--color-bg-output);
   border-radius: var(--radius-sm);
   font-size: 0.9rem;
 }
