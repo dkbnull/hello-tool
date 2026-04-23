@@ -1,6 +1,6 @@
 <template>
   <div class="tool-card-wrapper">
-    <router-link :to="to" class="tool-card">
+    <router-link :to="to" class="tool-card" v-track="{ category: '工具', action: '点击', label: title }">
       <div class="tool-icon">{{ icon }}</div>
       <h3 class="tool-title">{{ title }}</h3>
       <p class="tool-desc">{{ description }}</p>

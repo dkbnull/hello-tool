@@ -18,6 +18,7 @@ const tools = [
         title: '时间戳转换',
         description: 'UNIX时间戳与日期格式互转',
         category: 'time',
+        keywords: '时间戳,UNIX时间戳,时间戳转换,timestamp,日期转换,epoch',
     },
     {
         path: '/countdown',
@@ -27,6 +28,7 @@ const tools = [
         title: '倒计时定时器',
         description: '设置时间并开始倒计时',
         category: 'time',
+        keywords: '倒计时,定时器,countdown,timer,在线倒计时',
     },
     {
         path: '/json-all',
@@ -36,6 +38,7 @@ const tools = [
         title: 'JSON全能转换',
         description: 'JSON格式化/转XML/CSV/YAML',
         category: 'json',
+        keywords: 'JSON转换,JSON格式化,JSON转XML,JSON转CSV,JSON转YAML',
     },
     {
         path: '/json-xml',
@@ -45,6 +48,7 @@ const tools = [
         title: 'JSON XML互转',
         description: 'JSON与XML格式相互转换',
         category: 'json',
+        keywords: 'JSON转XML,XML转JSON,JSON XML互转,格式转换',
     },
     {
         path: '/json-quote',
@@ -54,6 +58,7 @@ const tools = [
         title: 'JSON引号转换',
         description: '单引号转双引号（标准JSON）',
         category: 'json',
+        keywords: 'JSON引号,单引号转双引号,JSON标准化,引号转换',
     },
     {
         path: '/json-case',
@@ -63,6 +68,7 @@ const tools = [
         title: 'JSON大小写转换',
         description: 'JSON字段大小写转换',
         category: 'json',
+        keywords: 'JSON大小写,字段名转换,大写转小写,小写转大写',
     },
     {
         path: '/jwt',
@@ -72,6 +78,7 @@ const tools = [
         title: 'JWT解密',
         description: '解析JWT令牌字段',
         category: 'security',
+        keywords: 'JWT,JWT解密,JWT解析,令牌,token解码,JWT decoder',
     },
     {
         path: '/crypto',
@@ -81,6 +88,7 @@ const tools = [
         title: '加解密工具',
         description: 'Base64/AES/DES/3DES加解密',
         category: 'security',
+        keywords: '加密,解密,AES,DES,3DES,Base64,在线加密,在线解密',
     },
     {
         path: '/rsa',
@@ -90,6 +98,7 @@ const tools = [
         title: 'RSA密钥生成',
         description: '生成RSA公钥和私钥',
         category: 'security',
+        keywords: 'RSA,密钥生成,公钥,私钥,RSA key,RSA生成',
     },
     {
         path: '/uuid',
@@ -99,6 +108,7 @@ const tools = [
         title: 'UUID生成器',
         description: '批量生成UUID/GUID',
         category: 'security',
+        keywords: 'UUID,GUID,UUID生成器,批量生成UUID,唯一标识符',
     },
     {
         path: '/text-diff',
@@ -108,6 +118,7 @@ const tools = [
         title: '文本差异对比',
         description: '对比两段文本的差异',
         category: 'text',
+        keywords: '文本对比,差异对比,diff,文本比较,代码对比',
     },
     {
         path: '/text-counter',
@@ -117,6 +128,7 @@ const tools = [
         title: '文本字数统计',
         description: '统计字数、字符数、行数',
         category: 'text',
+        keywords: '字数统计,字符统计,行数统计,文本计数,word count',
     },
     {
         path: '/encoding',
@@ -126,6 +138,7 @@ const tools = [
         title: '编码转换工具',
         description: 'Unicode/中文/ASCII/URL编码互转',
         category: 'encode',
+        keywords: '编码转换,Unicode,ASCII,URL编码,中文编码,编码解码',
     },
     {
         path: '/naming',
@@ -135,6 +148,7 @@ const tools = [
         title: '命名格式转换',
         description: '驼峰/下划线/帕斯卡/短横线互转',
         category: 'encode',
+        keywords: '命名转换,驼峰命名,下划线命名,帕斯卡命名,kebab-case,camelCase,snake_case',
     },
     {
         path: '/number-base',
@@ -144,6 +158,7 @@ const tools = [
         title: '进制转换',
         description: '二进制/八进制/十进制/十六进制互转',
         category: 'encode',
+        keywords: '进制转换,二进制,八进制,十进制,十六进制,进制计算',
     },
     {
         path: '/color',
@@ -153,6 +168,7 @@ const tools = [
         title: '颜色转换',
         description: 'HEX/RGB/HSL颜色格式互转',
         category: 'encode',
+        keywords: '颜色转换,HEX,RGB,HSL,颜色代码,取色器',
     },
     {
         path: '/qrcode',
@@ -162,6 +178,7 @@ const tools = [
         title: '二维码生成器',
         description: '将文本转换为二维码',
         category: 'image',
+        keywords: '二维码,QR码,二维码生成,QR code,在线二维码',
     },
     {
         path: '/image',
@@ -171,6 +188,7 @@ const tools = [
         title: '图片Base64互转',
         description: '图片转Base64和Base64转图片',
         category: 'image',
+        keywords: '图片Base64,Base64转图片,图片编码,Base64编码解码',
     },
     {
         path: '/image-compressor',
@@ -180,6 +198,7 @@ const tools = [
         title: '图片压缩工具',
         description: '压缩图片大小，调整质量和尺寸',
         category: 'image',
+        keywords: '图片压缩,压缩图片,图片缩小,在线压缩,image compress',
     },
     {
         path: '/mermaid',
@@ -189,6 +208,7 @@ const tools = [
         title: 'Mermaid UML图',
         description: '基于Mermaid代码生成UML图表',
         category: 'image',
+        keywords: 'Mermaid,UML,流程图,时序图,图表生成,diagram',
     },
     {
         path: '/regex',
@@ -198,6 +218,7 @@ const tools = [
         title: '正则表达式测试',
         description: '在线测试正则表达式匹配',
         category: 'dev',
+        keywords: '正则表达式,正则测试,regex,regular expression,正则匹配',
     },
     {
         path: '/code-formatter',
@@ -207,6 +228,7 @@ const tools = [
         title: '代码格式化',
         description: '格式化HTML/CSS/JS/SQL代码',
         category: 'dev',
+        keywords: '代码格式化,HTML格式化,CSS格式化,JS格式化,SQL格式化,代码美化',
     },
     {
         path: '/http-status',
@@ -216,6 +238,7 @@ const tools = [
         title: 'HTTP状态码',
         description: '查询HTTP状态码含义',
         category: 'dev',
+        keywords: 'HTTP状态码,HTTP status,状态码查询,404,500,200',
     },
     {
         path: '/ip',
@@ -225,6 +248,7 @@ const tools = [
         title: 'IP地址查询',
         description: '查询IP地址归属地信息',
         category: 'dev',
+        keywords: 'IP查询,IP归属地,IP地址,IP location,IP定位',
     },
     {
         path: '/pdf-converter',
@@ -234,6 +258,7 @@ const tools = [
         title: 'PDF转Word/Excel',
         description: '将PDF文档转换为Word或Excel格式',
         category: 'document',
+        keywords: 'PDF转换,PDF转Word,PDF转Excel,PDF converter,文档转换',
     },
 ]
 
@@ -254,8 +279,13 @@ export function searchTools(query) {
     const q = query.trim().toLowerCase()
     return tools.filter(t =>
         t.title.toLowerCase().includes(q) ||
-        t.description.toLowerCase().includes(q)
+        t.description.toLowerCase().includes(q) ||
+        (t.keywords && t.keywords.toLowerCase().includes(q))
     )
+}
+
+export function getToolByPath(path) {
+    return tools.find(t => t.path === path)
 }
 
 export function getToolRoutes() {
@@ -263,5 +293,10 @@ export function getToolRoutes() {
         path: tool.path,
         name: tool.name,
         component: tool.component,
+        meta: {
+            title: tool.title,
+            description: tool.description,
+            keywords: tool.keywords,
+        },
     }))
 }

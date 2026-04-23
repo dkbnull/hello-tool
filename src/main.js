@@ -4,8 +4,10 @@ import App from './App.vue'
 import router from './router'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import seoAnalytics from './plugins/seoAnalytics.js'
 
-const app = createApp(App)
-app.use(router)
-app.use(ElementPlus)
-app.mount('#app')
+createApp(App)
+    .use(router)
+    .use(seoAnalytics, {router, siteUrl: 'https://tool.wbnull.cn'})
+    .use(ElementPlus)
+    .mount('#app')
