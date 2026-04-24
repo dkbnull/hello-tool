@@ -97,7 +97,7 @@
         class="back-to-top"
         aria-label="回到顶部"
     >
-      <Top class="back-to-top-icon"/>
+      <ArrowUp class="back-to-top-icon"/>
     </button>
   </div>
 </template>
@@ -105,7 +105,7 @@
 <script setup>
 import {computed, onMounted, onUnmounted, ref} from 'vue'
 import {ElMessageBox} from 'element-plus'
-import {Search, Top} from '@element-plus/icons-vue'
+import {ArrowUp, Search} from '@element-plus/icons-vue'
 import Sidebar from '../components/Sidebar.vue'
 import ToolCard from '../components/ToolCard.vue'
 import {favoritesManager} from '../utils/favorites.js'
