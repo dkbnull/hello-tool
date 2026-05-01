@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="tool-container">
     <h2>二维码生成器</h2>
 
@@ -90,7 +90,7 @@
 import {ref} from 'vue'
 import QRCode from 'qrcode'
 import jsQR from 'jsqr'
-import {useCopy} from '../../composables/useCopy'
+import {useCopy} from '@/composables/useCopy'
 
 const {handleCopy} = useCopy()
 

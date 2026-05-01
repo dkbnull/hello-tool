@@ -1,5 +1,5 @@
-const SITE_NAME = 'Hello Tool'
-const SITE_URL = 'https://tool.wbnull.cn'
+import {SITE_NAME, SITE_URL} from '@/config/constants.js'
+
 const SITE_DESCRIPTION = 'Hello Tool - 开发工具箱，集成时间戳转换、JSON处理、加解密、编码转换、正则测试等多种常用开发工具，提高开发效率'
 const SITE_KEYWORDS = '开发工具,在线工具,工具箱,JSON格式化,时间戳转换,Base64,加密解密,正则表达式,UUID生成,二维码'
 const DEFAULT_TITLE = `${SITE_NAME} - 开发工具箱`

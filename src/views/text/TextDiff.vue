@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="tool-container">
     <h2>文本差异对比</h2>
 
@@ -28,7 +28,7 @@
 
 <script setup>
 import {ref} from 'vue'
-import {useCopy} from '../../composables/useCopy'
+import {useCopy} from '@/composables/useCopy'
 
 const {handleCopy} = useCopy()
 

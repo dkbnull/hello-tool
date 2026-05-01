@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="tool-container">
     <h2>PDF转Word/Excel</h2>
 
@@ -36,8 +36,8 @@
 
 <script setup>
 import {ref} from 'vue'
-import {HttpService} from '../../utils/http'
-import {DownloadService} from '../../utils/download'
+import {HttpService} from '@/utils/http'
+import {DownloadService} from '@/utils/download'
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024
 const API_PATHS = {word: '/convert/pdf-to-word', excel: '/convert/pdf-to-excel', scan: '/convert/pdf-scan-to-word'}

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="tool-container">
     <h2>代码格式化</h2>
 
@@ -36,7 +36,7 @@
 
 <script setup>
 import {ref} from 'vue'
-import {useCopy} from '../../composables/useCopy'
+import {useCopy} from '@/composables/useCopy'
 import {format as sqlFormat} from 'sql-formatter'
 import vkbeautify from 'vkbeautify'
 

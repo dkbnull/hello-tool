@@ -17,8 +17,8 @@
 </template>
 
 <script setup>
-import {onMounted, onUnmounted, ref} from 'vue'
-import {favoritesManager} from '../utils/favorites.js'
+import {computed} from 'vue'
+import {useFavoritesStore} from '@/stores/favorites.js'
 
 const props = defineProps({
   to: {type: String, required: true},
@@ -27,41 +27,25 @@ const props = defineProps({
   description: {type: String, required: true}
 })
 
-const isFavorited = ref(false)
+const favoritesStore = useFavoritesStore()
 
-const checkFavoriteStatus = () => {
-  isFavorited.value = favoritesManager.isFavorite(props.to)
-}
+const isFavorited = computed(() => favoritesStore.isFavorite(props.to))
 
 const toggleFavorite = (event) => {
   event.preventDefault()
   event.stopPropagation()
 
   if (isFavorited.value) {
-    favoritesManager.removeFavorite(props.to)
+    favoritesStore.removeFavorite(props.to)
   } else {
-    favoritesManager.addFavorite({
+    favoritesStore.addFavorite({
       to: props.to,
       icon: props.icon,
       title: props.title,
       description: props.description
     })
   }
-
-  checkFavoriteStatus()
-  window.dispatchEvent(new CustomEvent('favoritesChanged'))
 }
-
-const handleFavoritesChange = () => checkFavoriteStatus()
-
-onMounted(() => {
-  checkFavoriteStatus()
-  window.addEventListener('favoritesChanged', handleFavoritesChange)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('favoritesChanged', handleFavoritesChange)
-})
 </script>
 
 <style scoped>

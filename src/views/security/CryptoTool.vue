@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="tool-container">
     <h2>加解密工具</h2>
 
@@ -61,7 +61,7 @@
 <script setup>
 import {computed, ref} from 'vue'
 import CryptoJS from 'crypto-js'
-import {useCopy} from '../../composables/useCopy'
+import {useCopy} from '@/composables/useCopy'
 
 const {handleCopy} = useCopy()
 

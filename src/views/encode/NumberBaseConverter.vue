@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="tool-container">
     <h2>进制转换</h2>
 
@@ -31,7 +31,7 @@
 
 <script setup>
 import {reactive, ref} from 'vue'
-import {useCopy} from '../../composables/useCopy'
+import {useCopy} from '@/composables/useCopy'
 
 const {handleCopy} = useCopy()
 

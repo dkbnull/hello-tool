@@ -5,10 +5,12 @@
  * @param {number} [options.duration=3000] - 显示时长（毫秒）
  * @returns {Object} - toast实例
  */
+import {TOAST_DURATION} from '@/config/constants.js'
+
 export const showToast = (options) => {
     const {
         message,
-        duration = 3000
+        duration = TOAST_DURATION
     } = options;
 
     // 创建toast元素

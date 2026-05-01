@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="tool-container">
     <h2>时间戳与日期转换</h2>
 
@@ -49,8 +49,8 @@
 
 <script setup>
 import {onMounted, onUnmounted, ref} from 'vue'
-import {dateTimeToTimestamp, getCurrentTimeInfo, timestampToDateTime} from '../../utils/time'
-import {useCopy} from '../../composables/useCopy'
+import {dateTimeToTimestamp, getCurrentTimeInfo, timestampToDateTime} from '@/utils/time'
+import {useCopy} from '@/composables/useCopy'
 
 const {handleCopy} = useCopy()
 

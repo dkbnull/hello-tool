@@ -1,108 +1,62 @@
 /**
  * HTTP请求工具类
+ * 基于Axios封装，统一管理请求拦截、响应拦截和错误处理
  */
-export class HttpService {
-    /**
-     * 基础API路径
-     * @private
-     */
-    static BASE_URL = '/api';
+import axios from 'axios'
+import {HTTP_TIMEOUT} from '@/config/constants.js'
 
-    /**
-     * CSRF token 缓存
-     * @private
-     */
-    static _csrfToken = null;
+const BASE_URL = '/api'
 
-    /**
-     * 获取CSRF token
-     * @returns {Promise<string>} CSRF token
-     */
-    static async getCsrfToken() {
-        // 如果已有缓存的token，直接返回
-        if (this._csrfToken) {
-            return this._csrfToken;
-        }
+const httpInstance = axios.create({
+    baseURL: BASE_URL,
+    timeout: HTTP_TIMEOUT,
+    headers: {
+        'Content-Type': 'application/json'
+    }
+})
 
+let csrfToken = ''
+
+httpInstance.interceptors.request.use(async (config) => {
+    if (!csrfToken) {
         try {
-            // 如果没有，尝试从服务端获取
-            const response = await fetch(`${this.BASE_URL}/auth/csrf-token`);
-            if (!response.ok) {
-                throw new Error('获取CSRF token失败');
+            const response = await fetch(`${BASE_URL}/auth/csrf-token`)
+            if (response.ok) {
+                const data = await response.json()
+                csrfToken = data.csrf_token || ''
             }
-
-            // 解析响应体获取token
-            const responseData = await response.json();
-            if (responseData.csrf_token) {
-                this._csrfToken = responseData.csrf_token;
-                return responseData.csrf_token;
-            }
-
-            throw new Error('未找到CSRF token');
-        } catch (error) {
-            console.error('获取CSRF token失败:', error);
-            return '';
+        } catch {
         }
     }
 
-    /**
-     * 通用请求方法
-     * @param {string} url - 请求URL
-     * @param {object} options - 请求选项
-     * @returns {Promise<Response>} 响应对象
-     * @private
-     */
-    static async request(url, options = {}) {
-        const headers = {...options.headers} || {}
-
-        // 如果不是FormData，添加Content-Type
-        if (!(options.body instanceof FormData) && !headers['Content-Type']) {
-            headers['Content-Type'] = 'application/json';
-        }
-
-        // 添加CSRF token
-        const csrfToken = await this.getCsrfToken();
-        if (csrfToken) {
-            headers['X-CSRF-Token'] = csrfToken;
-        }
-
-        const response = await fetch(`${this.BASE_URL}${url}`, {
-            ...options,
-            headers
-        });
-
-        if (!response.ok) {
-            throw new Error(`请求失败: ${response.statusText}`);
-        }
-
-        return response;
+    if (csrfToken) {
+        config.headers['X-CSRF-Token'] = csrfToken
     }
 
-    /**
-     * 发送POST请求
-     * @param {string} url - 请求URL
-     * @param {FormData|object} data - 请求数据
-     * @returns {Promise<any>} 响应数据
-     */
-    static async post(url, data) {
-        const response = await this.request(url, {
-            method: 'POST',
-            body: data
-        });
+    return config
+})
 
-        return await response.json();
+httpInstance.interceptors.response.use(
+    (response) => response.data,
+    (error) => {
+        if (error.response?.status === 401) {
+            csrfToken = ''
+        }
+        return Promise.reject(error)
     }
+)
 
-    /**
-     * 下载文件
-     * @param {string} url - 文件URL
-     * @returns {Promise<Blob>} 文件Blob
-     */
-    static async download(url) {
-        const response = await this.request(url, {
-            method: 'GET'
-        });
+export const HttpService = {
+    async post(url, data) {
+        const isFormData = data instanceof FormData
+        const config = isFormData ? {headers: {'Content-Type': 'multipart/form-data'}} : {}
+        return httpInstance.post(url, data, config)
+    },
 
-        return await response.blob();
+    async download(url) {
+        const response = await httpInstance.get(url, {responseType: 'blob'})
+        return response
     }
 }
+
+export default httpInstance

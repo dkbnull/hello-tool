@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="tool-container">
     <h2>JSON大小写转换</h2>
 
@@ -33,7 +33,7 @@
 
 <script setup>
 import {ref, watch} from 'vue'
-import {useCopy} from '../../composables/useCopy'
+import {useCopy} from '@/composables/useCopy'
 
 const {handleCopy} = useCopy()
 

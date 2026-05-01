@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="tool-container">
     <h2>编码转换工具</h2>
 
@@ -40,7 +40,7 @@
 
 <script setup>
 import {ref} from 'vue'
-import {useCopy} from '../../composables/useCopy'
+import {useCopy} from '@/composables/useCopy'
 
 const {handleCopy} = useCopy()
 

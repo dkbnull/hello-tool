@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="tool-container">
     <h2>JSON全能转换</h2>
 
@@ -35,8 +35,8 @@
 
 <script setup>
 import {ref} from 'vue'
-import {useCopy} from '../../composables/useCopy'
-import {showToast} from '../../utils/toast'
+import {useCopy} from '@/composables/useCopy'
+import {showToast} from '@/utils/toast'
 
 const {handleCopy} = useCopy()
 

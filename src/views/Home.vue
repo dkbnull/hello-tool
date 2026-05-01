@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="home-container">
     <Sidebar/>
 
@@ -106,13 +106,14 @@
 import {computed, onMounted, onUnmounted, ref} from 'vue'
 import {ElMessageBox} from 'element-plus'
 import {ArrowUp, Search} from '@element-plus/icons-vue'
-import Sidebar from '../components/Sidebar.vue'
-import ToolCard from '../components/ToolCard.vue'
-import {favoritesManager} from '../utils/favorites.js'
-import {getCategories, getToolsByCategory, searchTools} from '../config/tools'
+import Sidebar from '@/components/Sidebar.vue'
+import ToolCard from '@/components/ToolCard.vue'
+import {useFavoritesStore} from '@/stores/favorites.js'
+import {BACK_TO_TOP_THRESHOLD} from '@/config/constants.js'
+import {getCategories, getToolsByCategory, searchTools} from '@/config/tools'
 
+const favoritesStore = useFavoritesStore()
 const categories = getCategories()
-const favoriteTools = ref([])
 const showBackToTop = ref(false)
 const searchQuery = ref('')
 
@@ -120,9 +121,7 @@ const searchResults = computed(() => {
   return searchTools(searchQuery.value)
 })
 
-const loadFavorites = () => {
-  favoriteTools.value = favoritesManager.getFavorites()
-}
+const favoriteTools = computed(() => favoritesStore.favorites)
 
 const clearFavorites = async () => {
   await ElMessageBox.confirm('确定要清空所有收藏的工具吗？此操作不可撤销。', '清空收藏', {
@@ -130,16 +129,12 @@ const clearFavorites = async () => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
-    favoritesManager.clearFavorites()
-    loadFavorites()
-    window.dispatchEvent(new CustomEvent('favoritesChanged'))
+    favoritesStore.clearFavorites()
   })
 }
 
-const handleFavoritesChange = () => loadFavorites()
-
 const handleScroll = () => {
-  showBackToTop.value = window.scrollY > 300
+  showBackToTop.value = window.scrollY > BACK_TO_TOP_THRESHOLD
 }
 
 const backToTop = () => {
@@ -147,13 +142,10 @@ const backToTop = () => {
 }
 
 onMounted(() => {
-  loadFavorites()
-  window.addEventListener('favoritesChanged', handleFavoritesChange)
   window.addEventListener('scroll', handleScroll)
 })
 
 onUnmounted(() => {
-  window.removeEventListener('favoritesChanged', handleFavoritesChange)
   window.removeEventListener('scroll', handleScroll)
 })
 </script>

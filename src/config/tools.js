@@ -13,7 +13,7 @@ const tools = [
     {
         path: '/timestamp',
         name: 'TimestampConverter',
-        component: () => import('../views/tools/TimestampConverter.vue'),
+        component: () => import('@/views/time/TimestampConverter.vue'),
         icon: '⏰',
         title: '时间戳转换',
         description: 'UNIX时间戳与日期格式互转',
@@ -23,7 +23,7 @@ const tools = [
     {
         path: '/countdown',
         name: 'CountdownTimer',
-        component: () => import('../views/tools/CountdownTimer.vue'),
+        component: () => import('@/views/time/CountdownTimer.vue'),
         icon: '⏲️',
         title: '倒计时定时器',
         description: '设置时间并开始倒计时',
@@ -33,7 +33,7 @@ const tools = [
     {
         path: '/json-all',
         name: 'JsonAllConverter',
-        component: () => import('../views/tools/JsonAllConverter.vue'),
+        component: () => import('@/views/json/JsonAllConverter.vue'),
         icon: '📋',
         title: 'JSON全能转换',
         description: 'JSON格式化/转XML/CSV/YAML',
@@ -43,7 +43,7 @@ const tools = [
     {
         path: '/json-xml',
         name: 'JsonXmlConverter',
-        component: () => import('../views/tools/JsonXmlConverter.vue'),
+        component: () => import('@/views/json/JsonXmlConverter.vue'),
         icon: '🔄',
         title: 'JSON XML互转',
         description: 'JSON与XML格式相互转换',
@@ -53,7 +53,7 @@ const tools = [
     {
         path: '/json-quote',
         name: 'JsonQuoteConverter',
-        component: () => import('../views/tools/JsonQuoteConverter.vue'),
+        component: () => import('@/views/json/JsonQuoteConverter.vue'),
         icon: '""',
         title: 'JSON引号转换',
         description: '单引号转双引号（标准JSON）',
@@ -63,7 +63,7 @@ const tools = [
     {
         path: '/json-case',
         name: 'JsonCaseConverter',
-        component: () => import('../views/tools/JsonCaseConverter.vue'),
+        component: () => import('@/views/json/JsonCaseConverter.vue'),
         icon: 'Aa',
         title: 'JSON大小写转换',
         description: 'JSON字段大小写转换',
@@ -73,7 +73,7 @@ const tools = [
     {
         path: '/jwt',
         name: 'JwtDecoder',
-        component: () => import('../views/tools/JwtDecoder.vue'),
+        component: () => import('@/views/security/JwtDecoder.vue'),
         icon: '🔑',
         title: 'JWT解密',
         description: '解析JWT令牌字段',
@@ -83,7 +83,7 @@ const tools = [
     {
         path: '/crypto',
         name: 'CryptoTool',
-        component: () => import('../views/tools/CryptoTool.vue'),
+        component: () => import('@/views/security/CryptoTool.vue'),
         icon: '🔓',
         title: '加解密工具',
         description: 'Base64/AES/DES/3DES加解密',
@@ -93,7 +93,7 @@ const tools = [
     {
         path: '/rsa',
         name: 'RsaKeyGenerator',
-        component: () => import('../views/tools/RsaKeyGenerator.vue'),
+        component: () => import('@/views/security/RsaKeyGenerator.vue'),
         icon: '🔐',
         title: 'RSA密钥生成',
         description: '生成RSA公钥和私钥',
@@ -103,7 +103,7 @@ const tools = [
     {
         path: '/uuid',
         name: 'UuidGenerator',
-        component: () => import('../views/tools/UuidGenerator.vue'),
+        component: () => import('@/views/security/UuidGenerator.vue'),
         icon: '🆔',
         title: 'UUID生成器',
         description: '批量生成UUID/GUID',
@@ -113,7 +113,7 @@ const tools = [
     {
         path: '/text-diff',
         name: 'TextDiff',
-        component: () => import('../views/tools/TextDiff.vue'),
+        component: () => import('@/views/text/TextDiff.vue'),
         icon: '🔍',
         title: '文本差异对比',
         description: '对比两段文本的差异',
@@ -123,7 +123,7 @@ const tools = [
     {
         path: '/text-counter',
         name: 'TextCounter',
-        component: () => import('../views/tools/TextCounter.vue'),
+        component: () => import('@/views/text/TextCounter.vue'),
         icon: '🔢',
         title: '文本字数统计',
         description: '统计字数、字符数、行数',
@@ -133,7 +133,7 @@ const tools = [
     {
         path: '/encoding',
         name: 'EncodingConverter',
-        component: () => import('../views/tools/EncodingConverter.vue'),
+        component: () => import('@/views/encode/EncodingConverter.vue'),
         icon: '🔤',
         title: '编码转换工具',
         description: 'Unicode/中文/ASCII/URL编码互转',
@@ -143,7 +143,7 @@ const tools = [
     {
         path: '/naming',
         name: 'NamingConverter',
-        component: () => import('../views/tools/NamingConverter.vue'),
+        component: () => import('@/views/encode/NamingConverter.vue'),
         icon: '📝',
         title: '命名格式转换',
         description: '驼峰/下划线/帕斯卡/短横线互转',
@@ -153,7 +153,7 @@ const tools = [
     {
         path: '/number-base',
         name: 'NumberBaseConverter',
-        component: () => import('../views/tools/NumberBaseConverter.vue'),
+        component: () => import('@/views/encode/NumberBaseConverter.vue'),
         icon: '🔢',
         title: '进制转换',
         description: '二进制/八进制/十进制/十六进制互转',
@@ -163,7 +163,7 @@ const tools = [
     {
         path: '/color',
         name: 'ColorConverter',
-        component: () => import('../views/tools/ColorConverter.vue'),
+        component: () => import('@/views/encode/ColorConverter.vue'),
         icon: '🎨',
         title: '颜色转换',
         description: 'HEX/RGB/HSL颜色格式互转',
@@ -173,7 +173,7 @@ const tools = [
     {
         path: '/qrcode',
         name: 'QrCodeGenerator',
-        component: () => import('../views/tools/QrCodeGenerator.vue'),
+        component: () => import('@/views/image/QrCodeGenerator.vue'),
         icon: '📱',
         title: '二维码生成器',
         description: '将文本转换为二维码',
@@ -183,7 +183,7 @@ const tools = [
     {
         path: '/image',
         name: 'ImageTool',
-        component: () => import('../views/tools/ImageTool.vue'),
+        component: () => import('@/views/image/ImageTool.vue'),
         icon: '🖼️',
         title: '图片Base64互转',
         description: '图片转Base64和Base64转图片',
@@ -193,7 +193,7 @@ const tools = [
     {
         path: '/image-compressor',
         name: 'ImageCompressor',
-        component: () => import('../views/tools/ImageCompressor.vue'),
+        component: () => import('@/views/image/ImageCompressor.vue'),
         icon: '📷',
         title: '图片压缩工具',
         description: '压缩图片大小，调整质量和尺寸',
@@ -203,7 +203,7 @@ const tools = [
     {
         path: '/mermaid',
         name: 'MermaidGenerator',
-        component: () => import('../views/tools/MermaidGenerator.vue'),
+        component: () => import('@/views/image/MermaidGenerator.vue'),
         icon: '📊',
         title: 'Mermaid UML图',
         description: '基于Mermaid代码生成UML图表',
@@ -213,7 +213,7 @@ const tools = [
     {
         path: '/regex',
         name: 'RegexTester',
-        component: () => import('../views/tools/RegexTester.vue'),
+        component: () => import('@/views/dev/RegexTester.vue'),
         icon: '🧪',
         title: '正则表达式测试',
         description: '在线测试正则表达式匹配',
@@ -223,7 +223,7 @@ const tools = [
     {
         path: '/code-formatter',
         name: 'CodeFormatter',
-        component: () => import('../views/tools/CodeFormatter.vue'),
+        component: () => import('@/views/dev/CodeFormatter.vue'),
         icon: '💻',
         title: '代码格式化',
         description: '格式化HTML/CSS/JS/SQL代码',
@@ -233,7 +233,7 @@ const tools = [
     {
         path: '/http-status',
         name: 'HttpStatusCode',
-        component: () => import('../views/tools/HttpStatusCode.vue'),
+        component: () => import('@/views/dev/HttpStatusCode.vue'),
         icon: '🌐',
         title: 'HTTP状态码',
         description: '查询HTTP状态码含义',
@@ -243,7 +243,7 @@ const tools = [
     {
         path: '/ip',
         name: 'IpQuery',
-        component: () => import('../views/tools/IpQuery.vue'),
+        component: () => import('@/views/dev/IpQuery.vue'),
         icon: '🌍',
         title: 'IP地址查询',
         description: '查询IP地址归属地信息',
@@ -253,7 +253,7 @@ const tools = [
     {
         path: '/pdf-converter',
         name: 'PdfConverter',
-        component: () => import('../views/tools/PdfConverter.vue'),
+        component: () => import('@/views/document/PdfConverter.vue'),
         icon: '📄',
         title: 'PDF转Word/Excel',
         description: '将PDF文档转换为Word或Excel格式',

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="tool-container">
     <h2>图片压缩工具</h2>
 
@@ -85,13 +85,13 @@
 
 <script setup>
 import {ref} from 'vue'
-import {useCopy} from '../../composables/useCopy'
+import {useCopy} from '@/composables/useCopy'
 import {
   calculateCompressionRatio,
   compressImage as compressImageUtil,
   downloadImage,
   formatFileSize
-} from '../../utils/image'
+} from '@/utils/image'
 
 const {handleCopy} = useCopy()
 
