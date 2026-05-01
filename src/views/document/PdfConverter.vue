@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="tool-container">
     <h2>PDF转Word/Excel</h2>
 
@@ -38,6 +38,7 @@
 import {ref} from 'vue'
 import {HttpService} from '@/utils/http'
 import {DownloadService} from '@/utils/download'
+import {PDF_CONVERT_TIMEOUT} from '@/config/constants'
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024
 const API_PATHS = {word: '/convert/pdf-to-word', excel: '/convert/pdf-to-excel', scan: '/convert/pdf-scan-to-word'}
@@ -80,7 +81,7 @@ const convertPdf = async () => {
   try {
     const formData = new FormData()
     formData.append('file', selectedFile.value)
-    const result = await HttpService.post(API_PATHS[outputFormat.value], formData)
+    const result = await HttpService.post(API_PATHS[outputFormat.value], formData, {timeout: PDF_CONVERT_TIMEOUT})
     if (result.code === 200) {
       conversionResult.value = {
         message: `PDF已成功转换为${FORMAT_NAMES[outputFormat.value]}格式，请尽快下载。<br>文件将在10分钟后自动删除。`,

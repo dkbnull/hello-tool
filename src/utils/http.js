@@ -47,9 +47,12 @@ httpInstance.interceptors.response.use(
 )
 
 export const HttpService = {
-    async post(url, data) {
+    async post(url, data, customConfig = {}) {
         const isFormData = data instanceof FormData
-        const config = isFormData ? {headers: {'Content-Type': 'multipart/form-data'}} : {}
+        const config = {
+            ...(isFormData ? {headers: {'Content-Type': 'multipart/form-data'}} : {}),
+            ...customConfig
+        }
         return httpInstance.post(url, data, config)
     },
 
