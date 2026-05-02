@@ -8,7 +8,7 @@
 
       <nav :class="['nav', { 'nav-open': menuOpen }]">
         <router-link
-            v-for="link in navLinks"
+            v-for="link in NAV_LINKS"
             :key="link.path"
             :to="link.path"
             class="nav-link"
@@ -38,7 +38,7 @@ import {ref} from 'vue'
 
 const menuOpen = ref(false)
 
-const navLinks = [
+const NAV_LINKS = [
   {name: '首页', path: '/'},
   {name: '关于', path: '/about'}
 ]
@@ -102,7 +102,7 @@ const navLinks = [
 }
 
 .nav-link:hover,
-.nav-link.router-link-active {
+.nav-link.router-link-exact-active {
   color: var(--color-primary);
   background-color: var(--color-primary-light);
 }
