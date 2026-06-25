@@ -2,25 +2,16 @@
   <div class="tool-container">
     <h2>Mermaid UML图生成器</h2>
 
-    <div class="section-card mb-lg">
-      <div class="chart-type-selector">
-        <button
-            v-for="type in chartTypes"
-            :key="type.value"
-            @click="currentChartType = type.value"
-            :class="['mode-btn', {active: currentChartType === type.value}]"
-        >
-          {{ type.label }}
-        </button>
-      </div>
-    </div>
-
     <div class="mermaid-container">
       <div class="section-card">
         <div class="section-header">
           <h3>Mermaid 代码</h3>
           <div class="flex-row">
-            <button @click="loadExample" class="btn btn-secondary btn-sm">示例</button>
+            <select v-model="currentExampleType" @change="loadExample" class="example-select">
+              <option v-for="type in exampleTypes" :key="type.value" :value="type.value">
+                {{ type.label }}示例
+              </option>
+            </select>
             <button @click="clearCode" class="btn btn-secondary btn-sm">清空</button>
           </div>
         </div>
@@ -45,17 +36,18 @@
 </template>
 
 <script setup>
-import {onMounted, ref, watch} from 'vue'
+import { onMounted, ref } from 'vue'
 import mermaid from 'mermaid'
 
-const chartTypes = [
-  {value: 'flowchart', label: '流程图'},
-  {value: 'sequence', label: '序列图'},
-  {value: 'gantt', label: '甘特图'},
-  {value: 'class', label: '类图'},
-  {value: 'state', label: '状态图'},
-  {value: 'er', label: 'ER图'},
-  {value: 'journey', label: '用户旅程图'},
+// 示例代码列表（包含流程图、序列图、甘特图等，供下拉选择加载）
+const exampleTypes = [
+  { value: 'flowchart', label: '流程图' },
+  { value: 'sequence', label: '序列图' },
+  { value: 'gantt', label: '甘特图' },
+  { value: 'class', label: '类图' },
+  { value: 'state', label: '状态图' },
+  { value: 'er', label: 'ER图' },
+  { value: 'journey', label: '用户旅程图' },
 ]
 
 const examples = {
@@ -68,7 +60,7 @@ const examples = {
   journey: `journey\n    title 用户购物体验\n    section 浏览商品\n      进入网站: 5: 用户\n      搜索商品: 4: 用户\n    section 下单\n      添加购物车: 5: 用户\n      支付: 2: 用户`,
 }
 
-const currentChartType = ref('flowchart')
+const currentExampleType = ref('flowchart')
 const mermaidCode = ref('')
 const renderedSvg = ref('')
 const renderingError = ref('')
@@ -81,7 +73,7 @@ const debouncedRender = () => {
 }
 
 const loadExample = () => {
-  mermaidCode.value = examples[currentChartType.value] || '';
+  mermaidCode.value = examples[currentExampleType.value] || '';
   renderChart()
 }
 const clearCode = () => {
@@ -99,7 +91,7 @@ const renderChart = async () => {
   try {
     renderingError.value = ''
     isRendering.value = true
-    const {svg} = await mermaid.render('mermaid-chart', mermaidCode.value)
+    const { svg } = await mermaid.render('mermaid-chart', mermaidCode.value)
     renderedSvg.value = svg
     isRendering.value = false
   } catch (e) {
@@ -148,7 +140,7 @@ const downloadImage = async () => {
             const url = URL.createObjectURL(blob)
             const link = document.createElement('a')
             link.href = url
-            link.download = `mermaid-${currentChartType.value}-${Date.now()}.png`
+            link.download = `mermaid-${Date.now()}.png`
             link.click()
             URL.revokeObjectURL(url)
             resolve()
@@ -163,21 +155,26 @@ const downloadImage = async () => {
   }
 }
 
-watch(currentChartType, () => {
-  if (mermaidCode.value.trim()) renderChart()
-})
-
 onMounted(() => {
-  mermaid.initialize({startOnLoad: false, theme: 'default', securityLevel: 'loose'})
+  mermaid.initialize({ startOnLoad: false, theme: 'default', securityLevel: 'loose' })
   loadExample()
 })
 </script>
 
 <style scoped>
-.chart-type-selector {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+.example-select {
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-output-hover);
+  color: var(--color-text);
+  font-size: 0.85rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.example-select:focus {
+  border-color: var(--color-primary);
 }
 
 .mermaid-container {
