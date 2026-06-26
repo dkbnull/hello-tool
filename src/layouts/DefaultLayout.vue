@@ -1,10 +1,10 @@
 <template>
   <div class="app">
-    <Header/>
+    <Header />
     <main class="main">
-      <router-view/>
+      <router-view />
     </main>
-    <Footer/>
+    <Footer />
   </div>
 </template>
 
@@ -22,6 +22,6 @@ import Footer from '@/components/Footer.vue'
 
 .main {
   flex: 1;
-  padding: 1.5rem 0;
+  padding: 0.5rem 0;
 }
 </style>
