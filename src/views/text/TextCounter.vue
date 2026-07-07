@@ -3,7 +3,7 @@
     <h2>文本字数统计</h2>
 
     <div class="section-card">
-      <textarea v-model="text" placeholder="请输入要统计的文本" rows="20" @input="calculateStats"></textarea>
+      <textarea v-model="text" placeholder="请输入要统计的文本" rows="20"></textarea>
     </div>
 
     <div class="stats-grid">
@@ -16,26 +16,23 @@
 </template>
 
 <script setup>
-import {computed, ref} from 'vue'
+import { computed, ref } from 'vue'
 
 const text = ref('')
 
 const stats = computed(() => {
   const t = text.value
   return [
-    {label: '字符数', value: t.length},
-    {label: '字符数（不含空格）', value: t.replace(/\s/g, '').length},
-    {label: '字数', value: t.trim() ? t.trim().split(/\s+/).length : 0},
-    {label: '行数', value: t ? t.split('\n').length : 0},
-    {label: '段落数', value: t.trim() ? t.trim().split(/\n\s*\n/).length : 0},
-    {label: '中文字符', value: (t.match(/[\u4e00-\u9fa5]/g) || []).length},
-    {label: '英文字母', value: (t.match(/[a-zA-Z]/g) || []).length},
-    {label: '数字', value: (t.match(/[0-9]/g) || []).length},
+    { label: '字符数', value: t.length },
+    { label: '字符数（不含空格）', value: t.replace(/\s/g, '').length },
+    { label: '字数', value: t.trim() ? t.trim().split(/\s+/).length : 0 },
+    { label: '行数', value: t ? t.split('\n').length : 0 },
+    { label: '段落数', value: t.trim() ? t.trim().split(/\n\s*\n/).length : 0 },
+    { label: '中文字符', value: (t.match(/[\u4e00-\u9fa5]/g) || []).length },
+    { label: '英文字母', value: (t.match(/[a-zA-Z]/g) || []).length },
+    { label: '数字', value: (t.match(/[0-9]/g) || []).length },
   ]
 })
-
-const calculateStats = () => {
-}
 </script>
 
 <style scoped>

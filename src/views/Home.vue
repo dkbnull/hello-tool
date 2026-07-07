@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="home-container">
     <Sidebar />
 
@@ -156,13 +156,16 @@ const searchResults = computed(() => {
 const favoriteTools = computed(() => favoritesStore.favorites)
 
 const clearFavorites = async () => {
-  await ElMessageBox.confirm('确定要清空所有收藏的工具吗？此操作不可撤销。', '清空收藏', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(() => {
+  try {
+    await ElMessageBox.confirm('确定要清空所有收藏的工具吗？此操作不可撤销。', '清空收藏', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
     favoritesStore.clearFavorites()
-  })
+  } catch {
+    // 用户取消，无需处理
+  }
 }
 
 const handleScroll = () => {

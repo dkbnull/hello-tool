@@ -1,15 +1,15 @@
-﻿<template>
+<template>
   <div class="tool-container">
     <h2>编码转换工具</h2>
 
     <div class="section-card">
       <div class="mode-grid">
         <button
-            v-for="mode in conversionModes"
-            :key="mode.value"
-            @click="conversionMode = mode.value"
-            class="mode-btn"
-            :class="{active: conversionMode === mode.value}"
+          v-for="mode in conversionModes"
+          :key="mode.value"
+          @click="conversionMode = mode.value"
+          class="mode-btn"
+          :class="{active: conversionMode === mode.value}"
         >
           {{ mode.label }}
         </button>
@@ -39,10 +39,10 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
-import {useCopy} from '@/composables/useCopy'
+import { ref } from 'vue'
+import { useCopy } from '@/composables/useCopy'
 
-const {handleCopy} = useCopy()
+const { handleCopy } = useCopy()
 
 const input = ref('')
 const output = ref('')
@@ -50,92 +50,58 @@ const error = ref('')
 const conversionMode = ref('unicodeToChinese')
 
 const conversionModes = [
-  {value: 'unicodeToChinese', label: 'Unicode转中文'},
-  {value: 'chineseToUnicode', label: '中文转Unicode'},
-  {value: 'asciiToUnicode', label: 'ASCII转Unicode'},
-  {value: 'unicodeToAscii', label: 'Unicode转ASCII'},
-  {value: 'asciiToChinese', label: 'ASCII转中文'},
-  {value: 'chineseToAscii', label: '中文转ASCII'},
-  {value: 'urlEncode', label: 'URL编码'},
-  {value: 'urlDecode', label: 'URL解码'},
+  { value: 'unicodeToChinese', label: 'Unicode转中文' },
+  { value: 'chineseToUnicode', label: '中文转Unicode' },
+  { value: 'asciiToUnicode', label: 'ASCII转Unicode' },
+  { value: 'unicodeToAscii', label: 'Unicode转ASCII' },
+  { value: 'asciiToChinese', label: 'ASCII转中文' },
+  { value: 'chineseToAscii', label: '中文转ASCII' },
+  { value: 'urlEncode', label: 'URL编码' },
+  { value: 'urlDecode', label: 'URL解码' },
 ]
 
+// 统一执行转换，处理异常与错误提示
+const runConvert = (action, errorMsg = '转换失败') => {
+  try {
+    output.value = action()
+    error.value = ''
+  } catch (e) {
+    error.value = errorMsg + ': ' + e.message
+  }
+}
+
 const converters = {
-  unicodeToChinese: () => {
-    try {
-      output.value = input.value.replace(/\\u([0-9a-fA-F]{4})/g, (_, p1) => String.fromCharCode(parseInt(p1, 16)))
-      error.value = ''
-    } catch (e) {
-      error.value = '转换失败: ' + e.message
-    }
-  },
-  chineseToUnicode: () => {
-    try {
-      output.value = Array.from(input.value).map(c => c.charCodeAt(0) > 127 ? '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0') : c).join('')
-      error.value = ''
-    } catch (e) {
-      error.value = '转换失败: ' + e.message
-    }
-  },
-  asciiToUnicode: () => {
-    try {
-      output.value = Array.from(input.value).map(c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0')).join('')
-      error.value = ''
-    } catch (e) {
-      error.value = '转换失败: ' + e.message
-    }
-  },
-  unicodeToAscii: () => {
-    try {
-      const text = input.value.replace(/\\u([0-9a-fA-F]{4})/g, (_, p1) => String.fromCharCode(parseInt(p1, 16)))
-      output.value = text.replace(/[^\x00-\x7F]/g, '')
-      error.value = ''
-    } catch (e) {
-      error.value = '转换失败: ' + e.message
-    }
-  },
-  asciiToChinese: () => {
-    try {
-      output.value = input.value.split(/[\s,]+/).filter(Boolean).map(c => String.fromCharCode(parseInt(c))).join('')
-      error.value = ''
-    } catch (e) {
-      error.value = '转换失败: ' + e.message
-    }
-  },
-  chineseToAscii: () => {
-    try {
-      output.value = Array.from(input.value).map(c => c.charCodeAt(0)).join(' ')
-      error.value = ''
-    } catch (e) {
-      error.value = '转换失败: ' + e.message
-    }
-  },
-  urlEncode: () => {
-    try {
-      output.value = encodeURIComponent(input.value);
-      error.value = ''
-    } catch (e) {
-      error.value = '编码失败: ' + e.message
-    }
-  },
-  urlDecode: () => {
-    try {
-      output.value = decodeURIComponent(input.value);
-      error.value = ''
-    } catch (e) {
-      error.value = '解码失败: ' + e.message
-    }
-  },
+  unicodeToChinese: () => runConvert(() =>
+    input.value.replace(/\\u([0-9a-fA-F]{4})/g, (_, p1) => String.fromCharCode(parseInt(p1, 16)))
+  ),
+  chineseToUnicode: () => runConvert(() =>
+    Array.from(input.value).map(c => c.charCodeAt(0) > 127 ? '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0') : c).join('')
+  ),
+  asciiToUnicode: () => runConvert(() =>
+    Array.from(input.value).map(c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0')).join('')
+  ),
+  unicodeToAscii: () => runConvert(() => {
+    const text = input.value.replace(/\\u([0-9a-fA-F]{4})/g, (_, p1) => String.fromCharCode(parseInt(p1, 16)))
+    return text.replace(/[^\x00-\x7F]/g, '')
+  }),
+  asciiToChinese: () => runConvert(() =>
+    input.value.split(/[\s,]+/).filter(Boolean).map(c => String.fromCharCode(parseInt(c))).join('')
+  ),
+  chineseToAscii: () => runConvert(() =>
+    Array.from(input.value).map(c => c.charCodeAt(0)).join(' ')
+  ),
+  urlEncode: () => runConvert(() => encodeURIComponent(input.value), '编码失败'),
+  urlDecode: () => runConvert(() => decodeURIComponent(input.value), '解码失败'),
 }
 
 const clearInput = () => {
-  input.value = '';
-  output.value = '';
+  input.value = ''
+  output.value = ''
   error.value = ''
 }
+
 const handleConvert = () => {
-  const fn = converters[conversionMode.value];
-  if (fn) fn()
+  converters[conversionMode.value]?.()
 }
 </script>
 

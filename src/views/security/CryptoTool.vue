@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="tool-container">
     <h2>加解密工具</h2>
 
@@ -19,15 +19,15 @@
 
         <div v-if="cryptoMode === 'aes'" class="input-group">
           <label>AES密钥：</label>
-          <input type="text" v-model="aesKey" placeholder="请输入AES密钥"/>
+          <input type="text" v-model="aesKey" placeholder="请输入AES密钥" />
         </div>
         <div v-if="cryptoMode === 'des'" class="input-group">
           <label>DES密钥：</label>
-          <input type="text" v-model="desKey" placeholder="请输入DES密钥"/>
+          <input type="text" v-model="desKey" placeholder="请输入DES密钥" />
         </div>
         <div v-if="cryptoMode === 'tripleDes'" class="input-group">
           <label>3DES密钥：</label>
-          <input type="text" v-model="tripleDesKey" placeholder="请输入3DES密钥"/>
+          <input type="text" v-model="tripleDesKey" placeholder="请输入3DES密钥" />
         </div>
 
         <div class="button-group-inline">
@@ -59,11 +59,12 @@
 </template>
 
 <script setup>
-import {computed, ref} from 'vue'
+import { computed, ref } from 'vue'
 import CryptoJS from 'crypto-js'
-import {useCopy} from '@/composables/useCopy'
+import { useCopy } from '@/composables/useCopy'
+import { decodeBase64, encodeBase64 } from '@/utils/base64.js'
 
-const {handleCopy} = useCopy()
+const { handleCopy } = useCopy()
 
 const input = ref('')
 const output = ref('')
@@ -81,132 +82,66 @@ const clearInput = () => {
   error.value = ''
 }
 
+// 统一执行加解密操作，处理异常与错误提示
+const runCrypto = (action, errorMsg) => {
+  try {
+    output.value = action()
+    error.value = ''
+  } catch (e) {
+    error.value = errorMsg + ': ' + e.message
+  }
+}
+
+// 校验密钥是否已输入
+const requireKey = (key, hint) => {
+  if (!key.value) {
+    error.value = hint
+    return false
+  }
+  return true
+}
+
 const encryptors = {
-  base64: () => {
-    try {
-      output.value = btoa(unescape(encodeURIComponent(input.value)))
-      error.value = ''
-    } catch (e) {
-      error.value = '加密失败: ' + e.message
-    }
-  },
+  base64: () => runCrypto(() => encodeBase64(input.value), '加密失败'),
   aes: () => {
-    if (!aesKey.value) {
-      error.value = '请输入密钥';
-      return
-    }
-    try {
-      output.value = CryptoJS.AES.encrypt(input.value, aesKey.value).toString()
-      error.value = ''
-    } catch (e) {
-      error.value = '加密失败: ' + e.message
-    }
+    if (!requireKey(aesKey, '请输入密钥')) return
+    runCrypto(() => CryptoJS.AES.encrypt(input.value, aesKey.value).toString(), '加密失败')
   },
   des: () => {
-    if (!desKey.value) {
-      error.value = '请输入DES密钥';
-      return
-    }
-    try {
-      output.value = CryptoJS.DES.encrypt(input.value, desKey.value).toString()
-      error.value = ''
-    } catch (e) {
-      error.value = '加密失败: ' + e.message
-    }
+    if (!requireKey(desKey, '请输入DES密钥')) return
+    runCrypto(() => CryptoJS.DES.encrypt(input.value, desKey.value).toString(), '加密失败')
   },
   tripleDes: () => {
-    if (!tripleDesKey.value) {
-      error.value = '请输入3DES密钥';
-      return
-    }
-    try {
-      output.value = CryptoJS.TripleDES.encrypt(input.value, tripleDesKey.value).toString()
-      error.value = ''
-    } catch (e) {
-      error.value = '加密失败: ' + e.message
-    }
+    if (!requireKey(tripleDesKey, '请输入3DES密钥')) return
+    runCrypto(() => CryptoJS.TripleDES.encrypt(input.value, tripleDesKey.value).toString(), '加密失败')
   },
-  md5: () => {
-    try {
-      output.value = CryptoJS.MD5(input.value).toString()
-      error.value = ''
-    } catch (e) {
-      error.value = '加密失败: ' + e.message
-    }
-  },
-  sha: () => {
-    try {
-      output.value = CryptoJS.SHA1(input.value).toString()
-      error.value = ''
-    } catch (e) {
-      error.value = '加密失败: ' + e.message
-    }
-  },
-  sha256: () => {
-    try {
-      output.value = CryptoJS.SHA256(input.value).toString()
-      error.value = ''
-    } catch (e) {
-      error.value = '加密失败: ' + e.message
-    }
-  }
+  md5: () => runCrypto(() => CryptoJS.MD5(input.value).toString(), '加密失败'),
+  sha: () => runCrypto(() => CryptoJS.SHA1(input.value).toString(), '加密失败'),
+  sha256: () => runCrypto(() => CryptoJS.SHA256(input.value).toString(), '加密失败'),
 }
 
 const decryptors = {
-  base64: () => {
-    try {
-      output.value = decodeURIComponent(escape(atob(input.value)))
-      error.value = ''
-    } catch (e) {
-      error.value = '解密失败: ' + e.message
-    }
-  },
+  base64: () => runCrypto(() => decodeBase64(input.value), '解密失败'),
   aes: () => {
-    if (!aesKey.value) {
-      error.value = '请输入密钥';
-      return
-    }
-    try {
-      output.value = CryptoJS.AES.decrypt(input.value, aesKey.value).toString(CryptoJS.enc.Utf8)
-      error.value = ''
-    } catch (e) {
-      error.value = '解密失败: ' + e.message
-    }
+    if (!requireKey(aesKey, '请输入密钥')) return
+    runCrypto(() => CryptoJS.AES.decrypt(input.value, aesKey.value).toString(CryptoJS.enc.Utf8), '解密失败')
   },
   des: () => {
-    if (!desKey.value) {
-      error.value = '请输入DES密钥';
-      return
-    }
-    try {
-      output.value = CryptoJS.DES.decrypt(input.value, desKey.value).toString(CryptoJS.enc.Utf8)
-      error.value = ''
-    } catch (e) {
-      error.value = '解密失败: ' + e.message
-    }
+    if (!requireKey(desKey, '请输入DES密钥')) return
+    runCrypto(() => CryptoJS.DES.decrypt(input.value, desKey.value).toString(CryptoJS.enc.Utf8), '解密失败')
   },
   tripleDes: () => {
-    if (!tripleDesKey.value) {
-      error.value = '请输入3DES密钥';
-      return
-    }
-    try {
-      output.value = CryptoJS.TripleDES.decrypt(input.value, tripleDesKey.value).toString(CryptoJS.enc.Utf8)
-      error.value = ''
-    } catch (e) {
-      error.value = '解密失败: ' + e.message
-    }
-  }
+    if (!requireKey(tripleDesKey, '请输入3DES密钥')) return
+    runCrypto(() => CryptoJS.TripleDES.decrypt(input.value, tripleDesKey.value).toString(CryptoJS.enc.Utf8), '解密失败')
+  },
 }
 
 const handleEncrypt = () => {
-  const fn = encryptors[cryptoMode.value]
-  if (fn) fn()
+  encryptors[cryptoMode.value]?.()
 }
 
 const handleDecrypt = () => {
-  const fn = decryptors[cryptoMode.value]
-  if (fn) fn()
+  decryptors[cryptoMode.value]?.()
 }
 </script>
 

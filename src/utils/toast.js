@@ -5,70 +5,31 @@
  * @param {number} [options.duration=3000] - 显示时长（毫秒）
  * @returns {Object} - toast实例
  */
-import {TOAST_DURATION} from '@/config/constants.js'
+import { TOAST_DURATION } from '@/config/constants.js'
+
+const FADE_DURATION = 300
 
 export const showToast = (options) => {
-    const {
-        message,
-        duration = TOAST_DURATION
-    } = options;
+  const { message, duration = TOAST_DURATION } = options
 
-    // 创建toast元素
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.textContent = message;
+  const toast = document.createElement('div')
+  toast.className = 'toast'
+  toast.textContent = message
+  document.body.appendChild(toast)
 
-    // 添加样式
-    Object.assign(toast.style, {
-        position: 'fixed',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        background: '#35495e',
-        color: 'white',
-        padding: '1rem 2rem',
-        borderRadius: '4px',
-        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.2)',
-        zIndex: '1000',
-        animation: 'fadeIn 0.3s ease-out'
-    });
+  const remove = () => {
+    toast.classList.add('toast-leaving')
+    setTimeout(() => {
+      if (toast.parentNode) document.body.removeChild(toast)
+    }, FADE_DURATION)
+  }
 
-    // 添加动画样式
-    const style = document.createElement('style');
-    style.textContent = `
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.8);
-      }
-      to {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-      }
+  const timer = setTimeout(remove, duration)
+
+  return {
+    close: () => {
+      clearTimeout(timer)
+      remove()
     }
-  `;
-    document.head.appendChild(style);
-
-    // 添加到文档
-    document.body.appendChild(toast);
-
-    // 定时移除
-    const timer = setTimeout(() => {
-        toast.style.animation = 'fadeOut 0.3s ease-in';
-        setTimeout(() => {
-            document.body.removeChild(toast);
-            document.head.removeChild(style);
-        }, 300);
-    }, duration);
-
-    return {
-        close: () => {
-            clearTimeout(timer);
-            toast.style.animation = 'fadeOut 0.3s ease-in';
-            setTimeout(() => {
-                document.body.removeChild(toast);
-                document.head.removeChild(style);
-            }, 300);
-        }
-    };
-};
+  }
+}

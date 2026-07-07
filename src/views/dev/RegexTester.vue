@@ -1,20 +1,20 @@
-﻿<template>
+<template>
   <div class="tool-container">
     <h2>正则表达式测试</h2>
 
     <div class="section-card">
       <div class="input-group">
-        <H3>正则表达式</H3>
+        <h3>正则表达式</h3>
         <div class="regex-input-row">
           <span class="regex-delimiter">/</span>
-          <input type="text" v-model="pattern" placeholder="输入正则表达式" class="regex-input"/>
+          <input type="text" v-model="pattern" placeholder="输入正则表达式" class="regex-input" />
           <span class="regex-delimiter">/</span>
-          <input type="text" v-model="flags" placeholder="gi" class="flags-input"/>
+          <input type="text" v-model="flags" placeholder="gi" class="flags-input" />
         </div>
       </div>
 
       <div class="input-group">
-        <H3>测试文本</H3>
+        <h3>测试文本</h3>
         <textarea v-model="testText" placeholder="输入测试文本" rows="6"></textarea>
       </div>
 
@@ -42,10 +42,10 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
-import {useCopy} from '@/composables/useCopy'
+import { ref } from 'vue'
+import { useCopy } from '@/composables/useCopy'
 
-const {handleCopy} = useCopy()
+const { handleCopy } = useCopy()
 
 const pattern = ref('')
 const flags = ref('g')

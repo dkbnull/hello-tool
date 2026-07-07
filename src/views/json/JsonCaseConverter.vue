@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="tool-container">
     <h2>JSON大小写转换</h2>
 
@@ -32,27 +32,15 @@
 </template>
 
 <script setup>
-import {ref, watch} from 'vue'
-import {useCopy} from '@/composables/useCopy'
+import { ref, watch } from 'vue'
+import { useCopy } from '@/composables/useCopy'
+import { convertObjectKeys, toCamelCase, toSnakeCase } from '@/utils/caseConverter.js'
 
-const {handleCopy} = useCopy()
+const { handleCopy } = useCopy()
 
 const originalJson = ref('')
 const camelCaseJson = ref('')
 const snakeCaseJson = ref('')
-
-const toCamelCase = (str) => str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '').replace(/^./, s => s.toLowerCase())
-const toSnakeCase = (str) => str.replace(/([A-Z])/g, '_$1').replace(/[-\s]+/g, '_').toLowerCase().replace(/^_+|_+$/g, '')
-
-const convertKeys = (obj, converter) => {
-  if (typeof obj !== 'object' || obj === null) return obj
-  if (Array.isArray(obj)) return obj.map(item => convertKeys(item, converter))
-  const result = {}
-  for (const key in obj) {
-    result[converter(key)] = convertKeys(obj[key], converter)
-  }
-  return result
-}
 
 const convertCase = () => {
   if (!originalJson.value) {
@@ -62,8 +50,8 @@ const convertCase = () => {
   }
   try {
     const obj = JSON.parse(originalJson.value)
-    camelCaseJson.value = JSON.stringify(convertKeys(obj, toCamelCase), null, 2)
-    snakeCaseJson.value = JSON.stringify(convertKeys(obj, toSnakeCase), null, 2)
+    camelCaseJson.value = JSON.stringify(convertObjectKeys(obj, toCamelCase), null, 2)
+    snakeCaseJson.value = JSON.stringify(convertObjectKeys(obj, toSnakeCase), null, 2)
   } catch {
     camelCaseJson.value = '无效的JSON格式'
     snakeCaseJson.value = '无效的JSON格式'

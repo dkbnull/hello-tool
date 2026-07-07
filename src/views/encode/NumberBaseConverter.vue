@@ -1,11 +1,11 @@
-﻿<template>
+<template>
   <div class="tool-container">
     <h2>进制转换</h2>
 
     <div class="section-card">
       <div class="input-group">
         <label>输入数值：</label>
-        <input type="text" v-model="input" placeholder="请输入数值" @input="convert"/>
+        <input type="text" v-model="input" placeholder="请输入数值" @input="convert" />
       </div>
 
       <div class="input-group">
@@ -30,25 +30,23 @@
 </template>
 
 <script setup>
-import {reactive, ref} from 'vue'
-import {useCopy} from '@/composables/useCopy'
+import { reactive, ref } from 'vue'
+import { useCopy } from '@/composables/useCopy'
 
-const {handleCopy} = useCopy()
+const { handleCopy } = useCopy()
 
 const input = ref('')
 const fromBase = ref(10)
 const results = reactive({})
-const error = ref('')
 
 const bases = [
-  {value: 2, label: '二进制 (Binary)'},
-  {value: 8, label: '八进制 (Octal)'},
-  {value: 10, label: '十进制 (Decimal)'},
-  {value: 16, label: '十六进制 (Hex)'},
+  { value: 2, label: '二进制 (Binary)' },
+  { value: 8, label: '八进制 (Octal)' },
+  { value: 10, label: '十进制 (Decimal)' },
+  { value: 16, label: '十六进制 (Hex)' },
 ]
 
 const convert = () => {
-  error.value = ''
   if (!input.value) {
     Object.keys(results).forEach(key => delete results[key])
     return
@@ -81,6 +79,9 @@ select {
   border-radius: var(--radius-sm);
   font-size: 1rem;
   background: white;
+}
+
+select {
   cursor: pointer;
 }
 

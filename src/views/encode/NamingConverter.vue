@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="tool-container">
     <h2>命名格式转换</h2>
 
@@ -50,24 +50,18 @@
 </template>
 
 <script setup>
-import {computed, ref} from 'vue'
-import {useCopy} from '@/composables/useCopy'
+import { computed, ref } from 'vue'
+import { useCopy } from '@/composables/useCopy'
+import { convertByLine, toCamelCase, toKebabCase, toPascalCase, toSnakeCase } from '@/utils/caseConverter.js'
 
-const {handleCopy} = useCopy()
+const { handleCopy } = useCopy()
 
 const inputText = ref('')
 
-const convertLine = (text, converter) => text.split('\n').map(converter).join('\n')
-
-const toCamelCase = (str) => str.replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '').replace(/^./, s => s.toLowerCase())
-const toSnakeCase = (str) => str.replace(/([A-Z])/g, '_$1').replace(/[-\s]+/g, '_').toLowerCase().replace(/^_+|_+$/g, '')
-const toPascalCase = (str) => toCamelCase(str).replace(/^./, s => s.toUpperCase())
-const toKebabCase = (str) => toSnakeCase(str).replace(/_/g, '-')
-
-const camelCaseOutput = computed(() => inputText.value ? convertLine(inputText.value, toCamelCase) : '')
-const snakeCaseOutput = computed(() => inputText.value ? convertLine(inputText.value, toSnakeCase) : '')
-const pascalCaseOutput = computed(() => inputText.value ? convertLine(inputText.value, toPascalCase) : '')
-const kebabCaseOutput = computed(() => inputText.value ? convertLine(inputText.value, toKebabCase) : '')
+const camelCaseOutput = computed(() => inputText.value ? convertByLine(inputText.value, toCamelCase) : '')
+const snakeCaseOutput = computed(() => inputText.value ? convertByLine(inputText.value, toSnakeCase) : '')
+const pascalCaseOutput = computed(() => inputText.value ? convertByLine(inputText.value, toPascalCase) : '')
+const kebabCaseOutput = computed(() => inputText.value ? convertByLine(inputText.value, toKebabCase) : '')
 </script>
 
 <style scoped>
