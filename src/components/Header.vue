@@ -1,27 +1,27 @@
 <template>
   <header class="header">
     <div class="container header-inner">
-      <router-link to="/" class="brand">
-        <img src="/favicon.svg" class="logo" alt="logo"/>
+      <a href="/" class="brand" @click.prevent="handleBrandClick">
+        <img src="/favicon.svg" class="logo" alt="logo" />
         <span class="brand-text">Hello Tool</span>
-      </router-link>
+      </a>
 
       <nav :class="['nav', { 'nav-open': menuOpen }]">
         <router-link
-            v-for="link in NAV_LINKS"
-            :key="link.path"
-            :to="link.path"
-            class="nav-link"
-            @click="menuOpen = false"
+          v-for="link in NAV_LINKS"
+          :key="link.path"
+          :to="link.path"
+          class="nav-link"
+          @click="menuOpen = false"
         >
           {{ link.name }}
         </router-link>
       </nav>
 
       <button
-          class="menu-toggle"
-          :aria-label="menuOpen ? '关闭菜单' : '打开菜单'"
-          @click="menuOpen = !menuOpen"
+        class="menu-toggle"
+        :aria-label="menuOpen ? '关闭菜单' : '打开菜单'"
+        @click="menuOpen = !menuOpen"
       >
         <span :class="['hamburger', { active: menuOpen }]">
           <span></span>
@@ -34,13 +34,25 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
+import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
+const router = useRouter()
+const route = useRoute()
 const menuOpen = ref(false)
 
+// 点击品牌logo：已在首页时滚动到顶部，否则导航到首页
+const handleBrandClick = () => {
+  if (route.name === 'Home') {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  } else {
+    router.push('/')
+  }
+}
+
 const NAV_LINKS = [
-  {name: '首页', path: '/'},
-  {name: '关于', path: '/about'}
+  { name: '首页', path: '/' },
+  { name: '关于', path: '/about' }
 ]
 </script>
 
