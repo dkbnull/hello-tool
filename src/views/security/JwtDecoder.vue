@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="tool-container">
     <h2>JWT解密</h2>
 

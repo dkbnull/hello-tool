@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="tool-container">
     <h2>二维码生成器</h2>
 

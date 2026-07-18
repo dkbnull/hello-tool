@@ -43,8 +43,8 @@
             :description="tool.description"
           />
         </div>
-        <div v-else class="no-results">
-          <span class="no-results-icon">🔍</span>
+        <div v-else class="empty-state">
+          <span class="empty-icon">🔍</span>
           <h3>未找到匹配的工具</h3>
           <p>请尝试其他关键词</p>
         </div>
@@ -72,8 +72,8 @@
           </div>
         </div>
 
-        <div v-else class="no-favorites">
-          <span class="no-favorites-icon">⭐</span>
+        <div v-else class="empty-state">
+          <span class="empty-icon">⭐</span>
           <h3>暂无收藏的工具</h3>
           <p>点击工具卡片上的星形按钮来收藏常用工具</p>
         </div>
@@ -197,6 +197,7 @@ onUnmounted(() => {
 
 .content {
   flex: 1;
+  min-width: 0;
 }
 
 .header-row {
@@ -215,14 +216,20 @@ onUnmounted(() => {
 
 .page-title {
   text-align: left;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   margin-bottom: 0.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 .page-subtitle {
   text-align: left;
   font-size: 0.95rem;
   margin-bottom: 0;
+  color: var(--color-text-secondary);
 }
 
 .search-bar {
@@ -236,10 +243,10 @@ onUnmounted(() => {
   padding: 2px 8px;
   border: 1px solid var(--color-border);
   border-radius: 5px;
-  background: var(--color-bg);
+  background: var(--color-bg-card-soft);
   color: var(--color-text-muted);
   font-size: 11px;
-  font-family: inherit;
+  font-family: var(--font-mono);
   line-height: 1.4;
   pointer-events: none;
   user-select: none;
@@ -248,7 +255,7 @@ onUnmounted(() => {
 .search-bar :deep(.el-input__wrapper) {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
-  padding: 0.25rem 1rem;
+  padding: 0.3rem 1rem;
   border: 1px solid transparent;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
@@ -259,7 +266,7 @@ onUnmounted(() => {
 
 .search-bar :deep(.el-input__wrapper.is-focus) {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-light);
+  box-shadow: 0 0 0 3px var(--color-primary-light), var(--shadow-md);
 }
 
 .search-bar :deep(.el-input__wrapper.is-filled) {
@@ -281,50 +288,50 @@ onUnmounted(() => {
   margin-left: 0.5rem;
 }
 
-.no-results {
-  background: #f8f9fa;
-  border: 2px dashed var(--color-border);
+.empty-state {
+  background: var(--color-bg-card-soft);
+  border: 1px dashed var(--color-border-strong);
   border-radius: var(--radius-lg);
   padding: 3rem 2rem;
   text-align: center;
+  margin-bottom: 3rem;
 }
 
-.no-results-icon {
+.empty-icon {
   font-size: 3rem;
   display: block;
   margin-bottom: 1rem;
   opacity: 0.5;
 }
 
-.no-results h3 {
+.empty-state h3 {
   color: var(--color-text-secondary);
   margin-bottom: 0.5rem;
   font-size: 1.2rem;
 }
 
-.no-results p {
+.empty-state p {
   color: var(--color-text-muted);
   font-size: 0.9rem;
 }
 
 .tool-section {
-  margin-bottom: 3.5rem;
+  margin-bottom: 3rem;
   scroll-margin-top: 5rem;
 }
 
 .tool-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .favorite-section {
-  background: var(--color-bg-card);
-  border-radius: var(--radius-lg);
-  padding: 0.75rem 1.5rem 1.5rem;
-  border: 1px solid var(--color-border);
-  margin-bottom: 3rem;
-  box-shadow: var(--shadow-sm);
+  margin-bottom: 2.5rem;
+}
+
+.favorite-section::before {
+  content: none;
 }
 
 .section-header-row {
@@ -340,38 +347,6 @@ onUnmounted(() => {
   margin-left: 0.5rem;
 }
 
-.btn-sm {
-  padding: 0.4rem 0.8rem;
-  font-size: 0.8rem;
-}
-
-.no-favorites {
-  background: #f8f9fa;
-  border: 2px dashed var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 3rem 2rem;
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
-.no-favorites-icon {
-  font-size: 3rem;
-  display: block;
-  margin-bottom: 1rem;
-  opacity: 0.5;
-}
-
-.no-favorites h3 {
-  color: var(--color-text-secondary);
-  margin-bottom: 0.5rem;
-  font-size: 1.2rem;
-}
-
-.no-favorites p {
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-}
-
 .back-to-top {
   position: fixed;
   bottom: 30px;
@@ -379,15 +354,15 @@ onUnmounted(() => {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background-color: var(--color-primary);
+  background: var(--color-primary);
   color: white;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow-md);
-  transition: all 0.2s ease;
+  box-shadow: 0 6px 20px rgba(66, 184, 131, 0.4);
+  transition: all var(--transition-fast);
   z-index: 1000;
 }
 
@@ -397,8 +372,8 @@ onUnmounted(() => {
 }
 
 .back-to-top:hover {
-  background-color: var(--color-primary-hover);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(66, 184, 131, 0.5);
 }
 
 @media (max-width: 768px) {

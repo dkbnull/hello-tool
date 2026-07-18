@@ -6,10 +6,10 @@
       <p class="tool-desc">{{ description }}</p>
     </router-link>
     <button
-        class="favorite-btn"
-        :class="{favorited: isFavorited}"
-        @click="toggleFavorite"
-        :title="isFavorited ? '取消收藏' : '收藏工具'"
+      class="favorite-btn"
+      :class="{favorited: isFavorited}"
+      @click="toggleFavorite"
+      :title="isFavorited ? '取消收藏' : '收藏工具'"
     >
       <span class="favorite-icon">{{ isFavorited ? '★' : '☆' }}</span>
     </button>
@@ -17,14 +17,14 @@
 </template>
 
 <script setup>
-import {computed} from 'vue'
-import {useFavoritesStore} from '@/stores/favorites.js'
+import { computed } from 'vue'
+import { useFavoritesStore } from '@/stores/favorites.js'
 
 const props = defineProps({
-  to: {type: String, required: true},
-  icon: {type: String, required: true},
-  title: {type: String, required: true},
-  description: {type: String, required: true}
+  to: { type: String, required: true },
+  icon: { type: String, required: true },
+  title: { type: String, required: true },
+  description: { type: String, required: true }
 })
 
 const favoritesStore = useFavoritesStore()
@@ -55,13 +55,16 @@ const toggleFavorite = (event) => {
 }
 
 .tool-card {
-  background: var(--color-bg-card);
-  border-radius: var(--radius-lg);
-  padding: 1.75rem;
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-xl);
+  padding: 1.6rem 1.5rem 1.5rem;
   text-decoration: none;
   color: var(--color-text);
-  transition: all 0.2s ease;
-  border: 1px solid var(--color-border);
+  transition: all var(--transition-normal);
+  border: 1px solid var(--glass-border);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -69,56 +72,98 @@ const toggleFavorite = (event) => {
   box-shadow: var(--shadow-sm);
   height: 100%;
   box-sizing: border-box;
+  overflow: hidden;
+}
+
+.tool-card::before {
+  content: '';
+  position: absolute;
+  background: var(--color-primary);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.tool-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-primary-light);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  pointer-events: none;
 }
 
 .tool-card:hover {
   transform: translateY(-6px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-glow), var(--shadow-lg);
   border-color: var(--color-primary);
 }
 
+.tool-card:hover::before {
+  opacity: 1;
+}
+
+.tool-card:hover::after {
+  opacity: 1;
+}
+
 .tool-icon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+  font-size: 2.2rem;
+  margin-bottom: 0.85rem;
   width: 60px;
   height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f0f9ff;
-  border-radius: 50%;
+  background: var(--color-primary-light);
+  border-radius: var(--radius-lg);
   color: var(--color-primary);
+  border: 1px solid var(--color-primary-light);
+  transition: all var(--transition-normal);
+}
+
+.tool-card:hover .tool-icon {
+  background: var(--color-primary);
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 14px rgba(66, 184, 131, 0.35);
 }
 
 .tool-title {
+  position: relative;
+  z-index: 1;
   margin-top: 0;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   color: var(--color-text);
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 600;
 }
 
 .tool-desc {
+  position: relative;
+  z-index: 1;
   margin-bottom: 0;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--color-text-secondary);
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 .favorite-btn {
   position: absolute;
   top: 12px;
   right: 12px;
-  background: var(--color-bg-card);
+  background: var(--color-bg-card-solid);
   border: 1px solid var(--color-border);
   border-radius: 50%;
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
   opacity: 0;
   transform: scale(0.8);
   z-index: 10;
@@ -131,31 +176,31 @@ const toggleFavorite = (event) => {
 }
 
 .favorite-btn:hover {
-  background: #fff9e6;
-  border-color: #ffd700;
-  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+  background: var(--color-warning-light);
+  border-color: var(--color-warning);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
 }
 
 .favorite-btn.favorited {
   opacity: 1;
   transform: scale(1);
-  background: #fff9e6;
-  border-color: #ffc107;
+  background: var(--color-warning-light);
+  border-color: var(--color-warning);
 }
 
 .favorite-icon {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: bold;
-  color: #adb5bd;
-  transition: color 0.2s;
+  color: var(--color-text-muted);
+  transition: color var(--transition-fast);
 }
 
 .favorite-btn:hover .favorite-icon {
-  color: #ffb300;
+  color: var(--color-warning);
 }
 
 .favorite-btn.favorited .favorite-icon {
-  color: #ffc107;
+  color: var(--color-warning);
 }
 
 @media (max-width: 768px) {
@@ -185,7 +230,7 @@ const toggleFavorite = (event) => {
   }
 
   .favorite-icon {
-    font-size: 14px;
+    font-size: 13px;
   }
 }
 </style>

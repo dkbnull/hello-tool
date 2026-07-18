@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <div class="container header-inner">
+    <div class="header-inner">
       <a href="/" class="brand" @click.prevent="handleBrandClick">
         <img src="/favicon.svg" class="logo" alt="logo" />
         <span class="brand-text">Hello Tool</span>
@@ -58,18 +58,19 @@ const NAV_LINKS = [
 
 <style scoped>
 .header {
-  background-color: var(--color-bg-card);
-  border-bottom: 1px solid var(--color-border);
   position: sticky;
   top: 0;
   z-index: 100;
+  height: 64px;
+  background: var(--color-bg-card-solid);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .header-inner {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 64px;
+  height: 100%;
   margin: 0 auto;
   padding: 0 4rem;
 }
@@ -79,6 +80,13 @@ const NAV_LINKS = [
   align-items: center;
   gap: var(--spacing-sm);
   text-decoration: none;
+  color: var(--color-text);
+}
+
+.brand:hover {
+  text-decoration: none;
+  color: var(--color-text);
+  text-shadow: none;
 }
 
 .logo {
@@ -90,25 +98,26 @@ const NAV_LINKS = [
   font-size: var(--font-size-xl);
   font-weight: 700;
   color: var(--color-text);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
-.brand-text:hover {
-  color: var(--color-primary);
+.brand:hover .brand-text {
+  color: var(--color-text);
+  text-shadow: none;
 }
 
 .nav {
   display: flex;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-lg);
   align-items: center;
 }
 
 .nav-link {
-  padding: 6px 14px;
-  border-radius: var(--radius-sm);
+  position: relative;
   font-size: var(--font-size-sm);
   font-weight: 500;
-  color: var(--color-text-secondary);
+  color: var(--color-text);
+  opacity: 0.65;
   text-decoration: none;
   transition: var(--transition-fast);
 }
@@ -116,7 +125,15 @@ const NAV_LINKS = [
 .nav-link:hover,
 .nav-link.router-link-exact-active {
   color: var(--color-primary);
-  background-color: var(--color-primary-light);
+  opacity: 1;
+  text-decoration: none;
+}
+
+.nav-link.router-link-exact-active {
+  font-weight: 600;
+  background: var(--color-primary-light);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-xs) var(--spacing-sm);
 }
 
 .menu-toggle {
@@ -137,7 +154,7 @@ const NAV_LINKS = [
 .hamburger span {
   display: block;
   height: 2px;
-  background-color: var(--color-text);
+  background: var(--color-text);
   border-radius: 1px;
   transition: var(--transition-fast);
 }
@@ -155,6 +172,10 @@ const NAV_LINKS = [
 }
 
 @media (max-width: 768px) {
+  .header-inner {
+    padding: 0 1rem;
+  }
+
   .menu-toggle {
     display: block;
   }
@@ -166,11 +187,13 @@ const NAV_LINKS = [
     left: 0;
     right: 0;
     flex-direction: column;
-    background-color: var(--color-bg-card);
-    border-bottom: 1px solid var(--color-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--glass-border);
     padding: var(--spacing-md);
     gap: var(--spacing-xs);
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-lg);
   }
 
   .nav-open {
