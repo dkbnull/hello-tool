@@ -380,7 +380,7 @@ onUnmounted(() => {
   .home-container {
     flex-direction: column;
     padding: 0.5rem 1rem 1rem;
-    gap: 1.5rem;
+    gap: 1rem;
   }
 
   .header-row {

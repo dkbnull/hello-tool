@@ -187,10 +187,8 @@ const NAV_LINKS = [
     left: 0;
     right: 0;
     flex-direction: column;
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--glass-border);
+    background: var(--color-bg-card-solid);
+    border-bottom: 1px solid var(--color-border);
     padding: var(--spacing-md);
     gap: var(--spacing-xs);
     box-shadow: var(--shadow-lg);
@@ -200,7 +198,8 @@ const NAV_LINKS = [
     display: flex;
   }
 
-  .nav-link {
+  .nav-link,
+  .nav-link.router-link-exact-active {
     width: 100%;
     padding: var(--spacing-sm) var(--spacing-md);
     text-align: left;

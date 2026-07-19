@@ -1,15 +1,36 @@
 <template>
-  <nav class="sidebar">
-    <h2 class="sidebar-title">
-      <span class="title-indicator"></span>
-      工具导航
-    </h2>
+  <!-- 移动端悬浮按钮 -->
+  <button
+    class="sidebar-toggle"
+    :class="{ expanded: isExpanded }"
+    @click="isExpanded = !isExpanded"
+    aria-label="工具导航"
+  >
+    <span class="toggle-icon">☰</span>
+  </button>
+
+  <!-- 移动端遮罩 -->
+  <div
+    v-if="isExpanded"
+    class="sidebar-overlay"
+    @click="isExpanded = false"
+  ></div>
+
+  <nav :class="['sidebar', { 'sidebar-expanded': isExpanded }]">
+    <div class="sidebar-header">
+      <h2 class="sidebar-title">
+        <span class="title-indicator"></span>
+        工具导航
+      </h2>
+      <button class="sidebar-close" @click="isExpanded = false" aria-label="收起导航">✕</button>
+    </div>
     <ul class="sidebar-menu">
       <li>
         <a
           href="#favorite-tools"
           class="sidebar-link"
           :class="{active: activeCategory === 'favorite-tools'}"
+          @click="handleLinkClick"
         >
           <span class="icon">⭐</span>
           <span>我的收藏</span>
@@ -20,6 +41,7 @@
           :href="`#${category.id}-tools`"
           class="sidebar-link"
           :class="{active: activeCategory === `${category.id}-tools`}"
+          @click="handleLinkClick"
         >
           <span class="icon">{{ category.icon }}</span>
           <span>{{ category.name }}</span>
@@ -35,6 +57,14 @@ import { getCategories } from '../config/tools'
 
 const categories = getCategories()
 const activeCategory = ref('')
+const isExpanded = ref(false)
+
+// 点击导航链接后收起侧边栏
+const handleLinkClick = () => {
+  if (window.innerWidth <= 768) {
+    isExpanded.value = false
+  }
+}
 
 let scrollHandler = null
 
@@ -74,6 +104,14 @@ onUnmounted(() => {
   align-self: flex-start;
   height: fit-content;
   box-shadow: var(--shadow-sm);
+}
+
+.sidebar-header {
+  display: none;
+}
+
+.sidebar-close {
+  display: none;
 }
 
 .sidebar-title {
@@ -136,33 +174,147 @@ onUnmounted(() => {
   text-align: center;
 }
 
+/* 移动端悬浮切换按钮 - 默认隐藏 */
+.sidebar-toggle {
+  display: none;
+}
+
+/* 遮罩 - 默认隐藏 */
+.sidebar-overlay {
+  display: none;
+}
+
 @media (max-width: 768px) {
+  /* 悬浮切换按钮 */
+  .sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 200;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-bg-card-solid);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-lg);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .sidebar-toggle:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+  }
+
+  .sidebar-toggle:hover .toggle-icon {
+    color: white;
+  }
+
+  .toggle-icon {
+    font-size: 1.2rem;
+    color: var(--color-text);
+    line-height: 1;
+  }
+
+  .sidebar-toggle.expanded {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* 遮罩 */
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 250;
+  }
+
+  /* 侧边栏 - 悬浮左侧，可展开/收起 */
   .sidebar {
-    width: 100%;
-    position: static;
+    position: fixed;
+    left: 0;
+    top: 64px;
+    bottom: 0;
+    width: 220px;
+    z-index: 300;
+    background: var(--color-bg-card-solid);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-radius: 0;
+    border-right: 1px solid var(--color-border);
+    border-left: none;
+    border-top: none;
+    border-bottom: none;
     padding: 1rem;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+    box-shadow: none;
+    align-self: auto;
+  }
+
+  .sidebar-expanded {
+    transform: translateX(0);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* 移动端显示关闭按钮和头部 */
+  .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .sidebar-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-md);
+    border: none;
+    background: var(--color-bg-hover);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all var(--transition-fast);
+  }
+
+  .sidebar-close:hover {
+    background: var(--color-primary);
+    color: white;
+  }
+
+  .sidebar-title {
+    margin-bottom: 0;
+    font-size: 1rem;
   }
 
   .sidebar-menu {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    flex-direction: column;
+    gap: 0;
   }
 
   .sidebar-menu li {
-    margin-bottom: 0;
-    flex: 1 1 calc(50% - 0.5rem);
+    margin-bottom: 0.35rem;
+    flex: none;
   }
 
   .sidebar-link {
-    padding: 0.5rem;
-    font-size: 0.85rem;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.9rem;
   }
-}
 
-@media (max-width: 480px) {
-  .sidebar-menu li {
-    flex: 1 1 100%;
+  .sidebar-link:hover {
+    transform: none;
   }
 }
 </style>
