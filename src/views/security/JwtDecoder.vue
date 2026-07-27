@@ -68,10 +68,25 @@
 </template>
 
 <script setup>
-import {computed, ref} from 'vue'
-import {useCopy} from '@/composables/useCopy'
+import { computed, ref } from 'vue'
+import { useCopy } from '@/composables/useCopy'
 
-const {handleCopy} = useCopy()
+const { handleCopy } = useCopy()
+
+// 安全解析 JSON：将超出 JS 安全整数范围的长整型保留为字符串，避免精度丢失
+const safeJsonParse = (jsonStr) => {
+  // 匹配字符串字面量或数字字面量，字符串原样返回（避免误处理字符串内的数字）
+  const tokenRegex = /"(?:\\.|[^"\\])*"|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g
+  const processed = jsonStr.replace(tokenRegex, (match) => {
+    if (match[0] === '"') return match
+    // 仅处理纯整数且超出安全范围的情况，小数与科学计数法保持原样
+    if (/^-?\d+$/.test(match) && !Number.isSafeInteger(Number(match))) {
+      return `"${match}"`
+    }
+    return match
+  })
+  return JSON.parse(processed)
+}
 
 const token = ref('')
 const parsed = ref(null)
@@ -98,8 +113,8 @@ const expInfo = computed(() => {
       return {
         expired,
         text: expired
-            ? `已过期（${expDate.toLocaleString('zh-CN')}）`
-            : `未过期（${expDate.toLocaleString('zh-CN')}）`,
+          ? `已过期（${expDate.toLocaleString('zh-CN')}）`
+          : `未过期（${expDate.toLocaleString('zh-CN')}）`,
       }
     }
   } catch (e) { /* ignore */
@@ -130,21 +145,21 @@ const parseJwt = () => {
       return decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''))
     }
 
-    const header = JSON.parse(decodeBase64(parts[0]))
-    const payload = JSON.parse(decodeBase64(parts[1]))
+    const header = safeJsonParse(decodeBase64(parts[0]))
+    const payload = safeJsonParse(decodeBase64(parts[1]))
 
     const claims = Object.entries(payload)
-        .filter(([key]) => claimDescriptions[key])
-        .map(([key, value]) => {
-          let displayValue = value
-          if (typeof value === 'number' && key !== 'jti') {
-            const date = new Date(value * 1000)
-            if (!isNaN(date.getTime())) {
-              displayValue = `${value} (${date.toLocaleString('zh-CN')})`
-            }
+      .filter(([key]) => claimDescriptions[key])
+      .map(([key, value]) => {
+        let displayValue = value
+        if (typeof value === 'number' && key !== 'jti') {
+          const date = new Date(value * 1000)
+          if (!isNaN(date.getTime())) {
+            displayValue = `${value} (${date.toLocaleString('zh-CN')})`
           }
-          return {key, description: claimDescriptions[key], value: displayValue}
-        })
+        }
+        return { key, description: claimDescriptions[key], value: displayValue }
+      })
 
     parsed.value = {
       header: JSON.stringify(header, null, 2),
