@@ -24,7 +24,7 @@
           <h3>预览</h3>
           <button @click="downloadImage" class="btn btn-success btn-sm" :disabled="!renderedSvg">下载PNG</button>
         </div>
-        <div class="preview-content">
+        <div class="preview-content" ref="previewRef">
           <div v-if="renderingError" class="error-message">{{ renderingError }}</div>
           <div v-else-if="isRendering" class="placeholder">正在渲染图表...</div>
           <div v-else-if="!renderedSvg" class="placeholder">请输入 Mermaid 代码生成图表</div>
@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, nextTick, ref } from 'vue'
 import mermaid from 'mermaid'
 
 // 示例代码列表（包含流程图、序列图、甘特图等，供下拉选择加载）
@@ -62,6 +62,7 @@ const examples = {
 
 const currentExampleType = ref('flowchart')
 const mermaidCode = ref('')
+const previewRef = ref(null)
 const renderedSvg = ref('')
 const renderingError = ref('')
 const isRendering = ref(false)
@@ -94,10 +95,25 @@ const renderChart = async () => {
     const { svg } = await mermaid.render('mermaid-chart', mermaidCode.value)
     renderedSvg.value = svg
     isRendering.value = false
+    // 渲染完成后自动滚动到预览图底部，让用户看到最新生成的图
+    await nextTick()
+    scrollToPreviewBottom()
   } catch (e) {
     renderingError.value = '渲染失败: ' + e.message
     renderedSvg.value = ''
     isRendering.value = false
+  }
+}
+
+// 滚动到预览图底部：图底部超出视口时才滚动，避免短图也触发滚动
+const scrollToPreviewBottom = () => {
+  if (!previewRef.value) return
+  const rect = previewRef.value.getBoundingClientRect()
+  if (rect.bottom > window.innerHeight) {
+    window.scrollTo({
+      top: window.scrollY + rect.bottom - window.innerHeight + 20,
+      behavior: 'smooth'
+    })
   }
 }
 
@@ -180,11 +196,18 @@ onMounted(() => {
 .mermaid-container {
   display: flex;
   gap: 1.5rem;
+  align-items: flex-start;
 }
 
 .mermaid-container .section-card {
   flex: 1;
   min-width: 300px;
+}
+
+/* 左侧代码区：sticky 固定在视口顶部，下拉预览图时始终可见 */
+.mermaid-container .section-card:first-child {
+  position: sticky;
+  top: 1rem;
 }
 
 .code-input {
@@ -236,6 +259,10 @@ onMounted(() => {
 @media (max-width: 768px) {
   .mermaid-container {
     flex-direction: column;
+  }
+  /* 小屏取消 sticky，保持原竖向排列体验 */
+  .mermaid-container .section-card:first-child {
+    position: static;
   }
 }
 </style>
