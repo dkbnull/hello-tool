@@ -12,11 +12,13 @@
                 {{ type.label }}示例
               </option>
             </select>
+            <button @click="undo" class="btn btn-secondary btn-sm" :disabled="!canUndo" title="撤销">撤销</button>
+            <button @click="redo" class="btn btn-secondary btn-sm" :disabled="!canRedo" title="恢复">恢复</button>
             <button @click="clearCode" class="btn btn-secondary btn-sm">清空</button>
           </div>
         </div>
         <textarea v-model="mermaidCode" placeholder="请输入 Mermaid 代码..." class="code-input"
-                  @input="debouncedRender"></textarea>
+                  @input="debouncedRender" @keydown="handleKeydown"></textarea>
       </div>
 
       <div class="section-card">
@@ -36,7 +38,8 @@
 </template>
 
 <script setup>
-import { onMounted, nextTick, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
+import { ElMessageBox } from 'element-plus'
 import mermaid from 'mermaid'
 
 // 示例代码列表（包含流程图、序列图、甘特图等，供下拉选择加载）
@@ -68,19 +71,97 @@ const renderingError = ref('')
 const isRendering = ref(false)
 let debounceTimer = null
 
+// 撤销/恢复历史栈：程序化修改（撤销/恢复本身）不记录
+const historyStack = ref([])
+const historyIndex = ref(-1)
+let isRestoring = false
+const canUndo = computed(() => historyIndex.value > 0)
+const canRedo = computed(() => historyIndex.value < historyStack.value.length - 1)
+
+const pushHistory = () => {
+  if (isRestoring) return
+  const val = mermaidCode.value
+  if (historyStack.value[historyIndex.value] === val) return
+  // 丢弃恢复点之后的历史，并限制栈深度
+  historyStack.value = historyStack.value.slice(0, historyIndex.value + 1)
+  historyStack.value.push(val)
+  if (historyStack.value.length > 100) historyStack.value.shift()
+  historyIndex.value = historyStack.value.length - 1
+}
+
+const restore = (val) => {
+  isRestoring = true
+  mermaidCode.value = val
+  renderChart()
+  nextTick(() => {
+    isRestoring = false
+  })
+}
+
+const undo = () => {
+  if (!canUndo.value) return
+  historyIndex.value--
+  restore(historyStack.value[historyIndex.value])
+}
+
+const redo = () => {
+  if (!canRedo.value) return
+  historyIndex.value++
+  restore(historyStack.value[historyIndex.value])
+}
+
+// 快捷键：Ctrl+Z 撤销、Ctrl+Y / Ctrl+Shift+Z 恢复（仅编辑区生效）
+const handleKeydown = (e) => {
+  if (!(e.ctrlKey || e.metaKey) || e.altKey) return
+  const key = e.key.toLowerCase()
+  if (key === 'z' && !e.shiftKey) {
+    e.preventDefault() // 屏蔽文本框原生撤销，避免与历史栈冲突
+    flushPendingInput()
+    undo()
+  } else if (key === 'y' || (key === 'z' && e.shiftKey)) {
+    e.preventDefault()
+    flushPendingInput()
+    redo()
+  }
+}
+
+// 有未落栈的输入时先入栈，保证撤销/恢复能取回最新内容
+const flushPendingInput = () => {
+  if (!debounceTimer) return
+  clearTimeout(debounceTimer)
+  debounceTimer = null
+  pushHistory()
+}
+
 const debouncedRender = () => {
   clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(renderChart, 500)
+  // 输入停顿 500ms 后合并为一条历史记录，避免逐字符堆积
+  debounceTimer = setTimeout(() => {
+    debounceTimer = null
+    pushHistory()
+    renderChart()
+  }, 500)
 }
 
 const loadExample = () => {
   mermaidCode.value = examples[currentExampleType.value] || '';
+  pushHistory()
   renderChart()
 }
-const clearCode = () => {
+const clearCode = async () => {
+  try {
+    await ElMessageBox.confirm('确定要清空当前 Mermaid 代码吗？清空后可通过撤销恢复。', '清空代码', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
+  } catch {
+    return
+  }
   mermaidCode.value = '';
   renderedSvg.value = '';
   renderingError.value = ''
+  pushHistory()
 }
 
 const renderChart = async () => {
@@ -260,6 +341,7 @@ onMounted(() => {
   .mermaid-container {
     flex-direction: column;
   }
+
   /* 小屏取消 sticky，保持原竖向排列体验 */
   .mermaid-container .section-card:first-child {
     position: static;
