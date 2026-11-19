@@ -29,7 +29,6 @@
     <!-- 分组：每行两个，命令与说明同行显示，点击卡片复制 -->
     <div v-for="group in filteredGroups" :key="group.key" class="section-card group-card">
       <h3 class="group-title">
-        <span v-if="group.categoryName" class="group-category">{{ group.categoryName }} ·</span>
         {{ group.name }}
         <span class="group-count">{{ group.items.length }} 条</span>
       </h3>
@@ -137,43 +136,39 @@ const buildRows = (items) => {
 }
 
 /**
- * 计算展示的分组：
- * - 无搜索：仅展示当前激活分类的分组
- * - 有搜索：跨所有分类检索，分组标题前附加分类名
+ * 计算展示的分组（仅检索当前激活分类）：
+ * - 无搜索：展示当前分类全部分组
+ * - 有搜索：在当前分类内按命令、说明、备注、路径、分组名过滤
  */
 const filteredGroups = computed(() => {
+  const cat = activeCategory.value
+  if (!cat) return []
   const keyword = search.value.toLowerCase()
   if (!keyword) {
-    const cat = activeCategory.value
-    if (!cat) return []
     return cat.groups.map(group => ({
       ...group,
-      categoryName: '',
       key: `${cat.id}-${group.name}`,
       rows: buildRows(group.items),
     }))
   }
-  return props.categories.flatMap(cat =>
-    cat.groups
-      .map(group => {
-        const filtered = group.items.filter(item => {
-          const valueText = getItemText(item).toLowerCase()
-          return valueText.includes(keyword) ||
-            item.description.toLowerCase().includes(keyword) ||
-            (item.note && item.note.toLowerCase().includes(keyword)) ||
-            (item.menuPath && item.menuPath.toLowerCase().includes(keyword)) ||
-            group.name.toLowerCase().includes(keyword)
-        })
-        return {
-          ...group,
-          categoryName: cat.name,
-          key: `${cat.id}-${group.name}`,
-          items: filtered,
-          rows: buildRows(filtered),
-        }
+  return cat.groups
+    .map(group => {
+      const filtered = group.items.filter(item => {
+        const valueText = getItemText(item).toLowerCase()
+        return valueText.includes(keyword) ||
+          item.description.toLowerCase().includes(keyword) ||
+          (item.note && item.note.toLowerCase().includes(keyword)) ||
+          (item.menuPath && item.menuPath.toLowerCase().includes(keyword)) ||
+          group.name.toLowerCase().includes(keyword)
       })
-      .filter(group => group.items.length > 0)
-  )
+      return {
+        ...group,
+        key: `${cat.id}-${group.name}`,
+        items: filtered,
+        rows: buildRows(filtered),
+      }
+    })
+    .filter(group => group.items.length > 0)
 })
 </script>
 
@@ -225,10 +220,6 @@ const filteredGroups = computed(() => {
   border-bottom: 2px solid var(--color-primary);
   font-size: 1.1rem;
   font-weight: 600;
-}
-
-.group-category {
-  color: var(--color-primary);
 }
 
 .group-count {
